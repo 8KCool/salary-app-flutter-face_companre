@@ -11,6 +11,12 @@ class ApiUrls{
   static const loginPost = baseUrl + 'loginPost';
   static const employerRegistration = baseUrl + 'employerRegistration';
   static const Getuserlogindetail = baseUrl + 'Getuserlogindetail';
+  static const qrattendance = baseUrl + 'qrattendance';
+  static const qrattendanceStore = baseUrl + 'qrattendanceStore';
+  static const getUser = baseUrl + 'getUser';
+
+
+
 
 
 }

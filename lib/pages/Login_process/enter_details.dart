@@ -431,7 +431,7 @@ class _Enter_Detail_PageState extends State<Enter_Detail_Page> {
                           print('data  for api-${data}');
                           var res=await Webservices.postData(apiUrl: ApiUrls.employerRegistration, body: data, context: context);
                           if(res['success'].toString()=='true'){
-                            print('Emp id--------${res['userData']['client_emp']}');
+                            // print('Emp id--------${res['userData']['client_emp']}');
                             Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
 
                             // await MyLocalServices.updateSharedPreferences(res['userData'],context);

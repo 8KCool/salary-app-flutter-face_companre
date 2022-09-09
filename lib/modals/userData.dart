@@ -1,12 +1,15 @@
 class UserModal {
-  String userId;
+  int userId;
   String name;
   String emailId;
   String gender;
   String city;
   String country;
   String phone;
-  //
+  String address;
+  String profile_img;
+  String token;
+  String branchId;
   // String about;
   // String wallet;
   // DateTime dateOfBirth;
@@ -35,6 +38,10 @@ class UserModal {
     required this.city,
     required this.country,
     required this.phone,
+    required this.address,
+    required this.profile_img,
+    required this.token,
+    required this.branchId,
     //
     // required this.about,
     // required this.wallet,
@@ -59,13 +66,17 @@ class UserModal {
 
   factory UserModal.fromJson(Map userData) {
     return UserModal(
-      userId: userData['client_emp']==null?'1':userData['client_emp'].toString(),
-      name: userData['name']??'32',
-      emailId: userData['email']??'',
-      gender: userData['gender']??'',
-      city: userData['oc_city']??'',
-      country: userData['oc_country']??'',
-      phone: userData['mobile']??'',
+        userId: userData['client_emp'] == null ? 1 : userData['client_emp'],
+        name: userData['name'] ?? '32',
+        emailId: userData['email'] ?? '',
+        gender: userData['gender'].toString() ?? '',
+        city: userData['oc_city'] ?? '',
+        country: userData['oc_country'] ?? '',
+        phone: userData['mobile'] ?? '',
+        address: userData['oc_address'] ??'',
+        profile_img: userData['avatar'] ?? '',
+        token: userData['token'] ?? '',
+        branchId: userData['branch_id'] ?? ''
 //     "id": 144,
 //     "client_emp": null,
 //     "plan_id": null,
@@ -150,6 +161,6 @@ class UserModal {
 // },
 // "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMWY1OWI0NWJmODg1YTI0OGQxNGQ2YTE4ZDFmNTczODg4MDUzYjUwZmQxMzU3YmIyMmRkMWNmYTYyZTU4ZGNmOWFlMWRmODNlNDU1ZGJhODgiLCJpYXQiOjE2NjE1MDk5NzYuNjg2OTg5MDY4OTg0OTg1MzUxNTYyNSwibmJmIjoxNjYxNTA5OTc2LjY4Njk5Mjg4MzY4MjI1MDk3NjU2MjUsImV4cCI6MTY5MzA0NTk3Ni42ODA5Mjc5OTE4NjcwNjU0Mjk2ODc1LCJzdWIiOiIxNDQiLCJzY29wZXMiOltdfQ.L7yanP5dRI7MkgFcgcEST2OJxRvRmVAwjCQbgF-vcESFfOBEorglHMQ_ohCBNeXhtszaDM3Lr4lNgggsK83qqE3m7BZmG47OHCVRY8VBx_cnobmTfsM8vgxCAyeqTdtz9fh9ueCCWSyOoWwpDvn05v0TRCuMlAhngcw_NXi8uU-2cwyB7WCzxHI8r_d-3tYui8j-1QvQEyBwBqzfxsZhwt0vE5nF35bxIqF9Nu0Mp4J814nSxy2fmG1zgYMsLUNXHWuysZ0NKTF9brIzdiuGfxcxZagjuWdPxfk3ZeEEZyJvZJ3NgM7uFspyBS1ZkgxjWf4jFcfDwQCUx08ynkKtrpEV4nLtDkiH5zs4dx4avLeFPzKy22RzgcC37VIAya9M-LVLPxzpH8y_q6HnWqt9TiGniKWmkMSYo2DnVs2QPlGT-pfS6VBIzxnmbhOf3OFbfK-UjvybpsR7pSTdU7STZqpdF1eGVaeYhdv6YtOySMQwtnH9zXfC7SWkBCZLitFGX7ac3ixAH6-ILfmT2mQOwop0YCvynRzVN3iYgXP-jyi3jb1Saspe_UmanZ-7spHuO1ZjXC9-qHo45Yvcn6DzizRnYKlV91WCybBecLZND7AnF-J5fGEiWnW-4dnvGASKjFl7vQ4fkuAGvQlEZy_Qhxq8VOvORTzcS8wJjokaWnA"
 // }
-    );
+        );
   }
 }

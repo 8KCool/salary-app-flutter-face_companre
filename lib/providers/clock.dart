@@ -4,8 +4,11 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:salaryredesign/modals/location.dart';
 import 'package:salaryredesign/modals/userData.dart';
 import 'package:salaryredesign/services/local_services.dart';
+
+import '../functions/location.dart';
 
 class GlobalModal extends ChangeNotifier {
   /// Internal, private state of the cart.
@@ -13,11 +16,13 @@ class GlobalModal extends ChangeNotifier {
  bool isShow=false;
  bool load=false;
  UserModal? userData;
+ LocationModal? location;
+ Timer? timer;
  // List<UserModel> userdata = [];
- addTime(){
+ startTimer(){
   int min=00;
   int sec=00;
-  Timer timer =Timer.periodic(new Duration(seconds: 1), (timer) {
+   timer =Timer.periodic(new Duration(seconds: 1), (timer) {
 
    sec++;
    if(sec==60){
@@ -46,6 +51,13 @@ class GlobalModal extends ChangeNotifier {
 
 
  }
+
+ cancelTimer(){
+  if(timer!=null){
+   timer?.cancel();
+  }
+ }
+
  addUserDetail(Map userMap , BuildContext context){
   print('object-----------258 ${userMap}');
   MyLocalServices.updateSharedPreferences(userMap,context);
@@ -59,6 +71,22 @@ class GlobalModal extends ChangeNotifier {
   load=false;
   notifyListeners();
  }
+getLocation() async {
+  load=true;
+ var res = await determinePosition();
+ print('drfs---------F1233--' + res.toString());
 
+
+ // Lat = res.latitude;
+ // lng = res.longitude.toString();
+
+ var address =
+     await getAddressFromLatLng(res.latitude, res.longitude);
+ print("123--------------" + address.toString());
+ // address = address1.toString();
+ location = LocationModal(Lat: res.latitude, Lng: res.longitude, addressString: address);
+ load=false;
+ notifyListeners();
+}
 
 }

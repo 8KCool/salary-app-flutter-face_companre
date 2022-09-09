@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:salaryredesign/pages/splash.dart';
 import 'package:salaryredesign/pages/welcome.dart';
 import 'package:salaryredesign/providers/clock.dart';
 import 'package:salaryredesign/services/local_services.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Welcome_Page()
+      home: SplashScreen()
     );
   }
 }

@@ -12,6 +12,9 @@ import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:salaryredesign/widgets/lists.dart';
 
+import '../tab_pages/bottom_tab.dart';
+import '../tab_pages/new_tab.dart';
+
 
 final SimpleDialog dialog1 = SimpleDialog(
   backgroundColor: Colors.transparent,
@@ -253,13 +256,15 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                     onTap: (){
                       // showDialog<void>(context: context, builder: (context) => dialog1);
                      if(widget.isEmp){
+                       // push(context: context, screen: newTabsPage());
                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                           MyPorfile_Page()), (Route<dynamic> route) => false);
+                           newTabsPage()), (Route<dynamic> route) => false);
                        // push(context: context, screen: MyPorfile_Page());
                      }
                      else{
+                       // push(context: context, screen: TabsPage());
                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                           Dashboard_Page()), (Route<dynamic> route) => false);
+                           TabsPage()), (Route<dynamic> route) => false);
                        // push(context: context, screen: Dashboard_Page());
                      }
 

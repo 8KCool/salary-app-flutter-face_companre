@@ -1,9 +1,12 @@
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salaryredesign/services/api_urls.dart';
 
 import '../constants/colors.dart';
 import '../constants/image_urls.dart';
+import '../providers/clock.dart';
 
 class CircleAvatarcustom extends StatelessWidget {
 
@@ -21,7 +24,8 @@ class CircleAvatarcustom extends StatelessWidget {
   const CircleAvatarcustom(
       {
         Key? key,
-        this. image = MyImages.logo,
+        // this. image = MyImages.logo,
+        this. image = '${ApiUrls.baseUrl}employeeprofile/fMyNtyX7jdzVlzNvsDBt4dQNElBOeUIm7ZAYT1IZ.jpg',
         this. bgcolor = Colors.white,
         this. borderradius = 50,
         this. height = 70,
@@ -45,12 +49,20 @@ class CircleAvatarcustom extends StatelessWidget {
           color: bgcolor,
           // border: Border.all(color: MyColors.border,),
         ),
-        child: Image.asset(
+        child:
+        // Image.asset(
+        //   image,
+        //   fit: fit,
+        //   height: imgheight,
+        //   width: imgwidth,
+        //
+        // ),
+          Image.network(
           image,
-          fit: fit,
-          height: imgheight,
-          width: imgwidth,
-        ),
+    fit: fit,
+    height: imgheight,
+    width: imgwidth,
+          )
       ),
     );
 

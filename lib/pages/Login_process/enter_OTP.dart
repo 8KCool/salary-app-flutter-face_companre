@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,9 @@ import '../../constants/image_urls.dart';
 import '../../providers/clock.dart';
 import '../../services/api_urls.dart';
 import '../../services/webservices.dart';
+import '../../widgets/CustomLoader.dart';
 import '../../widgets/CustomTexts.dart';
+import '../tab_pages/new_tab.dart';
 
 class Enter_OTP_Page extends StatefulWidget {
   final String phone;
@@ -43,6 +47,8 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
   FocusNode otp4focus=FocusNode();
   FocusNode otp5focus=FocusNode();
   FocusNode otp6focus=FocusNode();
+  BuildContext? c ;
+  Timer? timer=null;
   bool loader=false;
   String newotp='';
   // List controller=[
@@ -53,14 +59,16 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
     // TODO: implement initState
     super.initState();
     newotp=widget.otp;
+
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Consumer<GlobalModal>(
         builder: (context,globalModal,child) {
-          return SingleChildScrollView(
+          return globalModal.load?CustomLoader():SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -121,7 +129,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                         )
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         vSizedBox16,
                         vSizedBox16,
@@ -333,7 +341,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                 print('otp------------${res['data']['otp']}');
                                 newotp=res['data']['otp'].toString();
                                 //token
-                                Provider.of<GlobalModal>(context, listen: false).addTime();
+                                // Provider.of<GlobalModal>(context, listen: false).startTimer();
                               }
                             },
                           ),
@@ -364,24 +372,28 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                             Map<String, dynamic>data = {
                               'phone': widget.phone.toString()
                             };
-                            setState(() {
-                              loader = true;
-                            });
+                            // setState(() {
+                            //   loader = true;
+                            // });
                             var res = await Webservices.postData(
                                 apiUrl: ApiUrls.loginPost,
                                 body: data,
                                 context: context,
                                 showSuccessMessage: true);
-                            setState(() {
-                              loader = false;
-                            });
+                            // setState(() {
+                            //   loader = false;
+                            // });
                             print('res--------${res}');
 
                             if (res['success'].toString() == 'true') {
+                              // usertoken=res['userData']['token'];
+                              // print("token${usertoken}");
 
                               // showSnackbar(context, res['message'].toString());
-                              // // print('otp------------${res['data']['otp']}');
+                              print('otp------------${res['type']}');
                               if(res['type'].toString()=='1'){
+                                Provider.of<GlobalModal>(context, listen: false).cancelTimer();
+
                                 push(context: context, screen: Enter_Detail_Page(phone: widget.phone,));
                               }
                               else if(res['userData']['client_emp']==null){
@@ -394,9 +406,9 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                               }
                               else if(res['userData']['client_emp']!=null){
                                 await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
-
+                                // push(context: context, screen: newTabsPage());
                                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                    MyPorfile_Page()), (Route<dynamic> route) => false);
+                                    newTabsPage()), (Route<dynamic> route) => false);
                                 // await MyLocalServices.updateSharedPreferences(res['userData']);
 
                                 user=res['userData'];

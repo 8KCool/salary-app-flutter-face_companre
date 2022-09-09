@@ -9,7 +9,10 @@ import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:salaryredesign/widgets/custom_widgets.dart';
 
+import '../constants/globalkeys.dart';
 import '../providers/clock.dart';
+import '../services/api_urls.dart';
+import '../services/webservices.dart';
 
 class MyPorfile_Page extends StatefulWidget {
   const MyPorfile_Page({Key? key}) : super(key: key);
@@ -19,12 +22,28 @@ class MyPorfile_Page extends StatefulWidget {
 }
 
 class _MyPorfile_PageState extends State<MyPorfile_Page> {
+  getDetails()async{
+    Map<String ,dynamic>data={
+
+    };
+    var res = await Webservices.postData(apiUrl: ApiUrls.qrattendance, body: data, context: context);
+    print('res from api ${res}');
+// await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['data'],context);
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDetails();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context: context,
           implyLeading: false,
-          title:Provider.of<GlobalModal>(context, listen: false).userData!.name.toString(),
+          title:Provider.of<GlobalModal>(context, listen: false).userData?.name.toString(),
           titlecenter: false),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),

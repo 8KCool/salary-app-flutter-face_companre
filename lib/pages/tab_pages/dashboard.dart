@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
+import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/all_employee.dart';
 import 'package:salaryredesign/pages/attandance_page.dart';
+import 'package:salaryredesign/services/api_urls.dart';
+import 'package:salaryredesign/services/webservices.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 
@@ -47,6 +50,22 @@ List Name = [
 ];
 
 class _Dashboard_PageState extends State<Dashboard_Page> {
+  getDetails()async{
+    Map<String ,dynamic>data={
+      'token':'Bearer $usertoken'
+    };
+var res = await Webservices.postData(apiUrl: ApiUrls.qrattendance, body: data, context: context);
+print('res from api ${res}');
+// await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDetails();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

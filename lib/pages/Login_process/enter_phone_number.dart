@@ -127,6 +127,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                           text: 'Get OTP',
                           textColor: Colors.white,
                           onTap: () async {
+                            print('get otp --------------------');
                             String phonePattern =
                                 r'^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10}\s*,?$';
                             RegExp pnumber = new RegExp(phonePattern);
@@ -152,10 +153,10 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                               // Provider.of<GlobalModal>(context, listen: false).loadingHide();
                                globalModal.loadingHide();
                               if(res['success'].toString()=='true'){
-                            Timer timer =Timer.periodic(new Duration(seconds: 1), (timer) {
-                              Provider.of<GlobalModal>(context, listen: false).addTime();
-                              debugPrint(timer.tick.toString());
-                            });
+                            // Timer timer =Timer.periodic(new Duration(seconds: 1), (timer) {
+                              Provider.of<GlobalModal>(context, listen: false).startTimer();
+                              // debugPrint(timer.tick.toString());
+                            // });
 
 
 

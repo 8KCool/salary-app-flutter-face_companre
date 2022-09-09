@@ -1,5 +1,6 @@
 class MyImages{
   static const String baseImageUrl = 'assets/images/';
+  static const String baseImageUrlapproval = 'assets/images/approval_icon/';
   static const String baseIconsUrl = 'assets/icons/';
 
 
@@ -77,6 +78,45 @@ class MyImages{
   static const emp3 = baseImageUrl + 'My_Request.png';
   static const emp4 = baseImageUrl + 'Holiday_List.png';
   static const folder = baseImageUrl + 'folder.png';
+  static const attachments = baseImageUrl + 'Attachments.png';
+
+
+
+
+  static const bonus = baseImageUrl + 'Bonus.png';
+  static const deduction = baseImageUrl + 'Deduction.png';
+  static const advance = baseImageUrl + 'Advance.png';
+  static const red_up = baseImageUrl + 'red_up.png';
+  static const green_up = baseImageUrl + 'green_up.png';
+  static const gross_pay = baseImageUrl + 'gross_pay.png';
+  static const loan = baseImageUrl + 'Loan.png';
+  static const salary_slip = baseImageUrl + 'salary_slip.png';
+  static const search_full = baseImageUrl + 'search_full.png';
+  static const tds_Deduction = baseImageUrl + 'TDS_Deduction.png';
+  static const work = baseImageUrl + 'Work.png';
+  static const home_icon = baseImageUrl + 'home_icon.png';
+  static const fingerprint_icon = baseImageUrl + 'print_icon.png';
+  static const profile_icon = baseImageUrl + 'profile_icon.png';
+  static const setting_icon = baseImageUrl + 'setting_icon.png';
+  static const map_green = baseImageUrl + 'map_green.png';
+  static const time = baseImageUrl + 'time.png';
+  static const camera_turn = baseImageUrl + 'camera_turn.png';
+
+
+
+  static const attach = baseImageUrl + 'attach.png';
+  static const attendance_approval = baseImageUrl + 'attendance_approval.png';
+  static const date = baseImageUrl + 'date.png';
+  static const delete_grey = baseImageUrl + 'delete.png';
+  static const delete_this_report = baseImageUrl + 'delete_this_report.png';
+  static const download = baseImageUrl + 'download.png';
+  static const filter_grey = baseImageUrl + 'filter.png';
+  static const leave_request = baseImageUrl + 'leave_request.png';
+  static const overtime_request = baseImageUrl + 'overtime_request.png';
+  static const pay_per_work = baseImageUrl + 'pay_per_work.png';
+  static const permission_request = baseImageUrl + 'permission_request.png';
+  static const time_correction_approval = baseImageUrl + 'time_correction_approval.png';
+  static const xls = baseImageUrl + 'xls.png';
 
 
 }

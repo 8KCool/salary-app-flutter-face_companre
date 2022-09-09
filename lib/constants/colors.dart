@@ -22,5 +22,8 @@ class MyColors{
   static const Color orange = Color(0xffFF891A);
   static const Color white = Color(0xffffffff);
   static const Color black = Color(0xff000000);
+  static const Color bottommenucolor = Color(0xff888888);
+  static const Color disabledcolor = Color(0xffEFEFEF);
+  static const Color pending = Color(0xffFEF9C3);
 
 }

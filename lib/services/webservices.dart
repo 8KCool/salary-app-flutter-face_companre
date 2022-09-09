@@ -1,12 +1,19 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:salaryredesign/modals/userData.dart';
 
 
+import '../constants/globalkeys.dart';
+import '../providers/clock.dart';
 import '../widgets/showSnackbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 
@@ -45,17 +52,23 @@ class Webservices {
     http.Response response =
         http.Response('{"message":"failure","status":0}', 404);
     try {
-      log('the request for $apiUrl is $body');
-      response = await http.post(Uri.parse(apiUrl), body: body);
+      Map<dynamic,dynamic> headers={};
+      UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+      // SharedPreferences sharedPreferences =
+      // await SharedPreferences.getInstance();
+      // Map userMap = jsonDecode(sharedPreferences.getString('userData')!);
+      // log('the request for $apiUrl is ${userMap}');
+      response = await http.post(Uri.parse(apiUrl), body: body,   headers:user==null?{}:
+        {'Authorization':'Bearer ${user.token}'},);
       if (response.statusCode == 200) {
         var jsonResponse = convert.jsonDecode(response.body);
         log('the response for $apiUrl is $jsonResponse');
         if (jsonResponse['status'] == 1) {
           if(showSuccessMessage)
-          showSnackbar(context, jsonResponse['message']);
+          // showSnackbar(context, jsonResponse['message']);
           return jsonResponse;
         } else {
-          showSnackbar(context, jsonResponse['message'].toString());
+          // showSnackbar(context, jsonResponse['message'].toString());
         }
         return jsonResponse;
       }

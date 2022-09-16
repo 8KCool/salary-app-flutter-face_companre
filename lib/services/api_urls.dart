@@ -14,6 +14,11 @@ class ApiUrls{
   static const qrattendance = baseUrl + 'qrattendance';
   static const qrattendanceStore = baseUrl + 'qrattendanceStore';
   static const getUser = baseUrl + 'getUser';
+  static const listBranch = baseUrl + 'listBranch';
+  static const deleteBranch = baseUrl + 'deleteBranch';
+  static const storeBranch = baseUrl + 'storeBranch';
+  static const editBranch = baseUrl + 'editBranch';
+  static const updateBranch = baseUrl + 'updateBranch';
 
 
 

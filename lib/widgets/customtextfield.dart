@@ -36,6 +36,8 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardtype;
   final Function(String)? onchange;
   final bool isflag;
+  final bool enabled;
+
 
   CustomTextField({
     Key? key,
@@ -71,6 +73,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardtype = TextInputType.text,
     this.focusnode,
     this.isflag=false,
+    this.enabled=true,
   }) : super(key: key);
 
   @override
@@ -112,6 +115,7 @@ class CustomTextField extends StatelessWidget {
               textAlign: textAlign,
               focusNode: focusnode,
               maxLength: maxlength,
+              enabled: enabled,
 
               decoration: InputDecoration(
                 hintText: hintText,

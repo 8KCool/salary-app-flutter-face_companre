@@ -10,24 +10,7 @@ class UserModal {
   String profile_img;
   String token;
   String branchId;
-  // String about;
-  // String wallet;
-  // DateTime dateOfBirth;
-  // String genderInterestedIn;
-  // String status;
-  // String isDeactive;
-  // String createdAt;
-  // String profileImage;
-  // String incomingMessageCount;
-  // String addExperimentCount;
-  // String virtualMeetingCount;
-  // String giftReceiveCount;
-  // String apologyNote;
-  // String contacted;
-  // String age;
-  // String tagline;
-  // bool isAnyActiveExperiment;
-  // String experimentId;
+  String? companyName;
 
   UserModal({
     // required this.client_emp,
@@ -42,26 +25,7 @@ class UserModal {
     required this.profile_img,
     required this.token,
     required this.branchId,
-    //
-    // required this.about,
-    // required this.wallet,
-    // required this.dateOfBirth,
-    // required this.genderInterestedIn,
-    // required this.status,
-    // required this.isDeactive,
-    // required this.createdAt,
-    // required this.profileImage,
-    // required this.incomingMessageCount,
-    // required this.addExperimentCount,
-    // required this.virtualMeetingCount,
-    // required this.giftReceiveCount,
-    // required this.apologyNote,
-    // required this.name,
-    // required this.contacted,
-    // required this.age,
-    // required this.tagline,
-    // required this.experimentId,
-    // required this.isAnyActiveExperiment
+    this.companyName,
   });
 
   factory UserModal.fromJson(Map userData) {
@@ -76,7 +40,8 @@ class UserModal {
         address: userData['oc_address'] ??'',
         profile_img: userData['avatar'] ?? '',
         token: userData['token'] ?? '',
-        branchId: userData['branch_id'] ?? ''
+        branchId: userData['branch_id'] ?? '',
+        companyName: userData['oc_company_name']??''
 //     "id": 144,
 //     "client_emp": null,
 //     "plan_id": null,

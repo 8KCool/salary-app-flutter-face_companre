@@ -50,7 +50,7 @@ test();
 
   }
 test()async{
-    //await logout();
+    // await logout();
   // print("provider---------------"+Provider.of<GlobalModal>(context, listen: false).userData.toString());
 
   Future.delayed(Duration(seconds: 2)).then((value) async {

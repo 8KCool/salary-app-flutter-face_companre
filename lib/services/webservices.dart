@@ -25,13 +25,17 @@ class Webservices {
 
 
 
-  static Future<http.Response> getData(String url) async {
+  static Future<http.Response> getData(String url, BuildContext context,) async {
+    UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+
     http.Response response =
         http.Response('{"message":"failure","status":0}', 404);
     log('called $url');
     try {
       response = await http.get(
         Uri.parse(url),
+        headers:user==null?{}:
+        {'Authorization':'Bearer ${user.token}'},
       );
       if(response.statusCode!=200){
         print('The response status for url $url is ${response.statusCode}');
@@ -43,6 +47,7 @@ class Webservices {
     }
     return response;
   }
+
 
   static Future<Map<String, dynamic>> postData(
       {required String apiUrl,
@@ -148,8 +153,8 @@ class Webservices {
     return {};
   }
 
-  static Future<List> getList(String url) async {
-    var response = await getData(url);
+  static Future<List> getList(String url,{required BuildContext context}) async {
+    var response = await getData(url,context);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 1) {

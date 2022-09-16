@@ -51,6 +51,9 @@ dev_dependencies:
   country_picker: ^2.0.16
   flutter_html: ^2.2.1
   geocode: ^1.0.1
+  geocoding: ^2.0.5
+  google_maps_flutter: ^2.2.0
+  geolocator: ^9.0.1
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

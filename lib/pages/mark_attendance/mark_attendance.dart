@@ -28,6 +28,7 @@ import '../../widgets/avatar.dart';
 import 'package:intl/intl.dart';
 
 import '../qr_scanner.dart';
+import '../tab_pages/new_tab.dart';
 
 class Mark_Attendance_Page extends StatefulWidget {
   const Mark_Attendance_Page({Key? key}) : super(key: key);
@@ -52,6 +53,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
   String workingHours = '';
   Map att_detail = {};
   bool is_popup=false;
+  String message='';
+
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
 
@@ -82,6 +85,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
         if(is_popup==false){
           is_popup=true;
           await showPop();
+          // await push(context: context, screen: newTabsPage());
           is_popup=false;
 
         }
@@ -95,7 +99,39 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
     });
     // });
   }
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text('Alert'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children:  <Widget>[
+              // Image.asset(MyImages.cancel,width: 70,height: 70,),
+                Icon(Icons.dangerous,color: Colors.red,size: 80,),
+                vSizedBox2,
+                Text('${message.toString()}',textAlign: TextAlign.center,),
+                vSizedBox,
 
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    // Navigator.of(context).pop();
+                    push(context: context, screen: newTabsPage());
+                  },
+                ),
+              ],
+            ),
+          ),
+
+        );
+      },
+    );
+  }
   TextEditingController name = TextEditingController();
   @override
   void initState() {
@@ -145,6 +181,11 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
         workingHours = '${res['data']['today_attendance']['workinHours']}';
 
       }
+    }
+    else{
+      // showSnackbar(context, res['message']);
+      message=res['message'];
+      _showMyDialog();
     }
   }
 

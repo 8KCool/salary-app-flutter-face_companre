@@ -1,7 +1,7 @@
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocode/geocode.dart';
-
+import 'package:geocoding/geocoding.dart';
 Future<Position> determinePosition() async {
   // print('je;;o');
   var position;
@@ -55,15 +55,37 @@ Future<Position> determinePosition() async {
   }catch(e){
     // Geolocator.openAppSettings();
     print('Error in getting current location : $e');
-    position =  Position(longitude: 75.8577, latitude: 22.7196, timestamp: DateTime.now(), accuracy: 10, altitude: 10, heading: 10, speed: 10, speedAccuracy: 10);
+    position =  Position(longitude: 77.4126, latitude: 23.2599, timestamp: DateTime.now(), accuracy: 10, altitude: 10, heading: 10, speed: 10, speedAccuracy: 10);
     return position;
   }
 }
+// Future<String> getAddressFromLatLng(double? lat, double? lang) async {
+//   if (lat == null || lang == null) return "";
+//   GeoCode geoCode = GeoCode();
+//   try{
+//     Address address =
+//     // await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+//     // List<Placemark> placemarks = await placemarkFromCoordinates(52.2165157, 6.9437819);
+//     print("address"+address.toString());
+//     return "${address.streetAddress}, ${address.city}, ${address.countryName}, ${address.postal}";
+//   }catch(err){
+//     print('err from reverseGeocoding()-----------${err}');
+//     return '';
+//   }
+//
+// }
 Future<String> getAddressFromLatLng(double? lat, double? lang) async {
   if (lat == null || lang == null) return "";
-  GeoCode geoCode = GeoCode();
-  Address address =
-  await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
-  print("address"+address.toString());
-  return "${address.streetAddress}, ${address.city}, ${address.countryName}, ${address.postal}";
+
+  try{
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lang);
+    print("address ---------------${placemarks[0].toString()}");
+    return '${placemarks[0].street} , ${placemarks[0].name} ${placemarks[0].postalCode} ${placemarks[0].country}';
+
+  }catch(err){
+    print('err from reverseGeocoding()-----------${err}');
+    return '';
+  }
+
 }

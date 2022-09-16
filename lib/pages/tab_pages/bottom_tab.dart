@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:salaryredesign/pages/mark_attendance/mark_attendance.dart';
 import 'package:salaryredesign/pages/my_profile.dart';
+import 'package:salaryredesign/pages/settings/settings_page.dart';
 import 'package:salaryredesign/pages/tab_pages/dashboard.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_urls.dart';
@@ -27,7 +28,7 @@ class _TabsPageState extends State<TabsPage> {
     Dashboard_Page(),
     Mark_Attendance_Page(),
     MyPorfile_Page(),
-    Dashboard_Page(),
+    Settings_Page(),
   ];
 
   void _onItemTapped(int index) {

@@ -5,6 +5,7 @@ import 'package:salaryredesign/pages/my_profile.dart';
 import 'package:salaryredesign/pages/tab_pages/dashboard.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_urls.dart';
+import '../settings/settings_page.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class newTabsPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _newTabsPageState extends State<newTabsPage> {
     MyPorfile_Page(),
     Mark_Attendance_Page(),
     MyPorfile_Page(),
-    Dashboard_Page(),
+    Settings_Page(),
   ];
 
   void _onItemTapped(int index) {

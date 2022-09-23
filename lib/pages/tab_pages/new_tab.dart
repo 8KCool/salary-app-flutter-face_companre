@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:salaryredesign/pages/mark_attendance/mark_attendance.dart';
 import 'package:salaryredesign/pages/my_profile.dart';
 import 'package:salaryredesign/pages/tab_pages/dashboard.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_urls.dart';
+import '../../providers/clock.dart';
 import '../settings/settings_page.dart';
 
 /// This is the stateful widget that the main application instantiates.
@@ -35,6 +37,16 @@ class _newTabsPageState extends State<newTabsPage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLocation();
+  }
+  getLocation() async {
+    await Provider.of<GlobalModal>(context, listen: false).getLocation();
+
   }
 
   @override

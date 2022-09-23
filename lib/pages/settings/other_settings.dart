@@ -10,19 +10,19 @@ import 'package:salaryredesign/pages/all_employee.dart';
 
 import 'package:salaryredesign/pages/attandance_page.dart';
 import 'package:salaryredesign/pages/settings/branch_settings.dart';
+
 import 'package:salaryredesign/pages/settings/shift_settings.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 
-import '../../providers/clock.dart';
 import '../../widgets/custom_widgets.dart';
-import 'other_settings.dart';
-
-class Settings_Page extends StatefulWidget {
-  const Settings_Page({Key? key}) : super(key: key);
+import 'department_settings.dart';
+import '../../providers/clock.dart';
+class Other_Settings_Page extends StatefulWidget {
+  const Other_Settings_Page({Key? key}) : super(key: key);
 
   @override
-  State<Settings_Page> createState() => _Settings_PageState();
+  State<Other_Settings_Page> createState() => _Other_Settings_PageState();
 }
 
 List images = [
@@ -48,7 +48,7 @@ List Name = [
   'Pay Per Work',
 ];
 
-class _Settings_PageState extends State<Settings_Page> {
+class _Other_Settings_PageState extends State<Other_Settings_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +56,7 @@ class _Settings_PageState extends State<Settings_Page> {
       appBar: appBar(
           context: context,
           title:Provider.of<GlobalModal>(context, listen: false).userData?.companyName,
+
           implyLeading: false,
           titlecenter: false,
           leading: Icon(
@@ -80,12 +81,17 @@ class _Settings_PageState extends State<Settings_Page> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_outlined, size: 20, color: MyColors.primaryColor,),
-                  hSizedBox,
-                  ParagraphText(text: 'Settings', color: MyColors.primaryColor,)
-                ],
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back_outlined, size: 20, color: MyColors.primaryColor,),
+                    hSizedBox,
+                    ParagraphText(text: 'Others Settings', color: MyColors.primaryColor,)
+                  ],
+                ),
               ),
             ),
             vSizedBox2,
@@ -94,58 +100,51 @@ class _Settings_PageState extends State<Settings_Page> {
               child: Column(
                 children: [
                   clickable_list(
-                    text: 'Branch Settings',
+                    text: 'Departments',
                     img: MyImages.branch_settings,
-                    colorborderleft: Color(0xFF33CBCB),
+                    colorborderleft: Color(0xFFB98548),
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
-                      push(context: context, screen: Branch_Settings_Page());
+                      push(context: context, screen: Department_Settings_Page());
                     },
                   ),
                   clickable_list(
-                    text: 'Shift Settings',
-                    img: MyImages.shift_settings,colorborderleft: Color(0xFF33CBCB),
+                    text: 'Employee Category',
+                    img: MyImages.shift_settings,
+                    colorborderleft:MyColors.primaryColor,
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
-                      push(context: context, screen: Shift_Settings_Page());
+                      // push(context: context, screen: Shift_Other_Settings_Page());
                     },
                   ),
                   clickable_list(
-                    text: 'Attendance Settings',
+                    text: 'Designation',
                     img: MyImages.attendance_settings,
-                    colorborderleft: Color(0xFF33CBCB),
+                    colorborderleft: MyColors.secondarycolor,
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
                       // push(context: context, screen: Advance_Page());
                     },
                   ),
                   clickable_list(
-                    text: 'Holiday Settings',
+                    text: 'Roles & Permission',
                     img: MyImages.holiday_settings,
-                    colorborderleft: Color(0xFF33CBCB),
+                    colorborderleft: MyColors.yellow,
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
                       // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Policies',
-                    img: MyImages.policies_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Payroll Settings',
-                    img: MyImages.payroll_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Others',
-                    img: MyImages.payroll_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      push(context: context, screen: Other_Settings_Page());
                     },
                   ),
                 ],

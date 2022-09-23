@@ -35,16 +35,6 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
   Map permissions={};
   getBranch()async{
     await Provider.of<GlobalModal>(context, listen: false).getBranch(context);
-
-    //  var res =await Webservices.getData(ApiUrls.listBranch, context);
-   //  log('res from api listBranch ---------------${res.body}');
-   //  var result=res.body;
-   //  log('result-----1--${result}');
-   // var result1= convert.jsonDecode(result);
-   //  log('result-----2--${result1["data"]}');
-   //
-   //  branchList=result1['data'];
-   //  permissions=result1['permission'];
   }
   @override
   void initState() {
@@ -165,7 +155,7 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
                               DeleteFun: () async{
                                 Map<String,dynamic>data= {
                                   'id':globalModal.branch[i].id.toString()
-                                  // 'id':'5',
+
                                 };
                                 globalModal.loadingShow();
                                 var res =await Webservices.postData(apiUrl: ApiUrls.deleteBranch, body: data, context: context);

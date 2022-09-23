@@ -19,6 +19,17 @@ class ApiUrls{
   static const storeBranch = baseUrl + 'storeBranch';
   static const editBranch = baseUrl + 'editBranch';
   static const updateBranch = baseUrl + 'updateBranch';
+  static const listShift = baseUrl + 'listShift';
+  static const deleteShift = baseUrl + 'deleteShift';
+  static const storeShift = baseUrl + 'storeShift';
+  static const updateShift = baseUrl + 'updateShift';
+  static const listDepartment = baseUrl + 'listDepartment';
+  static const storeDepartment = baseUrl + 'storeDepartment';
+  static const deleteDepartment = baseUrl + 'deleteDepartment';
+  static const updateDepartment = baseUrl + 'updateDepartment';
+  static const ImagebaseUrl = 'https://salarydocument.fra1.digitaloceanspaces.com/';
+
+
 
 
 

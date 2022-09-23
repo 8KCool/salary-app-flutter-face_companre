@@ -83,83 +83,9 @@ test()async{
             Welcome_Page()), (Route<dynamic> route) => false);
     }
 
-   // if(await Provider.of<GlobalModal>(context, listen: false).userData!=null){
-   //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-   //       newTabsPage()), (Route<dynamic> route) => false);
-   // }
-   // else{
-   //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-   //       Welcome_Page()), (Route<dynamic> route) => false);
-   // }
-
-    // push(context: context, screen: Welcome_Page());
   });
 }
-  // checkStatus()async{
-  //
-  //   if(await isUserLoggedIn()) {
-  //     Map<String,dynamic> request={
-  //       "user_id":await getCurrentUserId()
-  //     };
-  //     print("user_id"+request.toString());
-  //     try{
-  //
-  //
-  //
-  //       timer =  Timer.periodic(Duration(seconds: 3), (timer) {
-  //         Webservices.getMap(ApiUrls.interval,request:request).then((value)async{
-  //           print('the status is ${value}');
-  //
-  //           updateUserDetails(value);
-  //           // cres['']ount=
-  //           if(value['email_verified'].toString()=='1'){
-  //             if(value['user_type'].toString()=='1'){
-  //               pushReplacement(context: context, screen: Sup_bottom_nav(key: MyGlobalKeys.tabBarKey2));
-  //             } else {
-  //               Navigator.pushNamedAndRemoveUntil(context, MyStatefulWidget.id, (route) => false);
-  //             }
-  //
-  //             timer.cancel();
-  //           }
-  //           else if(value['email_verified'].toString()=='0'){
-  //             print("000");
-  //             pushReplacement(context: context, screen: PendingScreen());
-  //           }
-  //           else if(value['data']['email_verified'].toString()=='0'){
-  //           }
-  //         });
-  //       });
-  //     }catch(e){
-  //       print('Error in catch block 237 $e');
-  //       pushReplacement(context: context, screen: WelcomeScreen());
-  //     }
-  //
-  //
-  //   }
-  //   else{
-  //     pushReplacement(context: context, screen: WelcomeScreen());
-  //   }
-  //
-  // }
-  // interval()async{
-  //   // Timer timer = new Timer(new Duration(seconds: 5), () async{
-  //   Timer.periodic(new Duration(seconds: 5), (timer) async{
-  //     debugPrint(timer.tick.toString());
-  //
-  //     if(await isUserLoggedIn()){
-  //       Map data ={
-  //         'user_id':await getCurrentUserId()
-  //       };
-  //       var res = await getData(data, 'interval_api', 0, 0);
-  //       // print('res from interval -${res}');
-  //       count=0;//int.parse(res['unreadNotification'].toString());
-  //       // print('count -${count.toString()}');
-  //       setState((){});
-  //     }
-  //     else{}
-  //   });
-  //
-  // }
+
   @override
   void dispose() {
     // TODO: implement dispose

@@ -1,5 +1,3 @@
-import 'package:salaryredesign/constants/globalkeys.dart';
-
 class BranchModal {
 String branchName;
 String branchAdd;
@@ -9,8 +7,7 @@ int id;
 String branchLat;
 String branchLong;
 
-// Map branchPermissions;
-// List branchList;
+
 
   BranchModal({
   required this.branchName,
@@ -20,8 +17,7 @@ String branchLong;
     required this.id,
     required this.branchLat,
     required this.branchLong,
-    // required this.branchPermissions,
-   // required this.branchList,
+
   });
 factory BranchModal.fromJson(Map BranchData) {
   return BranchModal(
@@ -33,8 +29,7 @@ factory BranchModal.fromJson(Map BranchData) {
     branchLat: BranchData['latitude'],
     branchLong: BranchData['longitude'],
 
-    // id:BranchModal['id'],
-    // branchPermissions: permission, branchList: []
+
 
   );
 }

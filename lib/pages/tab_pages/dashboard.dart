@@ -72,7 +72,7 @@ print('res from api ${res}');
       backgroundColor: Color(0xFFF3F4F6),
       appBar: appBar(
           context: context,
-          title: Provider.of<GlobalModal>(context, listen: false).userData!.name.toString(),
+          title: Provider.of<GlobalModal>(context, listen: false).userData!.companyName.toString(),
           implyLeading: false,
           titlecenter: false,
           leading: Icon(

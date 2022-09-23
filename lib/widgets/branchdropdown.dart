@@ -1,20 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
 import '../constants/sized_box.dart';
+import '../providers/clock.dart';
 import 'CustomTexts.dart';
 
-class DropDwon extends StatefulWidget {
+class DropDwonBranch extends StatefulWidget {
   final String label;
   final Color? labelcolor;
   final List<String> items;
   final bool islabel;
+  final Function(String?) onChange;
+  final  String? selectedValue;
 
-  const DropDwon({
+
+  const DropDwonBranch({
     Key? key,
     this.label = 'label',
+    required this.onChange,
+    this.selectedValue,
     this.labelcolor = MyColors.bordercolor,
     this.items = const [
       'All',
@@ -28,10 +35,10 @@ class DropDwon extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DropDwon> createState() => _DropDwonState();
+  State<DropDwonBranch> createState() => _DropDwonBranchState();
 }
 
-class _DropDwonState extends State<DropDwon> {
+class _DropDwonBranchState extends State<DropDwonBranch> {
   // final List<String> items = [
   //   'All',
   //   'Option 1',
@@ -39,7 +46,6 @@ class _DropDwonState extends State<DropDwon> {
   //   'Option 3',
   //   'Option 4',
   // ];
-  String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -67,26 +73,21 @@ class _DropDwonState extends State<DropDwon> {
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              items: widget.items
-                  .map((item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(
-                  item,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ))
-                  .toList(),
-              value: selectedValue,
-              onChanged: (value) {
-                setState(() {
-                  selectedValue = value as String?;
-                });
-              },
+              items: Provider.of<GlobalModal>(context, listen: false).departmentBranch.map((e) {
+                return DropdownMenuItem<String>(
+                  value: e['id'].toString(),
+                  child: Text(e['name']),
+                );
+              }).toList(),
+
+              value: widget.selectedValue,
+              onChanged:widget.onChange,
+              //     (value) {
+              //   setState(() {
+              //     selectedValue = value as String?;
+              //
+              //   });
+              // },
               icon: const Icon(
                 Icons.expand_more_outlined,
               ),

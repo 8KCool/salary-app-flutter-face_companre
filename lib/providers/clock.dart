@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/modals/department.dart';
 import 'package:salaryredesign/modals/location.dart';
@@ -11,6 +12,7 @@ import 'package:salaryredesign/services/local_services.dart';
 
 import '../functions/location.dart';
 import '../modals/branch.dart';
+import '../modals/holiday.dart';
 import '../modals/shift.dart';
 import '../services/api_urls.dart';
 import '../services/webservices.dart';
@@ -26,7 +28,18 @@ class GlobalModal extends ChangeNotifier {
   List<BranchModal> branch = [];
   List<ShiftModal> shift = [];
   List<DepartmentModal> department = [];
- Map usersDep={};
+  List<HolidayModal> holiday = [];
+
+  List holidayBranch=[];
+  Map holidayData={};
+
+  Map usersDep={};
+  Map dep={};
+  Map brnc={};
+  bool branchLoaded=false;
+  Map holidaybranch={};
+  List holidaybranchDetail=[];
+
   Map shiftPermission = {};
   Map branchPermission = {};
   Map departmentPermission = {};
@@ -34,6 +47,11 @@ class GlobalModal extends ChangeNotifier {
   List departmentBranchAll = [];
 
   List departmentUsers = [];
+  List depart=[];
+  List departhhh=[];
+  List category=[];
+  List calender=[];
+
 
   Timer? timer;
   // List<UserModel> userdata = [];
@@ -125,6 +143,10 @@ class GlobalModal extends ChangeNotifier {
   getShift(context) async {
     shift = [];
     load = true;
+
+
+
+
     var res = await Webservices.getData(ApiUrls.listShift, context);
     load = false;
     log('res from api listBranch ---------------${res.body}');
@@ -144,6 +166,7 @@ class GlobalModal extends ChangeNotifier {
   getDepartment(context) async {
     department = [];
     departmentUsers=[];
+    departmentBranchAll=[];
     load = true;
     var res = await Webservices.getData(ApiUrls.listDepartment, context);
     load = false;
@@ -156,6 +179,7 @@ class GlobalModal extends ChangeNotifier {
     departmentPermission = result1['permission'];
     departmentBranch =[];
     for(int i=0; i<result1['data']['Branch'].length;i++){
+      result1['data']['Branch'][i]['checked']=false;
       if(i==0){
 
         departmentBranchAll.add({"id":"","name":"All",});
@@ -184,34 +208,107 @@ class GlobalModal extends ChangeNotifier {
       department.add(DepartmentModal.fromJson(result1['data']['department'][i]));
       log(department.toString());
     }
-// log(department.toString());
+
 
     notifyListeners();
   }
+
+  getHoliday(context,String search_branch,String search_department) async {
+    holiday = [];
+    departhhh=[];
+    load = true;
+    // notifyListeners();
+
+    Map<String,dynamic>data={
+      'search_branch':search_branch.toString()==''?'0':search_branch.toString(),
+      'search_department':search_department.toString()==''?'0':search_department.toString()
+    };
+    log('data data data--------------${data}');
+
+    var res = await Webservices.postData(apiUrl:ApiUrls.listholiday,  body:data, context: context);
+    load = false;
+
+    log('res from api listholiday ---------------${res}');
+    holidayData=res['data'];
+    getBranchDepartment();
+    for (var i = 0; i < res['data']['department'].length; i++) {
+      res['data']['department'][i]['checked']=false;
+    }
+    for (var i = 0; i < res['data']['branch'].length; i++) {
+      res['data']['branch'][i]['checked']=false;
+    }
+    departhhh=res['data']['department'];
+    depart=departhhh;
+    departmentBranch=res['data']['branch'];
+    // var result = res.body;
+    log('result-----1--${departhhh}');
+    // var result1 = convert.jsonDecode(result);
+    log('result-----2m--${res["data"]['holiday']}');
+    for (var i = 0; i < res['data']['branch'].length; i++) {
+      brnc[res['data']['branch'][i]['id'].toString()]=res['data']['branch'][i];
+
+    }
+    for (var i = 0; i < res['data']['department'].length; i++) {
+      dep[res['data']['department'][i]['id'].toString()]=res['data']['department'][i];
+
+    }
+    log('dep------------${dep}');
+    log('branc------------${brnc}');
+
+    for (int i = 0; i < res['data']['holiday'].length; i++) {
+
+      print('i');
+      holiday.add(HolidayModal.fromJson(res['data']['holiday'][i]));
+    }
+
+    notifyListeners();
+  }
+updateHoliday(holiday)async{
+  for (int i = 0; i < holiday.length; i++) {
+
+    print('i------------789--------${holiday}');
+    holiday.add(HolidayModal.fromJson(holiday[i]));
+  }
+  log("Holiday------------list --------------${holiday}");
+  notifyListeners();
+}
+  getdepart(String id)async{
+    print('id --------${id}');
+
+    depart=[];
+    for(int i=0 ;i< departhhh.length;i++){
+      print('depid --------${departhhh}');
+      print('${departhhh[i]['b_id']}-----------------');
+
+
+      if(id==departhhh[i]['b_id'].toString()){
+       depart.add(departhhh[i]);
+      }
+    }
+print('object --------${depart}');
+    notifyListeners();
+  }
+  getBranchDepartment(){
+    category=departhhh+departmentBranch;
+    log('categorycategorycategory-------');
+    log(category.toString());
+    notifyListeners();
+  }
+  getCalendar(context)async{
+    load = true;
+    notifyListeners();
+    var res = await Webservices.getData(ApiUrls.calender, context);
+    load = false;
+    log('res from api listBranch ---------------${res.body}');
+    var result = res.body;
+    var result1 = convert.jsonDecode(result);
+    calender=result1['data']['holiday'];
+    load=false;
+    notifyListeners();
+  }
+
 }
 
 
 
-// for (var i = 0; i < result1['data']['department'].length; i++) {
-// // result1['data']['department'][i]['images']=[];
-// // log("123456789---------"+result1['data']['department'][i]['images'].toString());
-// // for (var j = 0; j < departmentUsers.length; j++) {
-// //   if (result1['data']['department'][i]['id'] ==
-// //       departmentUsers[j]['department_id']) {
-// //     log("-----------2---------"+result1['data']['department'][i]['images'].toString());
-// //
-// //     // if(departmentUsers[i]['avatar']!=null){
-// //       log("-----------3---------"+result1['data']['department'][i]['images'].toString());
-// //
-// //       result1['data']['department'][i]['images'].add(
-// //         result1['image_path'] + departmentUsers[i]['avatar']);
-// //     log('departmrj');
-// //     log(result1['data']['department'].toString());
-// //   // }
-// // }
-// //
-// // }
-//
-// department.add(DepartmentModal.fromJson(result1['data']['department'][i]));// branch=BranchModal(result1['data'][i] ,result1['permission'], branchPermissions: result1['permission']);
-// }
 

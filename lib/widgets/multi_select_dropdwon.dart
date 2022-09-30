@@ -8,40 +8,39 @@ import '../constants/sized_box.dart';
 import '../providers/clock.dart';
 import 'CustomTexts.dart';
 
-class DropDwonNew extends StatefulWidget {
+class MultiDropDwon<T> extends StatefulWidget {
   final String label;
   final Color? labelcolor;
   // final List<String> items;
   final bool islabel;
-  final Function(String?) onChange;
-  final  String? selectedValue;
-  final  List<DropdownMenuItem<String>>? items;
+  final Function(dynamic) onChange;
+  final  T? selectedValue;
+  final List<DropdownMenuItem<T>>? items;
 
 
-  const DropDwonNew({
+  const MultiDropDwon({
     Key? key,
     this.label = 'label',
     required this.onChange,
     this.selectedValue,
     this.labelcolor = MyColors.bordercolor,
-    this.items ,
+    this.items=const [],
     this.islabel = true,
-
 
   }) : super(key: key);
 
   @override
-  State<DropDwonNew> createState() => _DropDwonNewState();
+  State<MultiDropDwon> createState() => _MultiDropDwonState();
 }
 
-class _DropDwonNewState extends State<DropDwonNew> {
+class _MultiDropDwonState extends State<MultiDropDwon> {
   // final List<String> items = [
-  //   'All',
-  //   'Option 1',
-  //   'Option 2',
-  //   'Option 3',
-  //   'Option 4',
+  //   'Item1',
+  //   'Item2',
+  //   'Item3',
+  //   'Item4',
   // ];
+  // List<String> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -62,21 +61,61 @@ class _DropDwonNewState extends State<DropDwonNew> {
             child: DropdownButton2(
               isExpanded: true,
               hint: Text(
-                'Branch',
+                '',
                 style: TextStyle(
                   fontSize: 14,
                   color: MyColors.bordercolor,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              items: widget.items,
               // items: Provider.of<GlobalModal>(context, listen: false).departmentBranchAll.map((e) {
               //   return DropdownMenuItem<String>(
-              //     value: e['name'].toString(),
+              //     value: e['id'].toString(),
               //     child: Text(e['name']),
               //   );
               // }).toList(),
-
+              items: widget.items,
+              // items: widget.items.map((item) {
+              //   return DropdownMenuItem<String>(
+              //     value: item,
+              //     //disable default onTap to avoid closing menu when selecting an item
+              //     enabled: false,
+              //     child: StatefulBuilder(
+              //       builder: (context, menuSetState) {
+              //         final _isSelected = selectedItems.contains(item);
+              //         return InkWell(
+              //           onTap: () {
+              //             _isSelected
+              //                 ? selectedItems.remove(item)
+              //                 : selectedItems.add(item);
+              //             //This rebuilds the StatefulWidget to update the button's text
+              //             setState(() {});
+              //             //This rebuilds the dropdownMenu Widget to update the check mark
+              //             menuSetState(() {});
+              //           },
+              //           child: Container(
+              //             height: double.infinity,
+              //             padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              //             child: Row(
+              //               children: [
+              //                 _isSelected
+              //                     ? const Icon(Icons.check_box_outlined)
+              //                     : const Icon(Icons.check_box_outline_blank),
+              //                 const SizedBox(width: 16),
+              //                 Text(
+              //                   item,
+              //                   style: const TextStyle(
+              //                     fontSize: 14,
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   );
+              // }).toList(),
               value: widget.selectedValue,
               onChanged:widget.onChange,
               //     (value) {

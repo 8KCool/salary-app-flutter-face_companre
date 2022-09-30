@@ -878,6 +878,9 @@ class PopupmenuButtonCustom extends StatelessWidget {
   final bool isEdit;
   final bool isDelete;
   final Function()? DeleteFun;
+  final bool issubheading;
+  final bool editbtn;
+  final bool deletebtn;
 
 
 
@@ -890,6 +893,9 @@ class PopupmenuButtonCustom extends StatelessWidget {
         required this.isEdit,
         required this.isDelete,
         required this.DeleteFun,
+        this.issubheading = true,
+        this.editbtn = true,
+        this.deletebtn = true,
 
 
         Key? key
@@ -951,9 +957,12 @@ class PopupmenuButtonCustom extends StatelessWidget {
                             vSizedBox,
                             Image.asset(MyImages.delete_this_report, height: 35, width: 35,),
                             vSizedBox2,
-                            MainHeadingText(text: deletemain, color: MyColors.black,),
                             vSizedBox2,
-                            ParagraphText(text: deletesub),
+                            MainHeadingText(text: deletemain, color: MyColors.black,textAlign: TextAlign.center,),
+                            if(issubheading)
+                              vSizedBox2,
+                            if(issubheading)
+                              ParagraphText(text: deletesub,textAlign: TextAlign.center),
                             vSizedBox4,
                             Row(
                               mainAxisAlignment:

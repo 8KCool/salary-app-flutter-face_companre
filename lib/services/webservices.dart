@@ -30,13 +30,14 @@ class Webservices {
 
     http.Response response =
         http.Response('{"message":"failure","status":0}', 404);
-    log('called $url');
+    log('called $url------------');
     try {
       response = await http.get(
         Uri.parse(url),
         headers:user==null?{}:
         {'Authorization':'Bearer ${user.token}'},
       );
+      // log('Bearer ${user!.token}');
       if(response.statusCode!=200){
         print('The response status for url $url is ${response.statusCode}');
       }

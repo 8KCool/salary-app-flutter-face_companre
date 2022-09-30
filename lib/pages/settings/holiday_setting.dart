@@ -10,20 +10,21 @@ import 'package:salaryredesign/pages/all_employee.dart';
 
 import 'package:salaryredesign/pages/attandance_page.dart';
 import 'package:salaryredesign/pages/settings/branch_settings.dart';
+import 'package:salaryredesign/pages/settings/department_settings.dart';
+import 'package:salaryredesign/pages/settings/holiday_calender.dart';
+import 'package:salaryredesign/pages/settings/holiday_management.dart';
 import 'package:salaryredesign/pages/settings/shift_settings.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 
 import '../../providers/clock.dart';
 import '../../widgets/custom_widgets.dart';
-import 'holiday_setting.dart';
-import 'other_settings.dart';
 
-class Settings_Page extends StatefulWidget {
-  const Settings_Page({Key? key}) : super(key: key);
+class Holiday_Settings_Page extends StatefulWidget {
+  const Holiday_Settings_Page({Key? key}) : super(key: key);
 
   @override
-  State<Settings_Page> createState() => _Settings_PageState();
+  State<Holiday_Settings_Page> createState() => _Holiday_Settings_PageState();
 }
 
 List images = [
@@ -49,7 +50,7 @@ List Name = [
   'Pay Per Work',
 ];
 
-class _Settings_PageState extends State<Settings_Page> {
+class _Holiday_Settings_PageState extends State<Holiday_Settings_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,12 +82,17 @@ class _Settings_PageState extends State<Settings_Page> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_outlined, size: 20, color: MyColors.primaryColor,),
-                  hSizedBox,
-                  ParagraphText(text: 'Settings', color: MyColors.primaryColor,)
-                ],
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back_outlined, size: 20, color: MyColors.primaryColor,),
+                    hSizedBox,
+                    ParagraphText(text: 'Holiday Settings', color: MyColors.primaryColor,)
+                  ],
+                ),
               ),
             ),
             vSizedBox2,
@@ -95,58 +101,51 @@ class _Settings_PageState extends State<Settings_Page> {
               child: Column(
                 children: [
                   clickable_list(
-                    text: 'Branch Settings',
+                    text: 'Holiday Management',
                     img: MyImages.branch_settings,
-                    colorborderleft: Color(0xFF33CBCB),
+                    colorborderleft: Color(0xFFB98548),
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
-                      push(context: context, screen: Branch_Settings_Page());
+                      push(context: context, screen: Holiday_Management_Page());
                     },
                   ),
                   clickable_list(
-                    text: 'Shift Settings',
-                    img: MyImages.shift_settings,colorborderleft: Color(0xFF33CBCB),
+                    text: 'Weekoff Settings',
+                    img: MyImages.shift_settings,
+                    colorborderleft:MyColors.primaryColor,
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
-                      push(context: context, screen: Shift_Settings_Page());
+                      // push(context: context, screen: Shift_Holiday_Settings_Page());
                     },
                   ),
                   clickable_list(
-                    text: 'Attendance Settings',
+                    text: 'Leave Settings',
                     img: MyImages.attendance_settings,
-                    colorborderleft: Color(0xFF33CBCB),
+                    colorborderleft: MyColors.secondarycolor,
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
                       // push(context: context, screen: Advance_Page());
                     },
                   ),
                   clickable_list(
-                    text: 'Holiday Settings',
+                    text: 'Holiday Calender',
                     img: MyImages.holiday_settings,
-                    colorborderleft: Color(0xFF33CBCB),
+                    colorborderleft: MyColors.yellow,
+                    image: false,
+                    fontSize: 20,
+                    verticalpadding: 25,
+                    fontFamily: 'regular',
                     onTap: (){
-                      push(context: context, screen: Holiday_Settings_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Policies',
-                    img: MyImages.policies_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Payroll Settings',
-                    img: MyImages.payroll_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Others',
-                    img: MyImages.payroll_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      push(context: context, screen: Other_Settings_Page());
+                      push(context: context, screen: Holiday_Calender_Page());
                     },
                   ),
                 ],

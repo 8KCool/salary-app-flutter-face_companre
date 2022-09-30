@@ -54,6 +54,8 @@ dev_dependencies:
   geocoding: ^2.0.5
   google_maps_flutter: ^2.2.0
   geolocator: ^9.0.1
+  multi_select_flutter: ^4.1.2
+  getwidget: ^3.0.1
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

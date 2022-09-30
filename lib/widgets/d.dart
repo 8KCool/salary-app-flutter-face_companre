@@ -8,33 +8,37 @@ import '../constants/sized_box.dart';
 import '../providers/clock.dart';
 import 'CustomTexts.dart';
 
-class DropDwonNew extends StatefulWidget {
+class filter extends StatefulWidget {
   final String label;
   final Color? labelcolor;
-  // final List<String> items;
+  final List<String> items;
   final bool islabel;
   final Function(String?) onChange;
   final  String? selectedValue;
-  final  List<DropdownMenuItem<String>>? items;
 
 
-  const DropDwonNew({
+  const filter({
     Key? key,
     this.label = 'label',
     required this.onChange,
     this.selectedValue,
     this.labelcolor = MyColors.bordercolor,
-    this.items ,
+    this.items = const [
+      'All',
+      'Option 1',
+      'Option 2',
+      'Option 3',
+      'Option 4',
+    ],
     this.islabel = true,
-
 
   }) : super(key: key);
 
   @override
-  State<DropDwonNew> createState() => _DropDwonNewState();
+  State<filter> createState() => _filterState();
 }
 
-class _DropDwonNewState extends State<DropDwonNew> {
+class _filterState extends State<filter> {
   // final List<String> items = [
   //   'All',
   //   'Option 1',
@@ -62,20 +66,19 @@ class _DropDwonNewState extends State<DropDwonNew> {
             child: DropdownButton2(
               isExpanded: true,
               hint: Text(
-                'Branch',
+                widget.items[0],
                 style: TextStyle(
                   fontSize: 14,
                   color: MyColors.bordercolor,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              items: widget.items,
-              // items: Provider.of<GlobalModal>(context, listen: false).departmentBranchAll.map((e) {
-              //   return DropdownMenuItem<String>(
-              //     value: e['name'].toString(),
-              //     child: Text(e['name']),
-              //   );
-              // }).toList(),
+              items: Provider.of<GlobalModal>(context, listen: false).departmentBranchAll.map((e) {
+                return DropdownMenuItem<String>(
+                  value: e['id'].toString(),
+                  child: Text(e['name']),
+                );
+              }).toList(),
 
               value: widget.selectedValue,
               onChanged:widget.onChange,

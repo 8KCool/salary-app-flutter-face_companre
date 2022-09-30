@@ -277,7 +277,20 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                     fontfamily: 'regular',
                     color: Colors.transparent,
                     onTap: (){
-                      push(context: context, screen: Dashboard_Page());
+                      // showDialog<void>(context: context, builder: (context) => dialog1);
+                      if(widget.isEmp){
+                        // push(context: context, screen: newTabsPage());
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            newTabsPage()), (Route<dynamic> route) => false);
+                        // push(context: context, screen: MyPorfile_Page());
+                      }
+                      else{
+                        // push(context: context, screen: TabsPage());
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            TabsPage()), (Route<dynamic> route) => false);
+                        // push(context: context, screen: Dashboard_Page());
+                      }
+
                     },
                   ),
                 ],

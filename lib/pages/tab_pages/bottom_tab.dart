@@ -46,6 +46,8 @@ class _TabsPageState extends State<TabsPage> {
   }
   getLocation() async {
     await Provider.of<GlobalModal>(context, listen: false).getLocation();
+    await Provider.of<GlobalModal>(context, listen: false)
+        .getDepartment(context);
 
   }
   @override

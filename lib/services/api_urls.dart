@@ -29,7 +29,10 @@ class ApiUrls{
   static const updateDepartment = baseUrl + 'updateDepartment';
   static const ImagebaseUrl = 'https://salarydocument.fra1.digitaloceanspaces.com/';
 
-
+  static const listholiday = baseUrl + 'holiday';
+  static const storeHoliday = baseUrl + 'storeHoliday';
+  static const deleteHoliday = baseUrl + 'deleteHoliday';
+  static const calender = baseUrl + 'calender';
 
 
 

@@ -106,7 +106,7 @@ class _Department_Settings_PageState extends State<Department_Settings_Page> {
                                     branch_id=null;
                                     name.text='';
                                     bottomsheet(
-                                      height: 450,
+                                      height: 365,
                                       context: context,
                                       child: Scaffold(
                                         body: globalModal.load
@@ -541,7 +541,7 @@ class _Department_Settings_PageState extends State<Department_Settings_Page> {
                                                         'user ------------${users}');
 
                                                     bottomsheet(
-                                                      height: 450,
+                                                      height: users.length > 0?450:355,
                                                       context: context,
                                                       child: Scaffold(
                                                         body: globalModal.load

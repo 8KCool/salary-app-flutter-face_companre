@@ -1,4 +1,8 @@
-import 'dart:collection';
+
+
+
+
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +11,7 @@ import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
+import 'package:salaryredesign/widgets/CustomLoader.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
@@ -15,9 +20,13 @@ import 'package:salaryredesign/widgets/dropdown.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../providers/clock.dart';
+import '../../services/api_urls.dart';
+import '../../services/webservices.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/customtextfield.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert' as convert;
+
 
 class Holiday_Calender_Page extends StatefulWidget {
   const Holiday_Calender_Page({Key? key}) : super(key: key);
@@ -27,6 +36,7 @@ class Holiday_Calender_Page extends StatefulWidget {
 }
 
 class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
+
   TextEditingController name = TextEditingController();
   List image=[
     MyImages.avtarone,
@@ -38,6 +48,9 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
   ];
   DateTime Selecteddate = DateTime.now();
   Set<DateTime> selectedDays={};
+  // Set<DateTime> holiDays = {};
+  List<dynamic> weekoff=[];
+
   Map<DateTime, List<dynamic>> events={
     DateTime(2021, 6, 22) : ['Meeting URUS', 'Testing Danai Mobile', 'Weekly Report', 'Weekly Meeting'],
     DateTime(2021, 6, 25) : ['Weekly Testing'],
@@ -45,6 +58,34 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
     DateTime(2021, 6, 11) : ['Weekly Testing'],
     DateTime(2021, 6, 18) : ['Weekly Testing'],
   };
+  getWeekOff(date)async{
+    if( await Provider.of<GlobalModal>(context, listen: false).userData?.userId!=1){
+      log("getWeekOff------------getWeekOff-----${date}");
+      await Provider.of<GlobalModal>(context, listen: false).loadingShow();
+      var res = await Webservices.getData("${ApiUrls.weekoffdatebyday}?cal_date=${date}", context);
+      var result1 = convert.jsonDecode(res.body);
+      await Provider.of<GlobalModal>(context, listen: false).loadingHide();
+
+      log("result1------------getWeekOff-----${result1}");
+      if(date==''){
+        Selecteddate=DateTime.now();
+      }
+      else{
+        Selecteddate = date;
+
+      }
+      await Provider.of<GlobalModal>(context, listen: false)
+          .getweekoffbydate(result1['data']['getAllweekoff']);
+      // await Provider.of<GlobalModal>(context, listen: false)
+      //     .getweekoffbydate(result1['data']['getAllweekoff']);
+      setState(() {
+
+      });
+
+    }
+
+
+  }
   getcalender()async{
     await Provider.of<GlobalModal>(context, listen: false)
         .getCalendar(context);
@@ -53,24 +94,16 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
 
           }
     print('selectedDaysselectedDaysselectedDays----${selectedDays}');
-    setState(() {
-
-    });
-
   }
-  // final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
-  //   equals: isSameDay,
-  //   hashCode: getHashCode,
-  // );
 
-  // final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
-  //   equals: isSameDay,
-  //   hashCode: getHashCode,
-  // );
+  DateTime date1=DateTime.parse("2022-10-27 00:00:00.000");
+  DateTime date2=DateTime.parse("2022-10-29 00:00:00.000");
+
   @override
   void initState() {
     // TODO: implement initState
     getcalender();
+    getWeekOff('');
     super.initState();
   }
   @override
@@ -81,7 +114,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
       appBar: appBar(context: context, title: 'Holiday Calander', titlecenter: false),
       body: Consumer<GlobalModal>(
         builder: (context,globalModal,child) {
-          return SingleChildScrollView(
+          return globalModal.load?CustomLoader():SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -94,23 +127,27 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TableCalendar(
-                      // eventLoader:events,
+                        onCalendarCreated: (aa){
+                          print('he;l;llllll');
+                        },
+                      // eventLoader:_events,
+
                       // selectedDayPredicate: (day) {
                       //   // Use values from Set to mark multiple days as selected
                       //   return selectedDays.contains(day);
                       //   },
-                        onDaySelected: (DateTime a, DateTime b) async {
-                          print(
-                              'date time from calendaer-------------a----' + a.toString());
-                          print('date time from calendaer--------b----' + b.toString());
-                          Selecteddate = a;
-                          // data = [];
-                          // getbooking('1');
-                          setState(() {});
-                        },
+                      //   onDaySelected: (DateTime a, DateTime b) async {
+                      //     print(
+                      //         // 'date time from calendaer-------------a----' + a.toString());
+                      //     // print('date time from calendaer--------b----' + b.toString());
+                      //     // Selecteddate = DateTime.parse('2022-10-21 00:00:00.000');
+                      //     // data = [];
+                      //     // getbooking('1');
+                      //     // setState(() {});
+                      //   },
                         focusedDay: Selecteddate,
                         headerStyle: HeaderStyle(
-                      
+
                             leftChevronPadding: EdgeInsets.all(0),
                             rightChevronPadding: EdgeInsets.all(0),
                             formatButtonVisible: false,
@@ -119,27 +156,63 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                               fontSize: 12,
                             )),
                         calendarStyle: CalendarStyle(
+                          holidayTextStyle: TextStyle(fontFamily: 'sf-medium', color: Colors.white) ,
                           defaultTextStyle:
                           TextStyle(fontFamily: 'sf-medium', color: Color(0xFE77838F)),
                           // weekendTextStyle:
-                          // TextStyle(fontFamily: 'sf-medium', color: Colors.white),
+                          // TextStyle(fontFamily: 'sf-medium', color: Colors.black),
                           todayTextStyle:
                           TextStyle(fontFamily: 'sf-medium', color: Color(0xFE77838F)),
-                    
+                            weekendDecoration:BoxDecoration(
+                                color:Colors.white,
+                                borderRadius: BorderRadius.circular(5)),
+
+                            holidayDecoration:BoxDecoration(
+                                color:Color(0xFF6B7280),
+                                borderRadius: BorderRadius.circular(5)),
+
                           selectedDecoration: BoxDecoration(
                               color: MyColors.secondarycolor,
                               borderRadius: BorderRadius.circular(5)),
                         ),
-                        weekendDays: [DateTime.tuesday,DateTime.monday],
+
+                        // weekendDays: [DateTime.tuesday,DateTime.monday],
 
 
                         firstDay: DateTime.utc(2010, 10, 16),
                         lastDay: DateTime.utc(2030, 3, 14),
+                        onPageChanged: (date)async{
+                          print("onPageChanged---mizam-------${date}");
+                          if(globalModal.userData?.userId!=1){
+                            getWeekOff(date);
+                            log("getWeekOff------------getWeekOff-----${date}");
+                          }
+// setState(() {
+//
+// });
+                          // var res = await Webservices.getData("${ApiUrls.weekoffdatebyday}?cal_date=${date}", context);
+                          // var result1 = convert.jsonDecode(res.body);
+                          // log("result1------------getWeekOff-----${result1}");
+                          // await globalModal
+                          //     .getweekoffbydate(result1['data']['getAllweekoff']);
+                          //
+                        },
+                        holidayPredicate: (day) {
+
+                          print('day-------------------${day}');
+
+
+                          DateTime tempDay = DateTime(
+                              day.year, day.month, day.day);
+                          print('_events------------------${globalModal.holiDaysbtdate.contains(tempDay)}');
+                          return globalModal.holiDaysbtdate.contains(tempDay);
+
+                        },
                         selectedDayPredicate: (DateTime a) {
 
                           DateTime temp = DateTime(a.year,a.month, a.day);
                           print("predicate  ${temp}-----${selectedDays} " );
-                          print('selectedDays.contains(a)--------${selectedDays.contains(temp)}');
+                          // print('selectedDays.contains(a)--------${selectedDays.contains(temp)}');
                             return selectedDays.contains(temp);
 
                         },
@@ -152,11 +225,39 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                          
+                            // if(globalModal.userData?.userId!=1)
+                            Expanded(
+                              child:globalModal.userData?.userId!=1? Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        right: BorderSide(
+                                            color: MyColors.bordercolor
+                                        )
+                                    )
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 25,
+                                      width: 25,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFF6B7280),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                    ), hSizedBox,
+                                    MainHeadingText(text: 'Weekoff')
+                                  ],
+                                ),
+                              ):Container(),
+                            ),
+                            if(globalModal.userData?.userId!=1)
+
+                              hSizedBox05,
                             Expanded(
                               child: Container(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
                                       height: 25,
@@ -219,7 +320,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                             ),
                           ],
                         ),
-                    
+
                     ],
                   ),
                 ),

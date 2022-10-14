@@ -16,6 +16,7 @@ class MultiDropDwon<T> extends StatefulWidget {
   final Function(dynamic) onChange;
   final  T? selectedValue;
   final List<DropdownMenuItem<T>>? items;
+  final List<Widget>  Function(BuildContext)? selectedItemBuilder;
 
 
   const MultiDropDwon({
@@ -26,6 +27,7 @@ class MultiDropDwon<T> extends StatefulWidget {
     this.labelcolor = MyColors.bordercolor,
     this.items=const [],
     this.islabel = true,
+    this.selectedItemBuilder=null,
 
   }) : super(key: key);
 
@@ -116,6 +118,25 @@ class _MultiDropDwonState extends State<MultiDropDwon> {
               //     ),
               //   );
               // }).toList(),
+              selectedItemBuilder: widget.selectedItemBuilder,
+                //   (context) {
+                // return widget.items.map(
+                //       (item) {
+                //     return Container(
+                //       alignment: AlignmentDirectional.center,
+                //       padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                //       child: Text(
+                //         widget.selectedValue.join(', '),
+                //         style: const TextStyle(
+                //           fontSize: 14,
+                //           overflow: TextOverflow.ellipsis,
+                //         ),
+                //         maxLines: 1,
+                //       ),
+                //     );
+                //   },
+                // ).toList();
+              // },
               value: widget.selectedValue,
               onChanged:widget.onChange,
               //     (value) {
@@ -143,7 +164,7 @@ class _MultiDropDwonState extends State<MultiDropDwon> {
               ),
               buttonElevation: 0,
               itemHeight: 30,
-              itemPadding: const EdgeInsets.only(left: 14, right: 14),
+              itemPadding: const EdgeInsets.only(left: 0, right: 14),
               dropdownMaxHeight: 200,
               dropdownWidth: MediaQuery.of(context).size.width-32,
               dropdownPadding: null,

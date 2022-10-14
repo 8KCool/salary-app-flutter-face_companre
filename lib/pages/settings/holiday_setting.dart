@@ -7,13 +7,14 @@ import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/all_employee.dart';
-
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:salaryredesign/pages/attandance_page.dart';
 import 'package:salaryredesign/pages/settings/branch_settings.dart';
 import 'package:salaryredesign/pages/settings/department_settings.dart';
 import 'package:salaryredesign/pages/settings/holiday_calender.dart';
 import 'package:salaryredesign/pages/settings/holiday_management.dart';
 import 'package:salaryredesign/pages/settings/shift_settings.dart';
+import 'package:salaryredesign/pages/settings/weekoff_management.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 
@@ -40,7 +41,13 @@ List images = [
   MyImages.avatr11,
   MyImages.avatr12,
 ];
-
+final List<String> items = [
+  'Item1',
+  'Item2',
+  'Item3',
+  'Item4',
+];
+List<String> selectedItems = [];
 List Name = [
   'Attendance Approval',
   'Time correction Approval',
@@ -51,6 +58,19 @@ List Name = [
 ];
 
 class _Holiday_Settings_PageState extends State<Holiday_Settings_Page> {
+  getHoliday()async{
+    print(" getHoliday()async{");
+    await Provider.of<GlobalModal>(context, listen: false)
+        .getHoliday(context,'0','0');
+    print(" end of ptovider-----------------------");
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    getHoliday();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +141,7 @@ class _Holiday_Settings_PageState extends State<Holiday_Settings_Page> {
                     verticalpadding: 25,
                     fontFamily: 'regular',
                     onTap: (){
-                      // push(context: context, screen: Shift_Holiday_Settings_Page());
+                      push(context: context, screen: WeekOff_Management_Page());
                     },
                   ),
                   clickable_list(
@@ -148,6 +168,22 @@ class _Holiday_Settings_PageState extends State<Holiday_Settings_Page> {
                       push(context: context, screen: Holiday_Calender_Page());
                     },
                   ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 ],
               ),
             ),

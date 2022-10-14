@@ -33,6 +33,13 @@ class ApiUrls{
   static const storeHoliday = baseUrl + 'storeHoliday';
   static const deleteHoliday = baseUrl + 'deleteHoliday';
   static const calender = baseUrl + 'calender';
+  static const weekoff = baseUrl + 'employee-calender';
+  static const weekoffList = baseUrl + 'weekoff';
+  static const weekoffDelete = baseUrl + 'weekoffDelete';
+  static const weekoffStore = baseUrl + 'weekoffStore';
+  static const weekoffdatebyday = baseUrl + 'weekoffdatebyday';
+  static const weekoffupdate = baseUrl + 'weekoffupdate';
+
 
 
 

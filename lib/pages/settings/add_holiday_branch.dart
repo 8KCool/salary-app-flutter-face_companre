@@ -8,7 +8,10 @@ import '../../widgets/buttons.dart';
 import '../../widgets/customtextfield.dart';
 
 class SelectBranchPage extends StatefulWidget {
-  const SelectBranchPage({Key? key}) : super(key: key);
+  final List? branchId;
+  final List? depId;
+
+  const SelectBranchPage({Key? key,this.branchId,this.depId}) : super(key: key);
 
   @override
   State<SelectBranchPage> createState() => _SelectBranchPageState();
@@ -19,6 +22,60 @@ class _SelectBranchPageState extends State<SelectBranchPage> {
   TextEditingController search1 = TextEditingController();
 
   bool checked = false;
+  setData()async{
+    if(widget.branchId!=null){
+    if(widget.branchId?.length!=0){
+      for(var i=0 ; i<await Provider.of<GlobalModal>(context, listen: false).departmentBranch.length;i++){
+        for(int j=0 ; j<widget.branchId!.length ;j++){
+          if(await Provider.of<GlobalModal>(context, listen: false).departmentBranch[i]['id']==widget.branchId![j]) {
+             Provider.of<GlobalModal>(context, listen: false).departmentBranch[i]['checked'] = true;
+          }
+          }
+        }
+
+      }
+    }
+    else{
+      for(var i=0 ; i<await Provider.of<GlobalModal>(context, listen: false).departmentBranch.length;i++) {
+        Provider
+            .of<GlobalModal>(context, listen: false)
+            .departmentBranch[i]['checked'] = false;
+      }
+    }
+  }
+  setDep()async{
+    if(widget.depId!=null){
+      if(widget.depId?.length!=0){
+        for(var i=0 ; i<await Provider.of<GlobalModal>(context, listen: false).departhhh.length;i++){
+    for(int j=0 ; j<widget.depId!.length ;j++){
+    if(await Provider.of<GlobalModal>(context, listen: false).departhhh[i]['id']==widget.depId![j]) {
+    Provider.of<GlobalModal>(context, listen: false).departhhh[i]['checked'] = true;
+    }
+    }
+    }
+
+  }
+  }
+    else{
+      for(var i=0 ; i<await Provider.of<GlobalModal>(context, listen: false).departhhh.length;i++) {
+        Provider
+            .of<GlobalModal>(context, listen: false)
+            .departhhh[i]['checked'] = false;
+      }
+    }
+  }
+  getData()async{
+    await Provider.of<GlobalModal>(context, listen: false).getBranch(context);
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    setData();
+    setDep();
+    getData();
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

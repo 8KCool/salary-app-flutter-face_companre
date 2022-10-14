@@ -14,6 +14,7 @@ import '../functions/location.dart';
 import '../modals/branch.dart';
 import '../modals/holiday.dart';
 import '../modals/shift.dart';
+import '../modals/weekOffList.dart';
 import '../services/api_urls.dart';
 import '../services/webservices.dart';
 import 'dart:convert' as convert;
@@ -29,6 +30,7 @@ class GlobalModal extends ChangeNotifier {
   List<ShiftModal> shift = [];
   List<DepartmentModal> department = [];
   List<HolidayModal> holiday = [];
+  List<WeekOffListModal> weekOff = [];
 
   List holidayBranch=[];
   Map holidayData={};
@@ -51,6 +53,7 @@ class GlobalModal extends ChangeNotifier {
   List departhhh=[];
   List category=[];
   List calender=[];
+  Set<DateTime> holiDaysbtdate = {};
 
 
   Timer? timer;
@@ -307,6 +310,37 @@ print('object --------${depart}');
     notifyListeners();
   }
 
+  weekOffSetting(data,branch,departmaent,permission){
+    weekOff=[];
+    branchPermission=permission;
+    for (var i = 0; i < branch.length; i++) {
+      brnc[branch[i]['id'].toString()]=branch[i];
+
+    }
+    for (int i = 0; i < departmaent.length; i++) {
+      dep[departmaent[i]['id'].toString()]=departmaent[i];
+
+    }
+    log('dep------------${dep}');
+    log('branc------------${brnc}');
+    for (int i = 0; i < data.length; i++) {
+      weekOff.add(WeekOffListModal.fromJson(data[i]));
+      print('i------------789--------${weekOff}');
+
+    }
+    log("Holiday------------list --------------${data}");
+    notifyListeners();
+  }
+getweekoffbydate(data){
+  holiDaysbtdate = {};
+  for(var i=0; i<data.length;i++){
+    print("result1['data']['getAllweekoff']-----123----------${data[i]}");
+    holiDaysbtdate.add(DateTime.parse(data[i]));
+  }
+  print("result1['data']['getAllweekoff']---------------${holiDaysbtdate}");
+
+  // notifyListeners();
+}
 }
 
 

@@ -11,11 +11,15 @@ class DropDwon extends StatefulWidget {
   final Color? labelcolor;
   final List<String> items;
   final bool islabel;
+  final Function(String?)?  onChange;
+  final String selectedValue;
 
   const DropDwon({
     Key? key,
     this.label = 'label',
     this.labelcolor = MyColors.bordercolor,
+    this.onChange,
+     this.selectedValue='',
     this.items = const [
       'All',
       'Option 1',
@@ -39,12 +43,13 @@ class _DropDwonState extends State<DropDwon> {
   //   'Option 3',
   //   'Option 4',
   // ];
-  String? selectedValue;
+  // String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
 
     return Container(
+      width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -58,9 +63,10 @@ class _DropDwonState extends State<DropDwon> {
           SizedBox(height: 7),
           DropdownButtonHideUnderline(
             child: DropdownButton2(
+              // value:selectedValue,
               isExpanded: true,
               hint: Text(
-                widget.items[0],
+                widget.selectedValue,
                 style: TextStyle(
                   fontSize: 14,
                   color: MyColors.bordercolor,
@@ -81,12 +87,13 @@ class _DropDwonState extends State<DropDwon> {
                 ),
               ))
                   .toList(),
-              value: selectedValue,
-              onChanged: (value) {
-                setState(() {
-                  selectedValue = value as String?;
-                });
-              },
+
+              onChanged:widget.onChange,
+                  // (value) {
+              //   setState(() {
+              //     selectedValue = value as String?;
+              //   });
+              // },
               icon: const Icon(
                 Icons.expand_more_outlined,
               ),
@@ -108,7 +115,7 @@ class _DropDwonState extends State<DropDwon> {
               itemHeight: 30,
               itemPadding: const EdgeInsets.only(left: 14, right: 14),
               dropdownMaxHeight: 200,
-              dropdownWidth: MediaQuery.of(context).size.width - 48,
+              dropdownWidth: MediaQuery.of(context).size.width-32,
               dropdownPadding: null,
               dropdownDecoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),

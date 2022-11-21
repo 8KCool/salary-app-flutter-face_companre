@@ -5,6 +5,7 @@ class MyColors{
   static const Color primaryColor = Color(0xFF2563EB);
   static const Color secondarycolor = Color(0xFF17BC84);
   static const Color red = Color(0xFFFF4B55);
+  static const Color chipred = Color(0xFFDC2626);
   static const Color yellow = Color(0xFFFFCD5A);
   static const Color other = Color(0xFF363C49);
   static const Color textcolor = Color(0xFF9AA6B8);

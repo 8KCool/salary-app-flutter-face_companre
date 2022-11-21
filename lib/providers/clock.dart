@@ -4,18 +4,20 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salaryredesign/constants/globalkeys.dart';
-import 'package:salaryredesign/modals/department.dart';
-import 'package:salaryredesign/modals/location.dart';
-import 'package:salaryredesign/modals/userData.dart';
-import 'package:salaryredesign/services/local_services.dart';
+
+
 
 import '../functions/location.dart';
 import '../modals/branch.dart';
+import '../modals/department.dart';
+import '../modals/employee_attendance.dart';
 import '../modals/holiday.dart';
+import '../modals/location.dart';
 import '../modals/shift.dart';
+import '../modals/userData.dart';
 import '../modals/weekOffList.dart';
 import '../services/api_urls.dart';
+import '../services/local_services.dart';
 import '../services/webservices.dart';
 import 'dart:convert' as convert;
 
@@ -31,6 +33,8 @@ class GlobalModal extends ChangeNotifier {
   List<DepartmentModal> department = [];
   List<HolidayModal> holiday = [];
   List<WeekOffListModal> weekOff = [];
+  List<EmployeeAttendance> attanceList=[];
+  EmployeeAttendance? empAttend;
 
   List holidayBranch=[];
   Map holidayData={};
@@ -38,6 +42,7 @@ class GlobalModal extends ChangeNotifier {
   Map usersDep={};
   Map dep={};
   Map brnc={};
+  Map attendancedata={};
   bool branchLoaded=false;
   Map holidaybranch={};
   List holidaybranchDetail=[];
@@ -107,7 +112,20 @@ class GlobalModal extends ChangeNotifier {
     load = false;
     notifyListeners();
   }
+getAttendance(data)async{
+    loadingShow();
+    // for (var i = 0; i < data.length; i++) {
+      // result1['data'][i]['manager_name']='manager_name';
+    // empAttend=data;
+    log("empAttend-----1---------$data");
+    empAttend=EmployeeAttendance.fromJson(data);
+    log("empAttend------2--------$empAttend");
 
+    // branch=BranchModal(result1['data'][i] ,result1['permission'], branchPermissions: result1['permission']);
+    // }
+    loadingHide();
+    notifyListeners();
+}
   getLocation() async {
     load = true;
     try {
@@ -124,179 +142,179 @@ class GlobalModal extends ChangeNotifier {
     }
   }
 
-  getBranch(context) async {
-    branch = [];
-    load = true;
-    var res = await Webservices.getData(ApiUrls.listBranch, context);
-    load = false;
-    log('res from api listBranch ---------------${res.body}');
-    var result = res.body;
-    log('result-----1--${result}');
-    var result1 = convert.jsonDecode(result);
-    log('result-----2--${result1["data"]}');
-    branchPermission = result1['permission'];
-    for (var i = 0; i < result1['data'].length; i++) {
-      // result1['data'][i]['manager_name']='manager_name';
-      branch.add(BranchModal.fromJson(result1['data'][i]));
-      // branch=BranchModal(result1['data'][i] ,result1['permission'], branchPermissions: result1['permission']);
-    }
-    notifyListeners();
-  }
-
-  getShift(context) async {
-    shift = [];
-    load = true;
-
-
-
-
-    var res = await Webservices.getData(ApiUrls.listShift, context);
-    load = false;
-    log('res from api listBranch ---------------${res.body}');
-    var result = res.body;
-    log('result-----1--${result}');
-    var result1 = convert.jsonDecode(result);
-    log('result-----2--${result1["data"]}');
-    shiftPermission = result1['permission'];
-    for (var i = 0; i < result1['data'].length; i++) {
-      // result1['data'][i]['manager_name']='manager_name';
-      shift.add(ShiftModal.fromJson(result1['data'][i]));
-      // branch=BranchModal(result1['data'][i] ,result1['permission'], branchPermissions: result1['permission']);
-    }
-    notifyListeners();
-  }
-
-  getDepartment(context) async {
-    department = [];
-    departmentUsers=[];
-    departmentBranchAll=[];
-    load = true;
-    var res = await Webservices.getData(ApiUrls.listDepartment, context);
-    load = false;
-    log('res from api listBranch ---------------${res.body}');
-    var result = res.body;
-    log('result-----1--${result}');
-
-    var result1 = convert.jsonDecode(result);
-    log('result-----2--${result1['data']['department']}');
-    departmentPermission = result1['permission'];
-    departmentBranch =[];
-    for(int i=0; i<result1['data']['Branch'].length;i++){
-      result1['data']['Branch'][i]['checked']=false;
-      if(i==0){
-
-        departmentBranchAll.add({"id":"","name":"All",});
-      }
-      departmentBranch.add(result1['data']['Branch'][i]);
-      departmentBranchAll.add(result1['data']['Branch'][i]);
-
-    }
-    departmentUsers=result1['user'];
-    log('result-----2--${result1['user']}');
-    for (var i = 0; i < departmentUsers.length; i++) {
-      if(usersDep[departmentUsers[i]['department_id']]==null){
-        usersDep[departmentUsers[i]['department_id']]=[];
-      }
-      usersDep[departmentUsers[i]['department_id']].add(departmentUsers[i]);
-
-
-
-    }
-
-
-    print('departmentUsers id group ___________${usersDep}');
-
-    for (var i = 0; i < result1['data']['department'].length; i++) {
-      result1['data']['department'][i]['users']=usersDep[result1['data']['department'][i]['id']];
-      department.add(DepartmentModal.fromJson(result1['data']['department'][i]));
-      log(department.toString());
-    }
-
-
-    notifyListeners();
-  }
-
-  getHoliday(context,String search_branch,String search_department) async {
-    holiday = [];
-    departhhh=[];
-    load = true;
-    // notifyListeners();
-
-    Map<String,dynamic>data={
-      'search_branch':search_branch.toString()==''?'0':search_branch.toString(),
-      'search_department':search_department.toString()==''?'0':search_department.toString()
-    };
-    log('data data data--------------${data}');
-
-    var res = await Webservices.postData(apiUrl:ApiUrls.listholiday,  body:data, context: context);
-    load = false;
-
-    log('res from api listholiday ---------------${res}');
-    holidayData=res['data'];
-    getBranchDepartment();
-    for (var i = 0; i < res['data']['department'].length; i++) {
-      res['data']['department'][i]['checked']=false;
-    }
-    for (var i = 0; i < res['data']['branch'].length; i++) {
-      res['data']['branch'][i]['checked']=false;
-    }
-    departhhh=res['data']['department'];
-    depart=departhhh;
-    departmentBranch=res['data']['branch'];
-    // var result = res.body;
-    log('result-----1--${departhhh}');
-    // var result1 = convert.jsonDecode(result);
-    log('result-----2m--${res["data"]['holiday']}');
-    for (var i = 0; i < res['data']['branch'].length; i++) {
-      brnc[res['data']['branch'][i]['id'].toString()]=res['data']['branch'][i];
-
-    }
-    for (var i = 0; i < res['data']['department'].length; i++) {
-      dep[res['data']['department'][i]['id'].toString()]=res['data']['department'][i];
-
-    }
-    log('dep------------${dep}');
-    log('branc------------${brnc}');
-
-    for (int i = 0; i < res['data']['holiday'].length; i++) {
-
-      print('i');
-      holiday.add(HolidayModal.fromJson(res['data']['holiday'][i]));
-    }
-
-    notifyListeners();
-  }
-updateHoliday(holiday)async{
-  for (int i = 0; i < holiday.length; i++) {
-
-    print('i------------789--------${holiday}');
-    holiday.add(HolidayModal.fromJson(holiday[i]));
-  }
-  log("Holiday------------list --------------${holiday}");
-  notifyListeners();
-}
-  getdepart(String id)async{
-    print('id --------${id}');
-
-    depart=[];
-    for(int i=0 ;i< departhhh.length;i++){
-      print('depid --------${departhhh}');
-      print('${departhhh[i]['b_id']}-----------------');
-
-
-      if(id==departhhh[i]['b_id'].toString()){
-       depart.add(departhhh[i]);
-      }
-    }
-print('object --------${depart}');
-    notifyListeners();
-  }
-  getBranchDepartment(){
-    category=departhhh+departmentBranch;
-    log('categorycategorycategory-------');
-    log(category.toString());
-    notifyListeners();
-  }
+//   getBranch(context) async {
+//     branch = [];
+//     load = true;
+//     var res = await Webservices.getData(ApiUrls.listBranch, context);
+//     load = false;
+//     log('res from api listBranch ---------------${res.body}');
+//     var result = res.body;
+//     log('result-----1--${result}');
+//     var result1 = convert.jsonDecode(result);
+//     log('result-----2--${result1["data"]}');
+//     branchPermission = result1['permission'];
+//     for (var i = 0; i < result1['data'].length; i++) {
+//       // result1['data'][i]['manager_name']='manager_name';
+//       branch.add(BranchModal.fromJson(result1['data'][i]));
+//       // branch=BranchModal(result1['data'][i] ,result1['permission'], branchPermissions: result1['permission']);
+//     }
+//     notifyListeners();
+//   }
+//
+//   getShift(context) async {
+//     shift = [];
+//     load = true;
+//
+//
+//
+//
+//     var res = await Webservices.getData(ApiUrls.listShift, context);
+//     load = false;
+//     log('res from api listBranch ---------------${res.body}');
+//     var result = res.body;
+//     log('result-----1--${result}');
+//     var result1 = convert.jsonDecode(result);
+//     log('result-----2--${result1["data"]}');
+//     shiftPermission = result1['permission'];
+//     for (var i = 0; i < result1['data'].length; i++) {
+//       // result1['data'][i]['manager_name']='manager_name';
+//       shift.add(ShiftModal.fromJson(result1['data'][i]));
+//       // branch=BranchModal(result1['data'][i] ,result1['permission'], branchPermissions: result1['permission']);
+//     }
+//     notifyListeners();
+//   }
+//
+//   getDepartment(context) async {
+//     department = [];
+//     departmentUsers=[];
+//     departmentBranchAll=[];
+//     load = true;
+//     var res = await Webservices.getData(ApiUrls.listDepartment, context);
+//     load = false;
+//     log('res from api listBranch ---------------${res.body}');
+//     var result = res.body;
+//     log('result-----1--${result}');
+//
+//     var result1 = convert.jsonDecode(result);
+//     log('result-----2--${result1['data']['department']}');
+//     departmentPermission = result1['permission'];
+//     departmentBranch =[];
+//     for(int i=0; i<result1['data']['Branch'].length;i++){
+//       result1['data']['Branch'][i]['checked']=false;
+//       if(i==0){
+//
+//         departmentBranchAll.add({"id":"","name":"All",});
+//       }
+//       departmentBranch.add(result1['data']['Branch'][i]);
+//       departmentBranchAll.add(result1['data']['Branch'][i]);
+//
+//     }
+//     departmentUsers=result1['user'];
+//     log('result-----2--${result1['user']}');
+//     for (var i = 0; i < departmentUsers.length; i++) {
+//       if(usersDep[departmentUsers[i]['department_id']]==null){
+//         usersDep[departmentUsers[i]['department_id']]=[];
+//       }
+//       usersDep[departmentUsers[i]['department_id']].add(departmentUsers[i]);
+//
+//
+//
+//     }
+//
+//
+//     print('departmentUsers id group ___________${usersDep}');
+//
+//     for (var i = 0; i < result1['data']['department'].length; i++) {
+//       result1['data']['department'][i]['users']=usersDep[result1['data']['department'][i]['id']];
+//       department.add(DepartmentModal.fromJson(result1['data']['department'][i]));
+//       log(department.toString());
+//     }
+//
+//
+//     notifyListeners();
+//   }
+//
+//   getHoliday(context,String search_branch,String search_department) async {
+//     holiday = [];
+//     departhhh=[];
+//     load = true;
+//     // notifyListeners();
+//
+//     Map<String,dynamic>data={
+//       'search_branch':search_branch.toString()==''?'0':search_branch.toString(),
+//       'search_department':search_department.toString()==''?'0':search_department.toString()
+//     };
+//     log('data data data--------------${data}');
+//
+//     var res = await Webservices.postData(apiUrl:ApiUrls.listholiday,  body:data, context: context);
+//     load = false;
+//
+//     log('res from api listholiday ---------------${res}');
+//     holidayData=res['data'];
+//     getBranchDepartment();
+//     for (var i = 0; i < res['data']['department'].length; i++) {
+//       res['data']['department'][i]['checked']=false;
+//     }
+//     for (var i = 0; i < res['data']['branch'].length; i++) {
+//       res['data']['branch'][i]['checked']=false;
+//     }
+//     departhhh=res['data']['department'];
+//     depart=departhhh;
+//     departmentBranch=res['data']['branch'];
+//     // var result = res.body;
+//     log('result-----1--${departhhh}');
+//     // var result1 = convert.jsonDecode(result);
+//     log('result-----2m--${res["data"]['holiday']}');
+//     for (var i = 0; i < res['data']['branch'].length; i++) {
+//       brnc[res['data']['branch'][i]['id'].toString()]=res['data']['branch'][i];
+//
+//     }
+//     for (var i = 0; i < res['data']['department'].length; i++) {
+//       dep[res['data']['department'][i]['id'].toString()]=res['data']['department'][i];
+//
+//     }
+//     log('dep------------${dep}');
+//     log('branc------------${brnc}');
+//
+//     for (int i = 0; i < res['data']['holiday'].length; i++) {
+//
+//       print('i');
+//       holiday.add(HolidayModal.fromJson(res['data']['holiday'][i]));
+//     }
+//
+//     notifyListeners();
+//   }
+// updateHoliday(holiday)async{
+//   for (int i = 0; i < holiday.length; i++) {
+//
+//     print('i------------789--------${holiday}');
+//     holiday.add(HolidayModal.fromJson(holiday[i]));
+//   }
+//   log("Holiday------------list --------------${holiday}");
+//   notifyListeners();
+// }
+//   getdepart(String id)async{
+//     print('id --------${id}');
+//
+//     depart=[];
+//     for(int i=0 ;i< departhhh.length;i++){
+//       print('depid --------${departhhh}');
+//       print('${departhhh[i]['b_id']}-----------------');
+//
+//
+//       if(id==departhhh[i]['b_id'].toString()){
+//        depart.add(departhhh[i]);
+//       }
+//     }
+// print('object --------${depart}');
+//     notifyListeners();
+//   }
+//   getBranchDepartment(){
+//     category=departhhh+departmentBranch;
+//     log('categorycategorycategory-------');
+//     log(category.toString());
+//     notifyListeners();
+//   }
   getCalendar(context)async{
     load = true;
     notifyListeners();
@@ -309,28 +327,28 @@ print('object --------${depart}');
     load=false;
     notifyListeners();
   }
-
-  weekOffSetting(data,branch,departmaent,permission){
-    weekOff=[];
-    branchPermission=permission;
-    for (var i = 0; i < branch.length; i++) {
-      brnc[branch[i]['id'].toString()]=branch[i];
-
-    }
-    for (int i = 0; i < departmaent.length; i++) {
-      dep[departmaent[i]['id'].toString()]=departmaent[i];
-
-    }
-    log('dep------------${dep}');
-    log('branc------------${brnc}');
-    for (int i = 0; i < data.length; i++) {
-      weekOff.add(WeekOffListModal.fromJson(data[i]));
-      print('i------------789--------${weekOff}');
-
-    }
-    log("Holiday------------list --------------${data}");
-    notifyListeners();
-  }
+//
+//   weekOffSetting(data,branch,departmaent,permission){
+//     weekOff=[];
+//     branchPermission=permission;
+//     for (var i = 0; i < branch.length; i++) {
+//       brnc[branch[i]['id'].toString()]=branch[i];
+//
+//     }
+//     for (int i = 0; i < departmaent.length; i++) {
+//       dep[departmaent[i]['id'].toString()]=departmaent[i];
+//
+//     }
+//     log('dep------------${dep}');
+//     log('branc------------${brnc}');
+//     for (int i = 0; i < data.length; i++) {
+//       weekOff.add(WeekOffListModal.fromJson(data[i]));
+//       print('i------------789--------${weekOff}');
+//
+//     }
+//     log("Holiday------------list --------------${data}");
+//     notifyListeners();
+//   }
 getweekoffbydate(data){
   holiDaysbtdate = {};
   for(var i=0; i<data.length;i++){
@@ -339,10 +357,8 @@ getweekoffbydate(data){
   }
   print("result1['data']['getAllweekoff']---------------${holiDaysbtdate}");
 
-  // notifyListeners();
+  notifyListeners();
 }
 }
-
-
 
 

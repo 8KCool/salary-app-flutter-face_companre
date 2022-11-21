@@ -47,7 +47,6 @@ Future bottomsheet(
       );
     },
   );
-
 }
 
 Future showCustomDialogBox({required BuildContext context, required dynamic child}){
@@ -59,23 +58,23 @@ Future showCustomDialogBox({required BuildContext context, required dynamic chil
       contentPadding: EdgeInsets.all(0),
       // title: Text('Allow Liza to see', textAlign: TextAlign.center,),
       children: [
-        SimpleDialogOption(
-            padding: EdgeInsets.symmetric(vertical: 0),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height - 470,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                // border: Border.all(
-                //     color: MyColors.primaryColor
-                // ),
+    SimpleDialogOption(
+    padding: EdgeInsets.symmetric(vertical: 0),
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      width: MediaQuery.of(context).size.width,
+      // height: MediaQuery.of(context).size.height - 470,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        // border: Border.all(
+        //     color: MyColors.primaryColor
+        // ),
 
-              ),
-              child: child,
-            )
-        ),
+      ),
+      child: child,
+    )
+    ),
       ],
     );
   });

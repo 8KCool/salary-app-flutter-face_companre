@@ -29,7 +29,7 @@ class Webservices {
     UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
 
     http.Response response =
-        http.Response('{"message":"failure","status":0}', 404);
+    http.Response('{"message":"failure","status":0}', 404);
     log('called $url------------');
     try {
       response = await http.get(
@@ -37,42 +37,57 @@ class Webservices {
         headers:user==null?{}:
         {'Authorization':'Bearer ${user.token}'},
       );
-      // log('Bearer ${user!.token}');
-      if(response.statusCode!=200){
-        print('The response status for url $url is ${response.statusCode}');
-      }
+      log('Bearer ${user!.token}');
+      print('The response status for url $url is ${response.statusCode}');
+      // if(response.statusCode!=200){
+      //   print('The response status for url $url is ${response.statusCode}');
+      // }
       log(response.body);
     } catch (e) {
       // showSnackbar(context, text)
       log('Error in $url : ------ $e');
     }
+
+    // try {
+    //   response = await http.get(
+    //     Uri.parse(url),
+    //     headers:user==null?{}:
+    //     {'Authorization':'Bearer ${user.token}'},
+    //   );
+    //   log('Bearer ${user!.token}');
+    //   if(response.statusCode==422){
+    //     return response ;
+    //   }else if(response.statusCode!=200){
+    //     print('The response status for url $url is ${response.statusCode}');
+    //   }
+    //   log(response.body);
+    // }
     return response;
   }
 
 
   static Future<Map<String, dynamic>> postData(
       {required String apiUrl,
-      required Map<String, dynamic> body,
+        required Map<String, dynamic> body,
         bool showSuccessMessage = false,
-      required BuildContext context}) async {
+        required BuildContext context}) async {
     http.Response response =
-        http.Response('{"message":"failure","status":0}', 404);
+    http.Response('{"message":"failure","status":0}', 404);
     try {
       Map<dynamic,dynamic> headers={};
       UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
-      // SharedPreferences sharedPreferences =
-      // await SharedPreferences.getInstance();
-      // Map userMap = jsonDecode(sharedPreferences.getString('userData')!);
-      // log('the request for $apiUrl is ${userMap}');
-      response = await http.post(Uri.parse(apiUrl), body: body,   headers:user==null?{}:
-        {'Authorization':'Bearer ${user.token}'},);
+      response = await http.post(Uri.parse(apiUrl),
+        body: body,
+        headers:user==null?{}:
+      {'Authorization':'Bearer ${user.token}'},
+      );
       if (response.statusCode == 200) {
         var jsonResponse = convert.jsonDecode(response.body);
         log('the response for $apiUrl is $jsonResponse');
         if (jsonResponse['status'] == 1) {
           if(showSuccessMessage)
-          // showSnackbar(context, jsonResponse['message']);
-          return jsonResponse;
+            // showSnackbar(context, jsonResponse['message']);
+            return jsonResponse;
         } else {
           // showSnackbar(context, jsonResponse['message'].toString());
         }
@@ -213,17 +228,20 @@ class Webservices {
     //
     log(apiUrl);
     try {
-    var request = new http.MultipartRequest("POST", url);
-    body.forEach((key, value) {
-      request.fields[key] = value;
-      // log(value2);
-    });
-
-    if (files != null) {
-      (files as Map<dynamic, dynamic>).forEach((key, value) async {
-        request.files.add(await http.MultipartFile.fromPath(key, value.path));
+      UserModal? user = Provider.of<GlobalModal>(context, listen: false).userData;
+      var request = new http.MultipartRequest("POST", url,);
+      request.headers.addAll(user==null?{}:
+      {'Authorization':'Bearer ${user.token}'});
+      body.forEach((key, value) {
+        request.fields[key] = value;
+        // log(value2);
       });
-    }
+
+      if (files != null) {
+        (files as Map<dynamic, dynamic>).forEach((key, value) async {
+          request.files.add(await http.MultipartFile.fromPath(key, value.path));
+        });
+      }
 
 
       log(request.fields.toString());
@@ -246,9 +264,13 @@ class Webservices {
     } catch (e) {
       print(e);
       try{
+        Map<dynamic,dynamic> headers={};
+        UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
         var response = await http.post(
-          url,
-          body: body
+            url,
+            body: body,
+          headers:user==null?{}:
+          {'Authorization':'Bearer ${user.token}'},
         );
         if(response.statusCode==200){
           var jsonResponse = convert.jsonDecode(response.body);
@@ -264,31 +286,31 @@ class Webservices {
 
 
 
-  // static Future<void> updateDeviceToken({
-  //   required String userId,
-  //   required String token,
-  // }) async {
-  //   var request = {
-  //     "user_id": userId,
-  //     "device_id": token,
-  //   };
-  //   print('the device token request for url ${ApiUrls.updateDeviceToken} is $request');
-  //   try {
-  //     var response = await http.post(
-  //       Uri.parse(ApiUrls.updateDeviceToken),
-  //       body: request,
-  //     );
-  //     if (response.statusCode == 200) {
-  //       print('the device token is updated');
-  //     } else {
-  //
-  //       print('error in device token with status code ${response.statusCode}');
-  //       log(response.body);
-  //     }
-  //   } catch (e) {
-  //     print('error in device token:  $e');
-  //   }
-  // }
+// static Future<void> updateDeviceToken({
+//   required String userId,
+//   required String token,
+// }) async {
+//   var request = {
+//     "user_id": userId,
+//     "device_id": token,
+//   };
+//   print('the device token request for url ${ApiUrls.updateDeviceToken} is $request');
+//   try {
+//     var response = await http.post(
+//       Uri.parse(ApiUrls.updateDeviceToken),
+//       body: request,
+//     );
+//     if (response.statusCode == 200) {
+//       print('the device token is updated');
+//     } else {
+//
+//       print('error in device token with status code ${response.statusCode}');
+//       log(response.body);
+//     }
+//   } catch (e) {
+//     print('error in device token:  $e');
+//   }
+// }
 
 
 }

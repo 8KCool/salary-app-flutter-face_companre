@@ -23,7 +23,7 @@ import '../../widgets/CustomTexts.dart';
 enum SingingCharacter { one, two, three, four }
 class Enter_Detail_Page extends StatefulWidget {
   final String phone;
-   Enter_Detail_Page({Key? key,required this.phone}) : super(key: key);
+  Enter_Detail_Page({Key? key,required this.phone}) : super(key: key);
 
   @override
   State<Enter_Detail_Page> createState() => _Enter_Detail_PageState();
@@ -189,212 +189,212 @@ class _Enter_Detail_PageState extends State<Enter_Detail_Page> {
                           context: context,
                           builder: (BuildContext context) {
                             return StatefulBuilder(
-                              builder: (BuildContext context, StateSetter setState) {
-                                return Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                    )
-                                  ),
-                                  height: 400,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      vSizedBox4,
-                                      MainHeadingText(
-                                        text: 'Enter Employee Count',
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                        fontFamily: 'bold',
-                                      ),
-                                      vSizedBox2,
-                                      Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Theme(
-                                            data:  Theme.of(context).copyWith(
-                                                unselectedWidgetColor: MyColors.primaryColor,
-                                                backgroundColor: Colors.white
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 16),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        )
+                                    ),
+                                    height: 400,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        vSizedBox4,
+                                        MainHeadingText(
+                                          text: 'Enter Employee Count',
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                          fontFamily: 'bold',
+                                        ),
+                                        vSizedBox2,
+                                        Row(
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Theme(
+                                              data:  Theme.of(context).copyWith(
+                                                  unselectedWidgetColor: MyColors.primaryColor,
+                                                  backgroundColor: Colors.white
+                                              ),
+                                              child: Radio<SingingCharacter>(
+                                                value: SingingCharacter.one,
+                                                activeColor: MyColors.primaryColor,
+                                                groupValue: _character,
+                                                onChanged: (SingingCharacter? value) {
+                                                  setState(() {
+                                                    _character = value;
+                                                    dropvalue='0 - 10';
+                                                    numberofstaff.text='10';
+                                                    _character = SingingCharacter.one;
+                                                  });
+                                                  this.setState((){});
+                                                },
+                                              ),
                                             ),
-                                            child: Radio<SingingCharacter>(
-                                              value: SingingCharacter.one,
-                                              activeColor: MyColors.primaryColor,
-                                              groupValue: _character,
-                                              onChanged: (SingingCharacter? value) {
-                                                setState(() {
-                                                  _character = value;
-                                                  dropvalue='0 - 10';
-                                                  numberofstaff.text='10';
-                                                  _character = SingingCharacter.one;
-                                                });
-                                                this.setState((){});
-                                              },
-                                            ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              hSizedBox,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  ParagraphText(
-                                                    text: '0 - 10',
-                                                    fontSize: 16,
-                                                    fontFamily: 'bold',
-                                                    color: Colors.black,
-                                                  ),
+                                            Row(
+                                              children: [
+                                                hSizedBox,
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    ParagraphText(
+                                                      text: '0 - 10',
+                                                      fontSize: 16,
+                                                      fontFamily: 'bold',
+                                                      color: Colors.black,
+                                                    ),
                                                   ],
-                                              )
-                                            ],
-                                          ),
-
-
-                                        ],
-                                      ),
-                                      Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Theme(
-                                            data:  Theme.of(context).copyWith(
-                                                unselectedWidgetColor: MyColors.primaryColor,
-                                                backgroundColor: Colors.white
+                                                )
+                                              ],
                                             ),
-                                            child: Radio<SingingCharacter>(
-                                              value: SingingCharacter.two,
-                                              activeColor: MyColors.primaryColor,
-                                              groupValue: _character,
-                                              onChanged: (SingingCharacter? value) {
-                                                setState(() {
-                                                  _character = value;
-                                                  dropvalue='11 - 20';
-                                                  numberofstaff.text='20';
-                                                  _character = SingingCharacter.two;
-                                                  print(_character);
-                                                });
-                                                this.setState((){});
-                                              },
+
+
+                                          ],
+                                        ),
+                                        Row(
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Theme(
+                                              data:  Theme.of(context).copyWith(
+                                                  unselectedWidgetColor: MyColors.primaryColor,
+                                                  backgroundColor: Colors.white
+                                              ),
+                                              child: Radio<SingingCharacter>(
+                                                value: SingingCharacter.two,
+                                                activeColor: MyColors.primaryColor,
+                                                groupValue: _character,
+                                                onChanged: (SingingCharacter? value) {
+                                                  setState(() {
+                                                    _character = value;
+                                                    dropvalue='11 - 20';
+                                                    numberofstaff.text='20';
+                                                    _character = SingingCharacter.two;
+                                                    print(_character);
+                                                  });
+                                                  this.setState((){});
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              hSizedBox,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  ParagraphText(
-                                                    text: '11 - 20',
-                                                    fontSize: 16,
-                                                    fontFamily: 'bold',
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-
-
-                                        ],
-                                      ),
-                                      Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Theme(
-                                            data:  Theme.of(context).copyWith(
-                                                unselectedWidgetColor: MyColors.primaryColor,
-                                                backgroundColor: Colors.white
+                                            Row(
+                                              children: [
+                                                hSizedBox,
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    ParagraphText(
+                                                      text: '11 - 20',
+                                                      fontSize: 16,
+                                                      fontFamily: 'bold',
+                                                      color: Colors.black,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
                                             ),
-                                            child: Radio<SingingCharacter>(
-                                              value: SingingCharacter.three,
-                                              activeColor: MyColors.primaryColor,
-                                              groupValue: _character,
-                                              onChanged: (SingingCharacter? value) {
-                                                setState(() {
-                                                  _character = value;
-                                                  dropvalue='21 - 50';
 
-                                                  numberofstaff.text='50';
-                                                });
-                                              },
+
+                                          ],
+                                        ),
+                                        Row(
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Theme(
+                                              data:  Theme.of(context).copyWith(
+                                                  unselectedWidgetColor: MyColors.primaryColor,
+                                                  backgroundColor: Colors.white
+                                              ),
+                                              child: Radio<SingingCharacter>(
+                                                value: SingingCharacter.three,
+                                                activeColor: MyColors.primaryColor,
+                                                groupValue: _character,
+                                                onChanged: (SingingCharacter? value) {
+                                                  setState(() {
+                                                    _character = value;
+                                                    dropvalue='21 - 50';
+
+                                                    numberofstaff.text='50';
+                                                  });
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              hSizedBox,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  ParagraphText(
-                                                    text: '21 - 50',
-                                                    fontSize: 16,
-                                                    fontFamily: 'semibold',
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-
-
-                                        ],
-                                      ),
-                                      Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Theme(
-                                            data:  Theme.of(context).copyWith(
-                                                unselectedWidgetColor: MyColors.primaryColor,
-                                                backgroundColor: Colors.white
+                                            Row(
+                                              children: [
+                                                hSizedBox,
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    ParagraphText(
+                                                      text: '21 - 50',
+                                                      fontSize: 16,
+                                                      fontFamily: 'semibold',
+                                                      color: Colors.black,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
                                             ),
-                                            child: Radio<SingingCharacter>(
-                                              value: SingingCharacter.four,
-                                              activeColor: MyColors.primaryColor,
-                                              groupValue: _character,
-                                              onChanged: (SingingCharacter? value) {
-                                                setState(() {
-                                                  print(value);
-                                                  _character = value;
-                                                  dropvalue='50 Above';
 
-                                                  numberofstaff.text='100';
-                                                });
-                                              },
+
+                                          ],
+                                        ),
+                                        Row(
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Theme(
+                                              data:  Theme.of(context).copyWith(
+                                                  unselectedWidgetColor: MyColors.primaryColor,
+                                                  backgroundColor: Colors.white
+                                              ),
+                                              child: Radio<SingingCharacter>(
+                                                value: SingingCharacter.four,
+                                                activeColor: MyColors.primaryColor,
+                                                groupValue: _character,
+                                                onChanged: (SingingCharacter? value) {
+                                                  setState(() {
+                                                    print(value);
+                                                    _character = value;
+                                                    dropvalue='50 Above';
+
+                                                    numberofstaff.text='100';
+                                                  });
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              hSizedBox,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  ParagraphText(
-                                                    text: '50 Above',
-                                                    fontSize: 16,
-                                                    fontFamily: 'semibold',
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
+                                            Row(
+                                              children: [
+                                                hSizedBox,
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    ParagraphText(
+                                                      text: '50 Above',
+                                                      fontSize: 16,
+                                                      fontFamily: 'semibold',
+                                                      color: Colors.black,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
 
 
-                                        ],
-                                      ),
-                                      vSizedBox2,
-                                      RoundEdgedButton(
+                                          ],
+                                        ),
+                                        vSizedBox2,
+                                        RoundEdgedButton(
                                           text: 'Continue',
                                           textColor: Colors.white,
                                           onTap: (){
                                             Navigator.of(context).pop();
                                           },
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }
                             );
                           },
                         );
@@ -409,7 +409,7 @@ class _Enter_Detail_PageState extends State<Enter_Detail_Page> {
                             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                         RegExp regex = new RegExp(pattern);
                         if(oc_company_name.text==''){
-                        showSnackbar(context, 'Please enter company name');
+                          showSnackbar(context, 'Please enter company name');
                         }else if(name.text==''){
                           showSnackbar(context, 'Please enter your name');
                         }else if(email.text==''){

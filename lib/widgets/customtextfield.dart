@@ -22,6 +22,175 @@ class CustomTextField extends StatelessWidget {
   final double labelfont;
   final double left;
   final double suffixheight;
+  final double? height;
+  final double borderradius;
+  final double verticalPadding;
+  final String? prefixIcon;
+  final String? suffixIcon;
+  final TextAlign textAlign;
+  final double paddingsuffix;
+  final bool boxshadow;
+  final bool showlabel;
+  final bool isBorder;
+  final Function()? onTapsuffix;
+  final bool isflag;
+  final TextInputType? keyboardtype;
+  final bool enable;
+
+  CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.label = 'label',
+    this.border,
+    this.isBorder = true,
+    this.labelfontfamily = 'regular',
+    this.maxLines,
+    this.horizontalPadding = 0,
+    // this.verticalPadding = false,
+    this.obscureText = false,
+    this.bgColor = Colors.white,
+    this.inputbordercolor = Colors.transparent,
+    this.bordercolor = MyColors.bordercolor,
+    this.hintcolor = MyColors.textcolor,
+    this.labelcolor = MyColors.headingcolor,
+    this.verticalPadding = 0,
+    this.fontsize = 16,
+    this.labelfont = 14,
+    this.left = 16,
+    this.suffixheight = 10,
+    this.height,
+    this.borderradius = 4,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.textAlign = TextAlign.left,
+    this.paddingsuffix = 12,
+    this.boxshadow=false,
+    this.showlabel= false,
+    this.onTapsuffix,
+    this.isflag=false,
+    this.keyboardtype = TextInputType.text,
+    this.enable=true
+
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if(showlabel)
+        ParagraphText(
+          text: label,
+          fontSize: labelfont,
+          color: labelcolor,
+          fontFamily: labelfontfamily,
+        ),
+        if(showlabel)
+        SizedBox(height: 7),
+        Container(
+          height: maxLines == 1 ? 52: height,
+          margin: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+          decoration: BoxDecoration(
+              color: bgColor,
+
+              border: isBorder ? border?? Border.all(color: bordercolor): null,
+              // border: Border,
+              borderRadius: BorderRadius.circular(borderradius),
+              // boxShadow:[
+              //   shadow
+              // ]
+          ),
+          padding: EdgeInsets.only(left: prefixIcon != null? 0 : left),
+          child: Center(
+            child: TextField(
+              style: TextStyle(color: Colors.black, fontSize: fontsize, fontFamily: 'regular'),
+              maxLines: maxLines ?? 1,
+              controller: controller,
+              obscureText: obscureText,
+              textAlign: textAlign,
+              keyboardType: keyboardtype,
+              enabled: enable,
+
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: TextStyle(fontSize: fontsize, color: hintcolor, fontFamily: 'regular'),
+                // border: InputBorder.none ,
+                // focusedBorder: UnderlineInputBorder(
+                //   borderSide: BorderSide(color: inputbordercolor)
+                // ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: inputbordercolor),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: inputbordercolor),
+                ),
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: inputbordercolor),
+                ),
+                prefixIcon:prefixIcon==null?null:
+                Padding(
+                  padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 8.0,bottom: 08.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        prefixIcon!,
+                        // width: 10,
+                        // height: 10,
+                        fit: BoxFit.fitHeight,
+                        height: suffixheight,
+                      ),
+                    ],
+                  ),
+                ),
+                suffixIcon: suffixIcon==null?null:
+                GestureDetector(
+                  onTap: onTapsuffix,
+                  child: Padding(
+                    padding: EdgeInsets.all(paddingsuffix),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          suffixIcon!,
+                          // color: Colors.black,
+                          // width: 10,
+                          height: suffixheight,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+class CustomTextFieldOtp extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final String label;
+  final String labelfontfamily;
+  final BoxBorder? border;
+  final double horizontalPadding;
+  final bool obscureText;
+  final int? maxLines;
+  final Color bgColor;
+  final Color inputbordercolor;
+  final Color hintcolor;
+  final Color labelcolor;
+  final Color bordercolor;
+  final double fontsize;
+  final double labelfont;
+  final double left;
+  final double suffixheight;
   final double height;
   final double borderradius;
   final double verticalPadding;
@@ -39,7 +208,7 @@ class CustomTextField extends StatelessWidget {
   final bool enabled;
 
 
-  CustomTextField({
+  CustomTextFieldOtp({
     Key? key,
     required this.controller,
     required this.hintText,
@@ -184,21 +353,21 @@ class CustomTextField extends StatelessWidget {
                 suffixIcon: suffixIcon == null
                     ? null
                     : Padding(
-                        padding: EdgeInsets.all(paddingsuffix),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              suffixIcon!,
-                              // color: Colors.black,
-                              // width: 10,
-                              height: suffixheight,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ],
-                        ),
+                  padding: EdgeInsets.all(paddingsuffix),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        suffixIcon!,
+                        // color: Colors.black,
+                        // width: 10,
+                        height: suffixheight,
+                        fit: BoxFit.fitHeight,
                       ),
+                    ],
+                  ),
+                ),
               ),
               keyboardType: keyboardtype,
               onChanged: onchange,
@@ -209,7 +378,6 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
-
 class CustomTextFieldwithoutshadow extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
@@ -257,36 +425,32 @@ class CustomTextFieldwithoutshadow extends StatelessWidget {
         Container(
           // height: 45,
           width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.only(top: 1, left: 5, right: 5),
+          margin: EdgeInsets.only(top: 1, left: 5,right: 5),
           decoration: BoxDecoration(
               // color: MyColors.whiteColor,
-              borderRadius: BorderRadius.circular(borderradius)),
+              borderRadius: BorderRadius.circular(borderradius)
+          ),
         ),
         Container(
           // height: 50,
-          margin: EdgeInsets.symmetric(
-              horizontal: horizontalPadding ? 16 : 0,
-              vertical: verticalPadding),
+          margin: EdgeInsets.symmetric(horizontal: horizontalPadding ? 16 : 0, vertical: verticalPadding),
           decoration: BoxDecoration(
             color: bgColor,
-            border: border ?? Border.all(color: Colors.transparent),
+            border: border?? Border.all(color: Colors.transparent),
             // border: Border,
             borderRadius: BorderRadius.circular(borderradius),
+
           ),
           padding: EdgeInsets.only(left: left),
           child: TextField(
-            style: TextStyle(
-                color: Colors.black, fontSize: fontsize, fontFamily: 'av_book'),
+            style: TextStyle(color: Colors.black, fontSize: fontsize, fontFamily: 'av_book'),
             maxLines: maxLines ?? 1,
             controller: controller,
             obscureText: obscureText,
             textAlign: textAlign,
             decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: TextStyle(
-                fontSize: fontsize,
-                color: hintcolor,
-              ),
+              hintStyle: TextStyle(fontSize: fontsize, color: hintcolor,),
               // border: InputBorder.none ,
               // focusedBorder: UnderlineInputBorder(
               //   borderSide: BorderSide(color: inputbordercolor)
@@ -301,42 +465,45 @@ class CustomTextFieldwithoutshadow extends StatelessWidget {
                 borderSide: BorderSide(color: inputbordercolor),
               ),
 
-              prefixIcon: prefixIcon == null
-                  ? null
-                  : Padding(
-                      padding: const EdgeInsets.only(
-                          left: 12.0, right: 12.0, top: 12.0, bottom: 12.0),
-                      child: Container(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              color: Color(0xFF97989A),
-                              offset: Offset(0, 4.0),
-                              spreadRadius: 0.0,
-                              blurRadius: 4.0),
-                        ], borderRadius: BorderRadius.circular(50)),
-                        child: Image.asset(
-                          prefixIcon!,
-                          width: 10,
-                          height: 10,
-                          fit: BoxFit.fitHeight,
+              prefixIcon:prefixIcon==null?null:
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 12.0,bottom: 12.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0xFF97989A),
+                            offset: Offset(0,4.0),
+                            spreadRadius: 0.0,
+                            blurRadius: 4.0
                         ),
-                      ),
-                    ),
-              suffixIcon: suffixIcon == null
-                  ? null
-                  : Padding(
-                      padding: EdgeInsets.all(paddingsuffix),
-                      child: Image.asset(
-                        suffixIcon!,
-                        // color: Colors.black,
-                        width: 10,
-                        height: 10,
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
+                      ],
+                      borderRadius: BorderRadius.circular(50)
+                  ),
+                  child: Image.asset(
+                    prefixIcon!,
+                    width: 10,
+                    height: 10,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
+              suffixIcon: suffixIcon==null?null:
+              Padding(
+                padding: EdgeInsets.all(paddingsuffix),
+                child: Image.asset(
+                  suffixIcon!,
+                  // color: Colors.black,
+                  width: 10,
+                  height: 10,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
             ),
           ),
         ),
+
+
       ],
     );
   }
@@ -385,8 +552,10 @@ class CustomTextFieldapply extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
             Expanded(
               child: TextField(
+
                 maxLines: maxLines ?? 1,
                 controller: controller,
                 obscureText: obscureText,
@@ -395,30 +564,35 @@ class CustomTextFieldapply extends StatelessWidget {
                   hintText: hintText,
                   hintStyle: TextStyle(fontSize: 16),
                   border: InputBorder.none,
-                  prefixIcon: prefixIcon == null
-                      ? null
-                      : Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Image.asset(
-                            prefixIcon!,
-                            width: 10,
-                            height: 10,
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
+                  prefixIcon:prefixIcon==null?null:
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Image.asset(
+                      prefixIcon!,
+                      width: 10,
+                      height: 10,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
                 ),
               ),
             ),
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  'apply',
-                  style: TextStyle(color: Colors.red, fontSize: 15),
-                ))
+            TextButton(onPressed: (){},
+                child: Text('apply',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15
+                  ),
+                )
+            )
           ],
-        ));
+        )
+
+
+    );
   }
 }
+
 
 class CustomTextFields extends StatelessWidget {
   final TextEditingController controller;
@@ -430,6 +604,7 @@ class CustomTextFields extends StatelessWidget {
   final Color bgColor;
   final double verticalPadding;
   final String? prefixIcon;
+  final TextInputType? keyboardtype;
   const CustomTextFields({
     Key? key,
     required this.controller,
@@ -440,6 +615,7 @@ class CustomTextFields extends StatelessWidget {
     this.obscureText = false,
     this.bgColor = Colors.white,
     this.verticalPadding = 8,
+    this.keyboardtype = TextInputType.text,
     this.prefixIcon,
   }) : super(key: key);
 
@@ -473,6 +649,7 @@ class CustomTextFields extends StatelessWidget {
             ),
           ),
         ),
+        keyboardType: keyboardtype,
       ),
     );
   }
@@ -482,12 +659,12 @@ class CustomTextFieldEditProfile extends StatelessWidget {
   final TextEditingController controller;
   final String headingText;
   final String hintText;
-  const CustomTextFieldEditProfile(
-      {Key? key,
-      required this.controller,
-      required this.hintText,
-      required this.headingText})
-      : super(key: key);
+  const CustomTextFieldEditProfile({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    required this.headingText
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -499,12 +676,223 @@ class CustomTextFieldEditProfile extends StatelessWidget {
           SubHeadingText(text: headingText),
           TextField(
             controller: controller,
-            decoration: InputDecoration(
-                hintText: hintText,
-                hintStyle: TextStyle(color: Colors.black, fontSize: 20)),
+            decoration: InputDecoration(hintText: hintText,
+                hintStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20
+                )
+            ),
           )
         ],
       ),
+    );
+  }
+}
+
+
+
+class CustomTextFieldwithFlag extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final String label;
+  final String labelfontfamily;
+  final BoxBorder? border;
+  final double horizontalPadding;
+  final bool obscureText;
+  final int? maxLines;
+  final Color bgColor;
+  final Color inputbordercolor;
+  final Color hintcolor;
+  final Color labelcolor;
+  final Color bordercolor;
+  final double fontsize;
+  final double labelfont;
+  final double left;
+  final double suffixheight;
+  final double height;
+  final double borderradius;
+  final double verticalPadding;
+  final String? prefixIcon;
+  final String? suffixIcon;
+  final TextAlign textAlign;
+  final double paddingsuffix;
+  final bool boxshadow;
+  final bool showlabel;
+  final int? maxlength;
+  final FocusNode? focusnode;
+  final TextInputType? keyboardtype;
+  final Function(String)? onchange;
+  final bool isflag;
+  final bool enabled;
+
+
+  CustomTextFieldwithFlag({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.label = 'label',
+    this.border,
+    this.labelfontfamily = 'regular',
+    this.maxLines,
+    this.horizontalPadding = 0,
+    // this.verticalPadding = false,
+    this.obscureText = false,
+    this.bgColor = Colors.white,
+    this.inputbordercolor = Colors.transparent,
+    this.bordercolor = MyColors.bordercolor,
+    this.hintcolor = MyColors.textcolor,
+    this.labelcolor = MyColors.headingcolor,
+    this.verticalPadding = 0,
+    this.fontsize = 13,
+    this.labelfont = 14,
+    this.left = 16,
+    this.suffixheight = 10,
+    this.height = 52,
+    this.borderradius = 4,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.textAlign = TextAlign.left,
+    this.paddingsuffix = 12,
+    this.boxshadow = false,
+    this.showlabel = false,
+    this.onchange,
+    this.maxlength = null,
+    this.keyboardtype = TextInputType.text,
+    this.focusnode,
+    this.isflag=false,
+    this.enabled=true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (showlabel)
+          ParagraphText(
+            text: label,
+            fontSize: labelfont,
+            color: labelcolor,
+            fontFamily: labelfontfamily,
+          ),
+        if (showlabel) SizedBox(height: 7),
+        Container(
+          height: height,
+          margin: EdgeInsets.symmetric(
+              horizontal: horizontalPadding, vertical: verticalPadding),
+          decoration: BoxDecoration(
+            color: bgColor,
+            border: border ?? Border.all(color: bordercolor),
+            // border: Border,
+            borderRadius: BorderRadius.circular(borderradius),
+            // boxShadow:[
+            //   shadow
+            // ]
+          ),
+          padding: EdgeInsets.only(left: prefixIcon != null ? 0 : left),
+          child: Center(
+            child: TextField(
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: fontsize,
+                  fontFamily: 'regular'),
+              maxLines: maxLines ?? 1,
+              controller: controller,
+              obscureText: obscureText,
+              textAlign: textAlign,
+              focusNode: focusnode,
+              maxLength: maxlength,
+              enabled: enabled,
+
+              decoration: InputDecoration(
+                hintText: hintText,
+                counterText: "",
+
+                hintStyle: TextStyle(
+                    fontSize: fontsize,
+                    color: hintcolor,
+                    fontFamily: 'regular'),
+                // border: InputBorder.none ,
+                // focusedBorder: UnderlineInputBorder(
+                //   borderSide: BorderSide(color: inputbordercolor)
+                // ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: inputbordercolor),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: inputbordercolor),
+                ),
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: inputbordercolor),
+                ),
+                // prefixIcon:prefixIcon==null?null:
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 8.0,bottom: 08.0),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Image.asset(
+                //         prefixIcon!,
+                //         // width: 10,
+                //         // height: 10,
+                //         fit: BoxFit.fitHeight,
+                //         height: suffixheight,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                prefixIcon:isflag? Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Container(
+                    width: 75,
+                    child: Row(
+
+                      children: [
+                        Image.asset(
+                          'assets/images/flag.png',
+                          height: 25,
+                          width: 25,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '+' + '91',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'av_book',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ):null,
+                suffixIcon: suffixIcon == null
+                    ? null
+                    : Padding(
+                  padding: EdgeInsets.all(paddingsuffix),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        suffixIcon!,
+                        // color: Colors.black,
+                        // width: 10,
+                        height: suffixheight,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              keyboardType: keyboardtype,
+              onChanged: onchange,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -6,14 +6,14 @@ import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/Login_process/enter_details.dart';
-import 'package:salaryredesign/pages/my_profile.dart';
+// import 'package:salaryredesign/pages/my_profile.dart';
 import 'package:salaryredesign/pages/tab_pages/dashboard.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:salaryredesign/widgets/lists.dart';
 
 import '../tab_pages/bottom_tab.dart';
-import '../tab_pages/new_tab.dart';
+// import '../tab_pages/new_tab.dart';
 
 
 final SimpleDialog dialog1 = SimpleDialog(
@@ -64,19 +64,19 @@ class SimpleDialogItem extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: const Offset(
-                                0.0,
-                                4.0,
-                              ),
-                              blurRadius: 2.0,
-                              spreadRadius: 0.0,
-                            ),
-                          ]
-                        ),
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: const Offset(
+                                    0.0,
+                                    4.0,
+                                  ),
+                                  blurRadius: 2.0,
+                                  spreadRadius: 0.0,
+                                ),
+                              ]
+                          ),
                           child: Image.asset(
                             MyImages.organization_choose, height: 60, width: 60,)
                       ),
@@ -89,7 +89,7 @@ class SimpleDialogItem extends StatelessWidget {
                           ParagraphText(text: 'Id : 687676EB89',
                             fontSize: 14,
                             color: Colors.black,
-                            )
+                          )
                         ],
                       )
                     ],
@@ -107,19 +107,19 @@ class SimpleDialogItem extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: const Offset(
-                                0.0,
-                                4.0,
-                              ),
-                              blurRadius: 2.0,
-                              spreadRadius: 0.0,
-                            ),
-                          ]
-                        ),
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: const Offset(
+                                    0.0,
+                                    4.0,
+                                  ),
+                                  blurRadius: 2.0,
+                                  spreadRadius: 0.0,
+                                ),
+                              ]
+                          ),
                           child: Image.asset(
                             MyImages.organization_choose, height: 60, width: 60,)
                       ),
@@ -132,7 +132,7 @@ class SimpleDialogItem extends StatelessWidget {
                           ParagraphText(text: 'Id : 687676EB89',
                             fontSize: 14,
                             color: Colors.black,
-                            )
+                          )
                         ],
                       )
                     ],
@@ -150,19 +150,19 @@ class SimpleDialogItem extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: const Offset(
-                                0.0,
-                                4.0,
-                              ),
-                              blurRadius: 2.0,
-                              spreadRadius: 0.0,
-                            ),
-                          ]
-                        ),
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: const Offset(
+                                    0.0,
+                                    4.0,
+                                  ),
+                                  blurRadius: 2.0,
+                                  spreadRadius: 0.0,
+                                ),
+                              ]
+                          ),
                           child: Image.asset(
                             MyImages.organization_choose, height: 60, width: 60,)
                       ),
@@ -175,7 +175,7 @@ class SimpleDialogItem extends StatelessWidget {
                           ParagraphText(text: 'Id : 687676EB89',
                             fontSize: 14,
                             color: Colors.black,
-                            )
+                          )
                         ],
                       )
                     ],
@@ -252,21 +252,21 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RoundEdgedButton(
-                      text: 'Personalize', textColor: Colors.white,
+                    text: 'Personalize', textColor: Colors.white,
                     onTap: (){
                       // showDialog<void>(context: context, builder: (context) => dialog1);
-                     if(widget.isEmp){
-                       // push(context: context, screen: newTabsPage());
-                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                           newTabsPage()), (Route<dynamic> route) => false);
-                       // push(context: context, screen: MyPorfile_Page());
-                     }
-                     else{
-                       // push(context: context, screen: TabsPage());
-                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                           TabsPage()), (Route<dynamic> route) => false);
-                       // push(context: context, screen: Dashboard_Page());
-                     }
+                      if(widget.isEmp){
+                        // push(context: context, screen: newTabsPage());
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        //     newTabsPage()), (Route<dynamic> route) => false);
+                        // push(context: context, screen: MyPorfile_Page());
+                      }
+                      else{
+
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            TabsPage()), (Route<dynamic> route) => false);
+
+                      }
 
                     },
                   ),
@@ -277,18 +277,18 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                     fontfamily: 'regular',
                     color: Colors.transparent,
                     onTap: (){
-                      // showDialog<void>(context: context, builder: (context) => dialog1);
+
                       if(widget.isEmp){
-                        // push(context: context, screen: newTabsPage());
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            newTabsPage()), (Route<dynamic> route) => false);
-                        // push(context: context, screen: MyPorfile_Page());
-                      }
-                      else{
-                        // push(context: context, screen: TabsPage());
+
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                             TabsPage()), (Route<dynamic> route) => false);
-                        // push(context: context, screen: Dashboard_Page());
+
+                      }
+                      else{
+
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            TabsPage()), (Route<dynamic> route) => false);
+
                       }
 
                     },

@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:salaryredesign/pages/employee/my_profile.dart';
+import 'package:salaryredesign/pages/employer_settings_page.dart';
+import 'package:salaryredesign/pages/monthly_wise_employee.dart';
+import 'package:salaryredesign/pages/process_salary.dart';
+import 'package:salaryredesign/pages/settings/leave_setting.dart';
+import 'package:salaryredesign/pages/settings/policies.dart';
+import 'package:salaryredesign/pages/settings/settings_page.dart';
+import 'package:salaryredesign/pages/settings/weekoff_management.dart';
 import 'package:salaryredesign/pages/splash.dart';
+import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
+import 'package:salaryredesign/pages/view_salary_detail.dart';
+import 'package:salaryredesign/pages/weekly_wise_employee.dart';
 import 'package:salaryredesign/pages/welcome.dart';
 import 'package:salaryredesign/providers/clock.dart';
 import 'package:salaryredesign/services/local_services.dart';
-
-import 'constants/globalkeys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreference = await SharedPreferences.getInstance();
   runApp(
     ChangeNotifierProvider(
-    create: (context) => GlobalModal(),
-    // create: (BuildContext context) {  },
-    child: const MyApp(),
-  ),);
+      create: (context) => GlobalModal(),
+      // create: (BuildContext context) {  },
+      child: const MyApp(),
+    ),);
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +37,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      navigatorKey: MyGlobalKeys.navigatorKey,
       theme: ThemeData(
         fontFamily: 'regular',
         // This is the theme of your application.
@@ -42,6 +51,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: SplashScreen()
+      // home: TabsPage()
     );
   }
 }
@@ -80,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
+    // This method is rerun every time setSt  ate is called, for instance as done
     // by the _incrementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods

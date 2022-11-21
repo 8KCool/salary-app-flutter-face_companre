@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
-import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/all_employee.dart';
+import 'package:salaryredesign/pages/announcement/announcement_page.dart';
+import 'package:salaryredesign/pages/approvals/leave_request.dart';
+import 'package:salaryredesign/pages/approvals/manage_approvals.dart';
 import 'package:salaryredesign/pages/attandance_page.dart';
-import 'package:salaryredesign/services/api_urls.dart';
-import 'package:salaryredesign/services/webservices.dart';
+import 'package:salaryredesign/pages/notificationPage.dart';
+import 'package:salaryredesign/pages/reports/reports_page.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
-
-import '../../providers/clock.dart';
 
 class Dashboard_Page extends StatefulWidget {
   const Dashboard_Page({Key? key}) : super(key: key);
@@ -50,29 +49,13 @@ List Name = [
 ];
 
 class _Dashboard_PageState extends State<Dashboard_Page> {
-  getDetails()async{
-    Map<String ,dynamic>data={
-      'token':'Bearer $usertoken'
-    };
-var res = await Webservices.postData(apiUrl: ApiUrls.qrattendance, body: data, context: context);
-print('res from api ${res}');
-// await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
-
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getDetails();
-
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF3F4F6),
       appBar: appBar(
           context: context,
-          title: Provider.of<GlobalModal>(context, listen: false).userData!.companyName.toString(),
+          title: 'Ecomads Private Limited',
           implyLeading: false,
           titlecenter: false,
           leading: Icon(
@@ -82,7 +65,10 @@ print('res from api ${res}');
           appBarColor: MyColors.primaryColor,
           titleColor: Colors.white,
           actions: [
-            Icon(Icons.notifications_outlined),
+            GestureDetector(
+              onTap: () => push(context: context, screen: NotificationPage1()),
+              child: Icon(Icons.notifications_outlined)
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
@@ -386,97 +372,107 @@ print('res from api ${res}');
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                ClipRRect(
-                                  child: Image.asset(
-                                    MyImages.attendance,
-                                    height: 60,
-                                    width: 60,
-                                    fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: (){
+                            push(context: context, screen: Attandance_daily_Page());
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  ClipRRect(
+                                    child: Image.asset(
+                                      MyImages.attendance,
+                                      height: 60,
+                                      width: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                // Positioned(
-                                //     top: 0, right: 5,
-                                //     child: Container(
-                                //       height: 12,
-                                //       width: 12,
-                                //       decoration: BoxDecoration(
-                                //           color: MyColors.red,
-                                //           borderRadius: BorderRadius.circular(10),
-                                //           border: Border.all(
-                                //               color: Colors.white,
-                                //               width: 2
-                                //           )
-                                //       ),
-                                //     ))
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            ParagraphText(
-                              text: 'Attendance',
-                              textAlign: TextAlign.center,
-                              fontSize: 14,
-                              color: MyColors.primaryColor,
-                            )
-                          ],
+                                  // Positioned(
+                                  //     top: 0, right: 5,
+                                  //     child: Container(
+                                  //       height: 12,
+                                  //       width: 12,
+                                  //       decoration: BoxDecoration(
+                                  //           color: MyColors.red,
+                                  //           borderRadius: BorderRadius.circular(10),
+                                  //           border: Border.all(
+                                  //               color: Colors.white,
+                                  //               width: 2
+                                  //           )
+                                  //       ),
+                                  //     ))
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              ParagraphText(
+                                text: 'Attendance',
+                                textAlign: TextAlign.center,
+                                fontSize: 14,
+                                color: MyColors.primaryColor,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       hSizedBox4,
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                ClipRRect(
-                                  child: Image.asset(
-                                    MyImages.approvals,
-                                    height: 60,
-                                    width: 60,
-                                    fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: (){
+                            push(context: context, screen: Manage_Approvals_Page());
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  ClipRRect(
+                                    child: Image.asset(
+                                      MyImages.approvals,
+                                      height: 60,
+                                      width: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                Positioned(
-                                    top: -10,
-                                    right: 0,
-                                    child: Container(
-                                      height: 24,
-                                      width: 24,
-                                      decoration: BoxDecoration(
-                                          color: MyColors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                              color: Colors.white, width: 2)),
-                                      child: Center(
-                                        child: ParagraphText(
-                                          text: '1',
-                                          color: Colors.white,
-                                          fontSize: 12,
+                                  Positioned(
+                                      top: -10,
+                                      right: 0,
+                                      child: Container(
+                                        height: 24,
+                                        width: 24,
+                                        decoration: BoxDecoration(
+                                            color: MyColors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                                color: Colors.white, width: 2)),
+                                        child: Center(
+                                          child: ParagraphText(
+                                            text: '1',
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                    ))
-                              ],
-                              clipBehavior: Clip.none,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            ParagraphText(
-                              text: 'Approvals',
-                              textAlign: TextAlign.center,
-                              fontSize: 14,
-                              color: MyColors.primaryColor,
-                            )
-                          ],
+                                      ))
+                                ],
+                                clipBehavior: Clip.none,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              ParagraphText(
+                                text: 'Approvals',
+                                textAlign: TextAlign.center,
+                                fontSize: 14,
+                                color: MyColors.primaryColor,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       hSizedBox4,
@@ -530,91 +526,101 @@ print('res from api ${res}');
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                ClipRRect(
-                                  child: Image.asset(
-                                    MyImages.announcement,
-                                    height: 60,
-                                    width: 60,
-                                    fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: (){
+                            push(context: context, screen: Announcement_Page());
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  ClipRRect(
+                                    child: Image.asset(
+                                      MyImages.announcement,
+                                      height: 60,
+                                      width: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                // Positioned(
-                                //     top: 0, right: 5,
-                                //     child: Container(
-                                //       height: 12,
-                                //       width: 12,
-                                //       decoration: BoxDecoration(
-                                //           color: MyColors.red,
-                                //           borderRadius: BorderRadius.circular(10),
-                                //           border: Border.all(
-                                //               color: Colors.white,
-                                //               width: 2
-                                //           )
-                                //       ),
-                                //     ))
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            ParagraphText(
-                              text: 'Announcement',
-                              textAlign: TextAlign.center,
-                              fontSize: 13.7,
-                              color: MyColors.primaryColor,
-                            )
-                          ],
+                                  // Positioned(
+                                  //     top: 0, right: 5,
+                                  //     child: Container(
+                                  //       height: 12,
+                                  //       width: 12,
+                                  //       decoration: BoxDecoration(
+                                  //           color: MyColors.red,
+                                  //           borderRadius: BorderRadius.circular(10),
+                                  //           border: Border.all(
+                                  //               color: Colors.white,
+                                  //               width: 2
+                                  //           )
+                                  //       ),
+                                  //     ))
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              ParagraphText(
+                                text: 'Announcement',
+                                textAlign: TextAlign.center,
+                                fontSize: 13.7,
+                                color: MyColors.primaryColor,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       hSizedBox4,
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                ClipRRect(
-                                  child: Image.asset(
-                                    MyImages.reports,
-                                    height: 60,
-                                    width: 60,
-                                    fit: BoxFit.cover,
+                        child: GestureDetector(
+                          onTap: (){
+                            push(context: context, screen: Reports_Page());
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  ClipRRect(
+                                    child: Image.asset(
+                                      MyImages.reports,
+                                      height: 60,
+                                      width: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                // Positioned(
-                                //     top: 0, right: 5,
-                                //     child: Container(
-                                //       height: 12,
-                                //       width: 12,
-                                //       decoration: BoxDecoration(
-                                //           color: MyColors.red,
-                                //           borderRadius: BorderRadius.circular(10),
-                                //           border: Border.all(
-                                //               color: Colors.white,
-                                //               width: 2
-                                //           )
-                                //       ),
-                                //     )
-                                // )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            ParagraphText(
-                              text: 'Reports',
-                              textAlign: TextAlign.center,
-                              fontSize: 14,
-                              color: MyColors.primaryColor,
-                            )
-                          ],
+                                  // Positioned(
+                                  //     top: 0, right: 5,
+                                  //     child: Container(
+                                  //       height: 12,
+                                  //       width: 12,
+                                  //       decoration: BoxDecoration(
+                                  //           color: MyColors.red,
+                                  //           borderRadius: BorderRadius.circular(10),
+                                  //           border: Border.all(
+                                  //               color: Colors.white,
+                                  //               width: 2
+                                  //           )
+                                  //       ),
+                                  //     )
+                                  // )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              ParagraphText(
+                                text: 'Reports',
+                                textAlign: TextAlign.center,
+                                fontSize: 14,
+                                color: MyColors.primaryColor,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       hSizedBox4,
@@ -689,57 +695,62 @@ print('res from api ${res}');
                   vSizedBox,
                   vSizedBox05,
                   for (var i = 0; i < 3; i++)
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            ClipRRect(
-                              child: Image.asset(
-                                images[i],
-                                height: 60,
-                                width: 60,
+                    GestureDetector(
+                      onTap: (){
+                        push(context: context, screen: Leave_Request_Page());
+                      },
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              ClipRRect(
+                                child: Image.asset(
+                                  images[i],
+                                  height: 60,
+                                  width: 60,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            hSizedBox,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: Name[i] + ' ',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontFamily: 'bold'),
-                                      children: const <TextSpan>[
-                                        TextSpan(
-                                            text:
-                                                'is requested leave for 2 days.',
-                                            style: TextStyle(
-                                                color: MyColors.paragraphcolor,
-                                                fontFamily: 'regular')),
-                                      ],
+                              hSizedBox,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        text: Name[i] + ' ',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            fontFamily: 'bold'),
+                                        children: const <TextSpan>[
+                                          TextSpan(
+                                              text:
+                                                  'is requested leave for 2 days.',
+                                              style: TextStyle(
+                                                  color: MyColors.paragraphcolor,
+                                                  fontFamily: 'regular')),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            TextButton(
-                                onPressed: () {},
-                                child: ParagraphText(
-                                  text: 'View',
-                                  fontSize: 14,
-                                  fontFamily: 'bold',
-                                  color: MyColors.primaryColor,
-                                ))
-                          ],
-                        ),
-                        Divider(
-                          height: 30,
-                        )
-                      ],
+                              TextButton(
+                                  onPressed: () {},
+                                  child: ParagraphText(
+                                    text: 'View',
+                                    fontSize: 14,
+                                    fontFamily: 'bold',
+                                    color: MyColors.primaryColor,
+                                  ))
+                            ],
+                          ),
+                          Divider(
+                            height: 30,
+                          )
+                        ],
+                      ),
                     ),
                 ],
               ),

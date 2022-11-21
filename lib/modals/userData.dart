@@ -31,14 +31,14 @@ class UserModal {
   factory UserModal.fromJson(Map userData) {
     return UserModal(
         userId: userData['client_emp'] == null ? 1 : userData['client_emp'],
-        name: userData['name'] ?? '32',
+        name: userData['name'] ?? 'dummy name',
         emailId: userData['email'] ?? '',
         gender: userData['gender'].toString() ?? '',
         city: userData['oc_city'] ?? '',
         country: userData['oc_country'] ?? '',
-        phone: userData['mobile'] ?? '',
-        address: userData['oc_address'] ??'',
-        profile_img: userData['avatar'] ?? '',
+        phone: userData['phone_number'] ?? '',
+        address: userData['postal_address'] ??'',
+        profile_img: userData['profileImage'] ?? 'https://salarydocument.fra1.digitaloceanspaces.com/employeeprofile/cogKO4E3ks7sImNupnLt21rPwsHFfWncaHhhtmru.png',
         token: userData['token'] ?? '',
         branchId: userData['branch_id'] ?? '',
         companyName: userData['oc_company_name']??''

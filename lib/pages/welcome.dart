@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
-import 'package:salaryredesign/pages/Login_process/enter_phone_number.dart';
 import 'package:salaryredesign/pages/select_type_page.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../constants/sized_box.dart';
+import 'Login_process/enter_phone_number.dart';
 
 
 class Welcome_Page extends StatefulWidget {
@@ -37,7 +37,6 @@ class _Welcome_PageState extends State<Welcome_Page> {
               children: [
                 vSizedBox2,
                GestureDetector(
-
                  child: Container(
                    width: MediaQuery.of(context).size.width,
                    padding: EdgeInsets.only(right: 16),
@@ -50,7 +49,7 @@ class _Welcome_PageState extends State<Welcome_Page> {
                    ),
                  ),
                onTap: (){
-                 push(context: context, screen: Enter_Phone_Number());
+
                },
                ),
                 vSizedBox4,
@@ -131,7 +130,7 @@ class _Welcome_PageState extends State<Welcome_Page> {
                     ),
                   ),
                   onTap: (){
-                    push(context: context, screen: Enter_Phone_Number());
+
                   },
                 ),
                 vSizedBox4,
@@ -212,7 +211,7 @@ class _Welcome_PageState extends State<Welcome_Page> {
                     ),
                   ),
                   onTap: (){
-                    push(context: context, screen: Enter_Phone_Number());
+
                   },
                 ),
                 vSizedBox4,
@@ -325,7 +324,7 @@ class _Welcome_PageState extends State<Welcome_Page> {
                       GestureDetector(
                         onTap: (){
                             // controller.jumpToPage(1);
-                        push(context: context, screen: Select_Type_Page());
+                          push(context: context, screen: Enter_Phone_Number());
                         },
                         child:Image.asset(
                           MyImages.btnone,

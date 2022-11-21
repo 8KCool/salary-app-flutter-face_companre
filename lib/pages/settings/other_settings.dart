@@ -1,23 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/all_employee.dart';
-
+import 'package:salaryredesign/pages/approvals/attendance_approval.dart';
 import 'package:salaryredesign/pages/attandance_page.dart';
 import 'package:salaryredesign/pages/settings/branch_settings.dart';
-
+import 'package:salaryredesign/pages/settings/department_settings.dart';
+import 'package:salaryredesign/pages/settings/employee_category.dart';
+import 'package:salaryredesign/pages/settings/roles.dart';
 import 'package:salaryredesign/pages/settings/shift_settings.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 
 import '../../widgets/custom_widgets.dart';
-import 'department_settings.dart';
-import '../../providers/clock.dart';
+import 'designation_setting.dart';
+
 class Other_Settings_Page extends StatefulWidget {
   const Other_Settings_Page({Key? key}) : super(key: key);
 
@@ -55,8 +56,7 @@ class _Other_Settings_PageState extends State<Other_Settings_Page> {
       backgroundColor: MyColors.disabledcolor,
       appBar: appBar(
           context: context,
-          title:Provider.of<GlobalModal>(context, listen: false).userData?.companyName,
-
+          title: 'Ecomads Private Limited',
           implyLeading: false,
           titlecenter: false,
           leading: Icon(
@@ -120,7 +120,7 @@ class _Other_Settings_PageState extends State<Other_Settings_Page> {
                     verticalpadding: 25,
                     fontFamily: 'regular',
                     onTap: (){
-                      // push(context: context, screen: Shift_Other_Settings_Page());
+                      push(context: context, screen: EmployeeCategoryPage());
                     },
                   ),
                   clickable_list(
@@ -132,7 +132,7 @@ class _Other_Settings_PageState extends State<Other_Settings_Page> {
                     verticalpadding: 25,
                     fontFamily: 'regular',
                     onTap: (){
-                      // push(context: context, screen: Advance_Page());
+                      push(context: context, screen: DesignationSettingPage());
                     },
                   ),
                   clickable_list(
@@ -144,7 +144,7 @@ class _Other_Settings_PageState extends State<Other_Settings_Page> {
                     verticalpadding: 25,
                     fontFamily: 'regular',
                     onTap: (){
-                      // push(context: context, screen: Advance_Page());
+                      push(context: context, screen: RolesPage());
                     },
                   ),
                 ],

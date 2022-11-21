@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:salaryredesign/pages/employee/my_profile.dart';
 import 'package:salaryredesign/pages/mark_attendance/mark_attendance.dart';
-import 'package:salaryredesign/pages/my_profile.dart';
 import 'package:salaryredesign/pages/settings/settings_page.dart';
 import 'package:salaryredesign/pages/tab_pages/dashboard.dart';
+import 'package:salaryredesign/providers/clock.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_urls.dart';
-import '../../providers/clock.dart';
+import '../employee/employee_dshboard.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class TabsPage extends StatefulWidget {
@@ -27,35 +27,42 @@ class _TabsPageState extends State<TabsPage> {
       fontWeight: FontWeight.bold
   );
   static List<Widget> _widgetOptions = <Widget>[
-    Dashboard_Page(),
-    Mark_Attendance_Page(),
-    MyPorfile_Page(),
+    Employee_dashboard_Page(),
+
+      Mark_Attendance_Page(),
+    // MyPorfile_Page(),
     Settings_Page(),
   ];
+  static List<Widget> _widgetOptionsEmp = <Widget>[
+    Employee_dashboard_Page(),
 
+    // MyPorfile_Page(),
+    Settings_Page(),
+  ];
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-  @override
+  bool isEmp=false;
+  check()async{
+    if( Provider.of<GlobalModal>(context,listen: false).userData!.userId!=1){
+      isEmp=true;
+    }
+
+  }
+@override
   void initState() {
     // TODO: implement initState
+  // check();
     super.initState();
-    getLocation();
-  }
-  getLocation() async {
-    await Provider.of<GlobalModal>(context, listen: false).getLocation();
-    await Provider.of<GlobalModal>(context, listen: false)
-        .getDepartment(context);
-
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: Provider.of<GlobalModal>(context,listen: false).userData!.userId!=1?_widgetOptions.elementAt(_selectedIndex):_widgetOptionsEmp.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -85,16 +92,17 @@ class _TabsPageState extends State<TabsPage> {
               ),
               activeIcon:ImageIcon(
                 AssetImage(MyImages.home_icon),
-                color: MyColors.primaryColor,
+                 color: MyColors.primaryColor,
                 size: 24,
               ),
               // activeIcon: Icon(Icons.home, size: 30,color: themecolor,),
               // icon: Icon(Icons.home, size: 30,color: Colors.black,),
               label: 'Dashboard',
             ),
-            BottomNavigationBarItem(
-              label: 'Mark Attendance',
-              // activeIcon: Icon(Icons.home, size: 30,color: themecolor,),
+            if( Provider.of<GlobalModal>(context,listen: false).userData!.userId!=1)
+              BottomNavigationBarItem(
+                label: 'Mark Attendance',
+                // activeIcon: Icon(Icons.home, size: 30,color: themecolor,),
               icon: ImageIcon(
                 AssetImage(MyImages.fingerprint_icon),
                 color: MyColors.bottommenucolor,
@@ -106,25 +114,25 @@ class _TabsPageState extends State<TabsPage> {
                 size: 24,
               ),
             ),
-            BottomNavigationBarItem(
-              label: 'Profile',
-              // activeIcon: Icon(Icons.home, size: 30,color: themecolor,),
-              icon: ImageIcon(
-                AssetImage(MyImages.profile_icon),
-                color: MyColors.bottommenucolor,
-                size: 24,
-              ),
-              activeIcon: Stack(
-                children: <Widget>[
-                  // Icon(Icons.shopping_cart, size: 30, color: themecolor,),
-                  ImageIcon(
-                    AssetImage(MyImages.profile_icon),
-                    color: MyColors.primaryColor,
-                    size: 24,
-                  ),
-                ],
-              ),
-            ),
+            // BottomNavigationBarItem(
+            //   label: 'Profile',
+            //   // activeIcon: Icon(Icons.home, size: 30,color: themecolor,),
+            //   icon: ImageIcon(
+            //     AssetImage(MyImages.profile_icon),
+            //     color: MyColors.bottommenucolor,
+            //     size: 24,
+            //   ),
+            //   activeIcon: Stack(
+            //     children: <Widget>[
+            //       // Icon(Icons.shopping_cart, size: 30, color: themecolor,),
+            //       ImageIcon(
+            //         AssetImage(MyImages.profile_icon),
+            //         color: MyColors.primaryColor,
+            //         size: 24,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             BottomNavigationBarItem(
               // icon: Icon(Icons.school, size: 30, color: Colors.black,),
               icon: ImageIcon(

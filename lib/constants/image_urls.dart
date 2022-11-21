@@ -5,6 +5,7 @@ class MyImages{
 
 
   static const logo = baseImageUrl + 'logo.png';
+  static const logo2 = baseImageUrl + 'app_name_logo.png';
   static const sliderone = baseImageUrl + 'slider1.png';
   static const slidertwo = baseImageUrl + 'slider2.png';
   static const sliderthree = baseImageUrl + 'slider3.png';
@@ -80,6 +81,9 @@ class MyImages{
   static const emp4 = baseImageUrl + 'Holiday_List.png';
   static const folder = baseImageUrl + 'folder.png';
   static const attachments = baseImageUrl + 'Attachments.png';
+  static const leave_request_nw = baseImageUrl + 'leave_request_nw.png';
+  static const permission_request_nw = baseImageUrl + 'permission_request_nw.png';
+  static const pay_per_work_request = baseImageUrl + 'pay_per_work_request.png';
 
 
 
@@ -128,6 +132,7 @@ class MyImages{
   static const shift_settings = baseImageUrl + 'shift_settings.png';
 
   static const google_map = baseImageUrl + 'google_map.png';
+  static const face_detect = baseImageUrl + 'face_detect.png';
 
 
 }

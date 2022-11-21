@@ -1,25 +1,17 @@
-import 'dart:developer';
-import 'dart:convert' as convert;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/settings/add_branch.dart';
 import 'package:salaryredesign/pages/settings/edit_branch.dart';
-import 'package:salaryredesign/services/webservices.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:salaryredesign/widgets/custom_widgets.dart';
 import 'package:salaryredesign/widgets/dropdown.dart';
-import 'package:salaryredesign/widgets/showSnackbar.dart';
 
-import '../../providers/clock.dart';
-import '../../services/api_urls.dart';
-import '../../widgets/CustomLoader.dart';
 import '../../widgets/customtextfield.dart';
 
 class Branch_Settings_Page extends StatefulWidget {
@@ -31,26 +23,12 @@ class Branch_Settings_Page extends StatefulWidget {
 
 class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
   TextEditingController name = TextEditingController();
-  List branchList=[];
-  Map permissions={};
-  getBranch()async{
-    await Provider.of<GlobalModal>(context, listen: false).getBranch(context);
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getBranch();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.scaffold,
       appBar: appBar(context: context, title: 'Branches', titlecenter: false),
-      body:Consumer<GlobalModal>(
-        builder: (context,globalModal,child) {
-      return globalModal.load?CustomLoader(): SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -71,7 +49,6 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
                       MainHeadingText(text: 'Branches', fontSize: 20,),
                       hSizedBox,
                       hSizedBox05,
-                      if(globalModal.branchPermission['add'])
                       RoundEdgedButton(
                         text: 'Add New',
                         verticalPadding: 0,
@@ -79,7 +56,7 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
                         width: 100,
                         height: 35,
                         onTap: (){
-                          push(context: context, screen: Add_Branch_Page(isEdit: false,));
+                          push(context: context, screen: Add_Branch_Page());
                         },
                       )
                     ],
@@ -89,7 +66,6 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
               ),
             ),
             vSizedBox,
-            if(globalModal.branchPermission['view'])
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 200,
@@ -101,7 +77,7 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
                   children: [
                     MainHeadingText(text: 'Summary'),
                     vSizedBox4,
-                    for(var i=0; i<int.parse('${globalModal.branch.length}'); i++)
+                    for(var i=0; i<10; i++)
                     Column(
                       children: [
                         Row(
@@ -111,7 +87,7 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
                               children: [
                                 Image.asset(MyImages.map_green, height: 36, width: 36,),
                                 vSizedBox,
-                                MainHeadingText(text: '${globalModal.branch[i].radius.toString()}', fontSize: 14,),
+                                MainHeadingText(text: '200 M', fontSize: 14,),
                                 vSizedBox05,
                                 ParagraphText(text: 'Radius', fontSize: 14, color: MyColors.labelcolor,),
                               ],
@@ -121,50 +97,31 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  MainHeadingText(text:'${globalModal.branch[i].branchName.toString()}', fontSize: 16,),
+                                  MainHeadingText(text: 'Ecom Ads PVT Ltd, Tiruchengode', fontSize: 16,),
                                   vSizedBox05,
                                   ParagraphText(
-                                    text: '${globalModal.branch[i].branchAdd.toString()}',
+                                    text: '20/5, Molasiyar maaligai, Old bustand, Tiruchengode',
                                     fontSize: 14,
                                     color: MyColors.labelcolor,
                                   ),
-                                    vSizedBox,
-                                  if(globalModal.branch[i].branchManager!=null)
+                                 vSizedBox,
                                   Row(
                                     children: [
                                       ParagraphText(text: 'Branch Manager', fontSize: 14, color: MyColors.black,),
                                       hSizedBox,
-                                      ParagraphText(text: ': ${globalModal.branch[i].branchManager.toString()}', fontSize: 14, color: MyColors.primaryColor,),
+                                      ParagraphText(text: ': Karthika', fontSize: 14, color: MyColors.primaryColor,),
                                     ],
                                   ),
 
                                 ],
                               ),
                             ),
-                            if(globalModal.branchPermission['edit'] || globalModal.branchPermission['delete'])
                             PopupmenuButtonCustom(
                               onTapedit: (){
-                                Navigator.pop(context);
-                                push(context: context, screen: Add_Branch_Page(isEdit: true,id: globalModal.branch[i].id.toString(),));
+                                push(context: context, screen: Edit_Branch_Page());
                               },
                               deletemain: 'Delete This Branch',
                               deletesub: 'Do you wish to delete this Branch?',
-                              isEdit: globalModal.branchPermission['edit'],
-                              // isEdit: true,
-                              isDelete:globalModal.branchPermission['delete'],
-                              DeleteFun: () async{
-                                Map<String,dynamic>data= {
-                                  'id':globalModal.branch[i].id.toString()
-
-                                };
-                                globalModal.loadingShow();
-                                var res =await Webservices.postData(apiUrl: ApiUrls.deleteBranch, body: data, context: context);
-                                globalModal.loadingHide();
-                                showSnackbar(context, res['message']);
-                                globalModal.getBranch(context);
-                                Navigator.pop(context);
-                                // globalModal.
-                              } ,
                             )
 
                           ],
@@ -179,8 +136,6 @@ class _Branch_Settings_PageState extends State<Branch_Settings_Page> {
             ),
           ],
         ),
-      );
-    }
       ),
     );
   }

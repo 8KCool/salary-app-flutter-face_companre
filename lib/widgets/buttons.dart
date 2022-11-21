@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:salaryredesign/constants/sized_box.dart';
 import '../constants/colors.dart';
 import '../constants/constans.dart';
 import '../constants/image_urls.dart';
+
+
 class RoundEdgedButton extends StatelessWidget {
   final Color color;
   final Color bordercolor;
@@ -47,7 +50,7 @@ class RoundEdgedButton extends StatelessWidget {
       }
 
       )
-      : super(key: key);
+        : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +58,7 @@ class RoundEdgedButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         constraints:minWidth==null?null: BoxConstraints(
-            minWidth: minWidth!
+          minWidth: minWidth!
         ),
         height: height,
         margin: EdgeInsets.symmetric(horizontal: horizontalMargin,vertical: verticalMargin),
@@ -90,94 +93,6 @@ class RoundEdgedButton extends StatelessWidget {
   }
 }
 
-// class RoundEdgedButton extends StatelessWidget {
-//   final Color color;
-//   final Color bordercolor;
-//   final Color textColor;
-//   final double? fontSize;
-//   final double? letterspace;
-//   final double? width;
-//   final String text;
-//   final String fontfamily;
-//   final Function()? onTap;
-//   final double horizontalMargin;
-//   final double verticalMargin;
-//   final double horizontalPadding;
-//   final double verticalPadding;
-//   final double borderRadius;
-//   final double height;
-//   final double? minWidth;
-//   // final Gradient? gradient;
-//   final bool isSolid;
-//
-//   const RoundEdgedButton(
-//       {
-//         Key? key,
-//         this.color = MyColors.primaryColor,
-//         this.bordercolor = Colors.transparent,
-//         required this.text,
-//         required this.textColor,
-//         this.borderRadius= 4,
-//         this.onTap,
-//         this.fontSize = 20,
-//         this.letterspace = 2,
-//         this.width,
-//         this.fontfamily = 'bold',
-//         this.horizontalMargin=0,
-//         this.verticalMargin=0,
-//         this.horizontalPadding=30,
-//         this.verticalPadding= 6,
-//         this.height= 54,
-//         this.minWidth,
-//         // required this.hasGradient,
-//         this.isSolid=true,
-//
-//       }
-//
-//       )
-//         : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: Container(
-//         constraints:minWidth==null?null: BoxConstraints(
-//           minWidth: minWidth!
-//         ),
-//         height: height,
-//         margin: EdgeInsets.symmetric(horizontal: horizontalMargin,vertical: verticalMargin),
-//         width: minWidth!=null?null:width??MediaQuery.of(context).size.width,
-//         padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-//         decoration: BoxDecoration(
-//           color:isSolid? color:Colors.white,
-//           borderRadius:BorderRadius.circular(borderRadius),
-//           border: Border.all(color: isSolid? bordercolor: MyColors.primaryColor, width: 1),
-//           boxShadow: [
-//             boxShadow
-//           ]
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text(
-//               text,
-//               textAlign: TextAlign.center,
-//               style: TextStyle(
-//                 color:isSolid?textColor: MyColors.primaryColor,
-//                 fontSize: fontSize??20,
-//                 fontFamily: fontfamily,
-//                 // letterSpacing: letterspace,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class RoundEdgedButtonwithimage extends StatelessWidget {
   final Color color;
   final Color bordercolor;
@@ -195,6 +110,7 @@ class RoundEdgedButtonwithimage extends StatelessWidget {
   final double height;
   // final Gradient? gradient;
   final bool isSolid;
+  final String image;
 
   const RoundEdgedButtonwithimage(
       {
@@ -215,6 +131,7 @@ class RoundEdgedButtonwithimage extends StatelessWidget {
         this.height= 38,
         // required this.hasGradient,
         this.isSolid=true,
+        this.image=MyImages.logo,
 
       }
 
@@ -257,8 +174,9 @@ class RoundEdgedButtonwithimage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-                MyImages.logo
+                image
             ),
+            hSizedBox05,
             Text(
               text,
               textAlign: TextAlign.center,

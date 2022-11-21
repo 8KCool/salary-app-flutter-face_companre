@@ -39,6 +39,22 @@ class ApiUrls{
   static const weekoffStore = baseUrl + 'weekoffStore';
   static const weekoffdatebyday = baseUrl + 'weekoffdatebyday';
   static const weekoffupdate = baseUrl + 'weekoffupdate';
+  static const getNewProfile = baseUrl + 'dashboard';
+  static const getNewProfileData = baseUrl + 'getprofiledetail';
+  static const getprofiledetailstore = baseUrl + 'getprofiledetailstore';
+  static const getworkdetailstore = baseUrl + 'getworkdetailstore';
+  static const getworkdetail = baseUrl + 'getworkdetail';
+  static const getbankdetail = baseUrl + 'getbankdetail';
+  static const getbankdetailstore = baseUrl + 'getbankdetailstore';
+  static const getupistore = baseUrl + 'getupistore';
+  static const permissionRequestStore = baseUrl + 'permissionRequestStore';
+  static const permissionhistoryview = baseUrl + 'permissionhistoryview';
+  static const permissionadd = baseUrl + 'permissionadd';
+  static const breakstore = baseUrl + 'breakstore';
+  static const employeeattendance = baseUrl + 'employeeattendance';
+  static const attendancedetail = baseUrl + 'attendancedetail';
+
+
 
 
 

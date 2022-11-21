@@ -23,15 +23,13 @@ blurRadius: 12.0
 
 
 
-// EdgeInsets pad_horizontal = EdgeInsets.symmetric(horizontal: 16);
 EdgeInsets horizontal_pad = EdgeInsets.symmetric(horizontal: 16);
 
 
 width(BuildContext context){
-  double width = MediaQuery.of(context).size.width;
-  return width;
+   double width = MediaQuery.of(context).size.width;
+   return width;
 }
-
 
 enum UserType{
   user,provider

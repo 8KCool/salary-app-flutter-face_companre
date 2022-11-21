@@ -7,17 +7,21 @@ import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/all_employee.dart';
-
+import 'package:salaryredesign/pages/approvals/attendance_approval.dart';
 import 'package:salaryredesign/pages/attandance_page.dart';
+import 'package:salaryredesign/pages/payroll_setting/payroll_setting.dart';
 import 'package:salaryredesign/pages/settings/branch_settings.dart';
+import 'package:salaryredesign/pages/settings/holiday_settings.dart';
+import 'package:salaryredesign/pages/settings/other_settings.dart';
+import 'package:salaryredesign/pages/settings/policies.dart';
 import 'package:salaryredesign/pages/settings/shift_settings.dart';
+import 'package:salaryredesign/pages/welcome.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 
 import '../../providers/clock.dart';
+import '../../services/auth.dart';
 import '../../widgets/custom_widgets.dart';
-import 'holiday_setting.dart';
-import 'other_settings.dart';
 
 class Settings_Page extends StatefulWidget {
   const Settings_Page({Key? key}) : super(key: key);
@@ -56,13 +60,13 @@ class _Settings_PageState extends State<Settings_Page> {
       backgroundColor: MyColors.disabledcolor,
       appBar: appBar(
           context: context,
-          title:Provider.of<GlobalModal>(context, listen: false).userData?.companyName,
+          title: '${Provider.of<GlobalModal>(context, listen: false).userData!.companyName ??Provider.of<GlobalModal>(context, listen: false).userData!.name}',
           implyLeading: false,
           titlecenter: false,
-          leading: Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
+          // leading: Icon(
+          //   Icons.menu,
+          //   color: Colors.white,
+          // ),
           appBarColor: MyColors.primaryColor,
           titleColor: Colors.white,
           actions: [
@@ -79,76 +83,51 @@ class _Settings_PageState extends State<Settings_Page> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_outlined, size: 20, color: MyColors.primaryColor,),
-                  hSizedBox,
-                  ParagraphText(text: 'Settings', color: MyColors.primaryColor,)
-                ],
-              ),
-            ),
+            // 8
             vSizedBox2,
             Padding(
-              padding: horizontal_pad + EdgeInsets.symmetric(horizontal: 36),
+              padding: horizontal_pad + EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   clickable_list(
-                    text: 'Branch Settings',
-                    img: MyImages.branch_settings,
+                    text: 'Logout',
+                    img: MyImages.emp3,
                     colorborderleft: Color(0xFF33CBCB),
                     onTap: (){
-                      push(context: context, screen: Branch_Settings_Page());
+                      showDialog(context: context, builder: (context1) {
+                        return AlertDialog(
+
+                          title: Text('Logout',),
+                          content: Text('Are you sure, want to logout?'),
+                          actions: [
+                            TextButton(
+                                onPressed: () async {
+                                  await logout();
+                                  // Navigator.of(context).pushReplacementNamed('/pre-login');
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(builder: (context) =>
+                                          Welcome_Page()), (
+                                      Route<dynamic> route) => false);
+                                }, child: Text('logout')),
+                            TextButton(onPressed: () async {
+                              Navigator.pop(context1);
+                            }, child: Text('cancel')
+                            ),
+                          ],
+                        );
+                      });
+                      // push(context: context, screen: Welcome_Page());
                     },
                   ),
-                  clickable_list(
-                    text: 'Shift Settings',
-                    img: MyImages.shift_settings,colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      push(context: context, screen: Shift_Settings_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Attendance Settings',
-                    img: MyImages.attendance_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Holiday Settings',
-                    img: MyImages.holiday_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      push(context: context, screen: Holiday_Settings_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Policies',
-                    img: MyImages.policies_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Payroll Settings',
-                    img: MyImages.payroll_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      // push(context: context, screen: Advance_Page());
-                    },
-                  ),
-                  clickable_list(
-                    text: 'Others',
-                    img: MyImages.payroll_settings,
-                    colorborderleft: Color(0xFF33CBCB),
-                    onTap: (){
-                      push(context: context, screen: Other_Settings_Page());
-                    },
-                  ),
+              // clickable_list(
+              //   text: 'Calendar',
+              //   img: MyImages.emp3,
+              //   colorborderleft: Color(0xFF33CBCB),
+              //     onTap: (){
+              //     push(context: context, screen: screen);
+              //     },
+              // )
+
                 ],
               ),
             ),

@@ -4,10 +4,13 @@ import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
+import 'package:salaryredesign/pages/add_new_employee.dart';
 import 'package:salaryredesign/pages/attandance_page.dart';
+import 'package:salaryredesign/pages/employee_profile_detail.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
+import 'package:salaryredesign/widgets/dropdown.dart';
 
 import '../widgets/customtextfield.dart';
 
@@ -109,6 +112,9 @@ class _All_Employee_PageState extends State<All_Employee_Page> {
                         minWidth: 90,
                         height: 35,
                         horizontalPadding: 0,
+                        onTap: (){
+                          push(context: context, screen: Add_New_Employee());
+                        },
 
                       )
                     ],
@@ -122,7 +128,67 @@ class _All_Employee_PageState extends State<All_Employee_Page> {
                       prefixIcon: MyImages.search,
                       suffixIcon: MyImages.filter,
                       suffixheight: 20,
+                      fontsize: 16,
                       height: 52,
+                      onTapsuffix: (){
+                        showModalBottomSheet<void>(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 16),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        )
+                                    ),
+                                    height: 650,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        vSizedBox4,
+                                        MainHeadingText(
+                                          text: 'Filters',
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontFamily: 'bold',
+                                        ),
+                                        DropDwon(
+                                          label: 'Select Branch',
+                                        ),
+                                        DropDwon(
+                                          label: 'Select Department',
+                                        ),
+                                        DropDwon(
+                                          label: 'Select Role',
+                                        ),
+                                        DropDwon(
+                                          label: 'Select Employee Category',
+                                        ),
+                                        DropDwon(
+                                          label: 'Select Destination',
+                                        ),
+                                        vSizedBox2,
+                                        RoundEdgedButton(
+                                          text: 'APPLY FILTERS',
+                                          textColor: Colors.white,
+                                          onTap: (){
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                   vSizedBox,
@@ -131,56 +197,61 @@ class _All_Employee_PageState extends State<All_Employee_Page> {
             ),
             vSizedBox,
             for (var i = 0; i < 3; i++)
-              Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              // margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    child: Image.asset(
-                      images[i],
-                      height: 60,
-                      width: 60,
+              GestureDetector(
+                onTap: (){
+                  push(context: context, screen: Employee_Profile_Details());
+                },
+                child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                // margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      child: Image.asset(
+                        images[i],
+                        height: 60,
+                        width: 60,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  hSizedBox,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: Name[i] + ' ',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontFamily: 'bold'),
+                    hSizedBox,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: Name[i] + ' ',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontFamily: 'bold'),
+                            ),
                           ),
-                        ),
-                        vSizedBox05,
-                        ParagraphText(text: 'Branch Manager',fontSize: 14, color: MyColors.labelcolor,)
-                      ],
+                          vSizedBox05,
+                          ParagraphText(text: 'Branch Manager',fontSize: 14, color: MyColors.labelcolor,)
+                        ],
+                      ),
                     ),
-                  ),
-                 Image.asset(MyImages.call, height: 36,),
-                 hSizedBox,
-                 Image.asset(MyImages.whatsapp, height: 36,),
-                  // TextButton(
-                  //     onPressed: () {},
-                  //     child: ParagraphText(
-                  //       text: 'View',
-                  //       fontSize: 14,
-                  //       fontFamily: 'bold',
-                  //       color: MyColors.primaryColor,
-                  //     ))
-                ],
-              ),
+                   Image.asset(MyImages.call, height: 36,),
+                   hSizedBox,
+                   Image.asset(MyImages.whatsapp, height: 36,),
+                    // TextButton(
+                    //     onPressed: () {},
+                    //     child: ParagraphText(
+                    //       text: 'View',
+                    //       fontSize: 14,
+                    //       fontFamily: 'bold',
+                    //       color: MyColors.primaryColor,
+                    //     ))
+                  ],
+                ),
             ),
+              ),
           ],
         ),
       ),

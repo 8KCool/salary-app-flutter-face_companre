@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
 
 import 'package:salaryredesign/pages/welcome.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/colors.dart';
 
 import '../functions/navigation_functions.dart';
+import '../modals/userData.dart';
 import '../providers/clock.dart';
 import '../services/api_urls.dart';
 import '../services/auth.dart';
@@ -62,21 +64,29 @@ class _SplashScreenState extends State<SplashScreen> {
       if (sharedPreferences.getString('userData') != null) {
         Map userMap = jsonDecode(sharedPreferences.getString('userData')!);
         Map<String,dynamic>data={};
+        UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
 
-        var res = await Webservices.postData(apiUrl: ApiUrls.getUser, body: data, context: context);
-        if(res['status'].toString()==true);
-        await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
+        // if(user!=null){
+          var res = await Webservices.postData(apiUrl: ApiUrls.getUser, body: data, context: context);
+          if(res['status'].toString()==true);
+          await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
 
-        log('dkljslfkj--------${userMap['client_emp'].toString()}');
-        if(userMap['client_emp'].toString()=='null'){
+          log('dkljslfkj--------${userMap['client_emp'].toString()}');
+          if(userMap['client_emp'].toString()=='null'){
 
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              TabsPage()), (Route<dynamic> route) => false);
-        }
-        else{
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              TabsPage()), (Route<dynamic> route) => false);
-        }
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                TabsPage()), (Route<dynamic> route) => false);
+          }
+          else{
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                TabsPage()), (Route<dynamic> route) => false);
+          }
+        // }
+
+        // else{
+        //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+        //       Welcome_Page()), (Route<dynamic> route) => false);
+        // }
 
 
       }

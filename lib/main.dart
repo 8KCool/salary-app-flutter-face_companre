@@ -13,7 +13,9 @@ import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
 import 'package:salaryredesign/pages/view_salary_detail.dart';
 import 'package:salaryredesign/pages/weekly_wise_employee.dart';
 import 'package:salaryredesign/pages/welcome.dart';
+import 'package:salaryredesign/providers/attendanceCalendar.dart';
 import 'package:salaryredesign/providers/clock.dart';
+import 'package:salaryredesign/providers/newProvider.dart';
 import 'package:salaryredesign/services/local_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,10 +24,17 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreference = await SharedPreferences.getInstance();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => GlobalModal(),
-      // create: (BuildContext context) {  },
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => GlobalModal(),),
+        ChangeNotifierProvider(
+          create: (context) => PermissionModal(),),
+        ChangeNotifierProvider(
+          create: (context) => AttendanceCalendarModal(),),
+      ],
       child: const MyApp(),
+
     ),);
 }
 

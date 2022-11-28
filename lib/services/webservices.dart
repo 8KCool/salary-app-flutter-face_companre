@@ -76,12 +76,17 @@ class Webservices {
     try {
       Map<dynamic,dynamic> headers={};
       UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+      // print('object----------585 ${user}');
       response = await http.post(Uri.parse(apiUrl),
         body: body,
         headers:user==null?{}:
       {'Authorization':'Bearer ${user.token}'},
       );
+
+
       if (response.statusCode == 200) {
+        // print('object----------999 ${user!.token}');
+
         var jsonResponse = convert.jsonDecode(response.body);
         log('the response for $apiUrl is $jsonResponse');
         if (jsonResponse['status'] == 1) {

@@ -210,7 +210,7 @@ class CalendarStyle {
     this.disabledDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.holidayTextStyle = const TextStyle(color: const Color(0xFF5C6BC0)),
     this.holidayDecoration = const BoxDecoration(
-      border: const Border.fromBorderSide(
+      border:  Border.fromBorderSide(
         const BorderSide(color: const Color(0xFF9FA8DA), width: 1.4),
       ),
       shape: BoxShape.circle,

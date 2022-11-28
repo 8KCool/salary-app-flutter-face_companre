@@ -292,53 +292,53 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                  color: MyColors.primaryColor,
-                                )),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                        child: RoundEdgedButton(
-                                      text: 'ATTENDANCE',
-                                      borderRadius: 0,
-                                      color: attendance
-                                          ? MyColors.primaryColor
-                                          : MyColors.white,
-                                      textColor: attendance
-                                          ? MyColors.white
-                                          : MyColors.black,
-                                      onTap: () {
-                                        setState((){
-                                        attendance = true;
-                                        breaks = false;
-                                        });/**/
-                                      },
-                                    )),
-                                    Expanded(
-                                        child: RoundEdgedButton(
-                                      text: 'BREAK',
-                                      borderRadius: 0,
-                                      color: breaks
-                                          ? MyColors.primaryColor
-                                          : MyColors.white,
-                                      textColor: breaks
-                                          ? MyColors.white
-                                          : MyColors.black,
-                                      onTap: () {
-                                        setState((){
-                                        attendance = false;
-                                        breaks = true;
-                                        });
-                                      },
-                                    )),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // ClipRRect(
+                            //   borderRadius: BorderRadius.circular(4),
+                            //   child: Container(
+                            //     decoration: BoxDecoration(
+                            //         border: Border.all(
+                            //       color: MyColors.primaryColor,
+                            //     )),
+                            //     child: Row(
+                            //       children: [
+                            //         Expanded(
+                            //             child: RoundEdgedButton(
+                            //           text: 'ATTENDANCE',
+                            //           borderRadius: 0,
+                            //           color: attendance
+                            //               ? MyColors.primaryColor
+                            //               : MyColors.white,
+                            //           textColor: attendance
+                            //               ? MyColors.white
+                            //               : MyColors.black,
+                            //           onTap: () {
+                            //             setState((){
+                            //             attendance = true;
+                            //             breaks = false;
+                            //             });/**/
+                            //           },
+                            //         )),
+                            //         Expanded(
+                            //             child: RoundEdgedButton(
+                            //           text: 'BREAK',
+                            //           borderRadius: 0,
+                            //           color: breaks
+                            //               ? MyColors.primaryColor
+                            //               : MyColors.white,
+                            //           textColor: breaks
+                            //               ? MyColors.white
+                            //               : MyColors.black,
+                            //           onTap: () {
+                            //             setState((){
+                            //             attendance = false;
+                            //             breaks = true;
+                            //             });
+                            //           },
+                            //         )),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                             vSizedBox4,
                             if (attendance)
                               Column(
@@ -1202,16 +1202,20 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                       await Provider.of<GlobalModal>(context, listen: false)
                           .loadingHide();
                       if (res['success'].toString() == 'true') {
+                        await getDetails();
+
                         is_popup=false;
                         showSnackbar(context, res['message'].toString());
 
                         Navigator.pop(context);
-                        await getDetails();
-
                         is_scan=false;
+
+
                       } else {
                         showSnackbar(context, res['message'].toString());
                         Navigator.pop(context);
+                        await getDetails();
+
                       }
                     },
                   ),

@@ -134,6 +134,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                             body: data,
                             context: context,
                             showSuccessMessage: true);
+                        print('data for phone------------$data');
                         // Provider.of<GlobalModal>(context, listen: false).loadingHide();
                         globalModal.loadingHide();
                         if(res['success'].toString()=='true'){

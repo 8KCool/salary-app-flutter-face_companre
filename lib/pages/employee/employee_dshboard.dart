@@ -9,6 +9,7 @@ import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/employee/personal_details.dart';
 import 'package:salaryredesign/pages/employee/work.dart';
+import 'package:salaryredesign/providers/newProvider.dart';
 import 'package:salaryredesign/services/api_urls.dart';
 
 import 'package:salaryredesign/widgets/CustomTexts.dart';
@@ -18,6 +19,7 @@ import 'package:salaryredesign/widgets/custom_widgets.dart';
 
 import '../../providers/clock.dart';
 import '../../services/webservices.dart';
+import '../../widgets/CustomCircularImage.dart';
 import '../../widgets/avatar.dart';
 import '../employee_profile_detail.dart';
 import '../face_recognition/face_recognition_start_page.dart';
@@ -35,26 +37,43 @@ class Employee_dashboard_Page extends StatefulWidget {
 }
 
 class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
-  Map dashBoardData={};
+  // Map dashBoardData={};
+  bool load=false;
   @override
   void initState() {
     // TODO: implement initState
     getDetail();
+    print('img--------------${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}');
     super.initState();
   }
   getDetail()async{
 
-    Provider.of<GlobalModal>(context, listen: false).loadingShow();
+    // Provider.of<GlobalModal>(context, listen: false).loadingShow();
+    // setState(() {
+    //   load=true;
+    // });
+    Provider.of<PermissionModal>(context, listen: false).load=true;
+    // Provider.of<GlobalModal>(context, listen: false).loadingShow();
+
+
     var res = await Webservices.getData(ApiUrls.getNewProfile,context);
 
     log('res from new api -----------$res');
     var jsonResponse = convert.jsonDecode(res.body);
     log('res from new api -----------$jsonResponse');
-    dashBoardData=jsonResponse['data'];
-    Provider.of<GlobalModal>(context, listen: false).loadingHide();
-    setState(() {
+    // dashBoardData=jsonResponse['data'];
+    Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
 
-    });
+    Provider.of<PermissionModal>(context, listen: false).load=false;
+    // Provider.of<GlobalModal>(context, listen: false).loadingHide();
+
+    // setState(() {
+    //   load=false;
+    // });
+    // Provider.of<GlobalModal>(context, listen: false).loadingHide();
+    // setState(() {
+    //
+    // });
     // await Provider.of<GlobalModal>(context, listen: false).addUserDetail(jsonResponse,context);
 
 
@@ -80,14 +99,14 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
         ),
 
       ),
-      body: Consumer<GlobalModal>(
-        builder: (context,globalModal,child) {
-          return globalModal.load?CustomLoader():SingleChildScrollView(
-            child: Container(
+      body: SingleChildScrollView(
+        child: Container(
 
-              child: Column(
-                children: [
-                  Container(
+          child: Column(
+            children: [
+              Consumer<GlobalModal>(
+                builder: (context,globalModal,child) {
+                  return Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -99,20 +118,23 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
                         vSizedBox2,
                         Stack(
                           children: [
+                            if(globalModal.userData!.profile_img!='')
                             Container(
-                              child: CircleAvatarcustom(
-                                borderradius: 100,
-                                image:'${dashBoardData['profileImage']}',
-                                isnetwork: true,
+                              child: CustomCircularImage(
+                                // borderradius: 100,
+                                // image:MyImages.logo2,
+                                // image:'${dashBoardData['profileImage']??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg'}',
+                                // isnetwork: true,
                                 height: 100,
-                                width: 100,
+                                width: 100, imageUrl:globalModal.userData!.profile_img,
+                                fileType: CustomFileType.network,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 3
-                                )
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(
+                                      color: Colors.white,
+                                      width: 3
+                                  )
                               ),
                             ),
                             // Positioned(
@@ -124,102 +146,98 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
                         ),
                         vSizedBox,
                         ParagraphText(
-                          text: '${dashBoardData['name']}',
+                          text: globalModal.userData!.name??'',
+                          // text: '${dashBoardData['name']}',
                           fontSize: 20,
                           fontFamily: 'semibold',
                           color: MyColors.white,
                         ),
                         vSizedBox05,
                         ParagraphText(
-                          text: '${dashBoardData['company_name']??''}',
+                          text: globalModal.userData!.companyName??'',
+                          // text: '${dashBoardData['company_name']??''}',
                           fontSize: 14,
                           color: MyColors.white,
                         ),
                         vSizedBox2,
                       ],
                     ),
-                  ),
-                  vSizedBox2,
-                  Container(
+                  );
+                }
+              ),
+              vSizedBox2,
+              Consumer<PermissionModal>(
+                builder: (context,permissionModal,child) {
+                  return Container(
                     padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
+                    child:permissionModal.load?CustomLoader(): Column(
                       children: [
-                        clickable_list(
+                        if(permissionModal.dashboardMenuPermission['profileemenu'].toString()=='1')
+
+                          clickable_list(
                           text: 'Personal Detail',
                           image: false,
                           colorborderleft: MyColors.primaryColor,
-                        onTap: ()async{
+                          onTap: ()async{
                             await push(context: context, screen: Personal_details_Page());
                             getDetail();
-                        },
-                        ),
-                        if(dashBoardData['workmenu'].toString()=='1')
-                          clickable_list(
-                          text: 'Work',
-                          image: false,
-                          img: MyImages.emp2,
-                          colorborderleft: MyColors.red,
-                          onTap: (){
-                            push(context: context, screen: Employee_Work_Details());
                           },
                         ),
-                        if(dashBoardData['Bankmenu'].toString()=='1')
+                        if(permissionModal.dashboardMenuPermission['workmenu'].toString()=='1')
+                          clickable_list(
+                            text: 'Work',
+                            image: false,
+                            img: MyImages.emp2,
+                            colorborderleft: MyColors.red,
+                            onTap: (){
+                              push(context: context, screen: Employee_Work_Details());
+                            },
+                          ),
+                        if(permissionModal.dashboardMenuPermission['Bankmenu'].toString()=='1')
 
                           clickable_list(
-                          text: 'Bank / UPI',
-                          image: false,
-                          img: MyImages.emp3,
-                          colorborderleft: MyColors.secondarycolor,
-                          onTap: (){
-                            push(context: context, screen: Bank_UPI_Page());
-                          },
-                        ),
-                        // clickable_list(
-                        //   text: 'Increment Detail',image: false, img: MyImages.emp4, colorborderleft: MyColors.yellow,
-                        //   onTap: (){
-                        //     push(context: context, screen: Increament_Detail_Page());
-                        //   },
-                        // ),
-                        // clickable_list(
-                        //   text: 'Documents',image: false, img: MyImages.emp4, colorborderleft: MyColors.headingcolor,
-                        //   onTap: (){
-                        //     push(context: context, screen: Documents_Page());
-                        //   },
-                        // ),
+                            text: 'Bank / UPI',
+                            image: false,
+                            img: MyImages.emp3,
+                            colorborderleft: MyColors.secondarycolor,
+                            onTap: (){
+                              push(context: context, screen: Bank_UPI_Page());
+                            },
+                          ),
 
                         Row(
                           children: [
-                            if(dashBoardData['myattendancemenu'].toString()=='1')
+                            if(permissionModal.dashboardMenuPermission['myattendancemenu'].toString()=='1')
 
                               Expanded(
-                              child: clickable_list_horizontal(
-                                text: 'My Attendance',
-                                img: MyImages.emp2,
-                                colorborderleft: MyColors.primaryColor,
-                                image_vert: true,
-                                image: false,
-                                fontSize: 14,
-                                onTap: (){
-                                  push(context: context, screen: Employee_Profile_Details());
-                                },
+                                child: clickable_list_horizontal(
+                                  text: 'My Attendance',
+                                  img: MyImages.emp2,
+                                  colorborderleft: MyColors.primaryColor,
+                                  image_vert: true,
+                                  image: false,
+                                  fontSize: 14,
+                                  onTap: (){
+                                    push(context: context, screen: Employee_Profile_Details());
+                                  },
+                                ),
                               ),
-                            ),
                             hSizedBox,
-                            if(dashBoardData['myrequestemenu'].toString()=='1')
+                            if(permissionModal.dashboardMenuPermission['myrequestemenu'].toString()=='1')
 
                               Expanded(
-                              child: clickable_list_horizontal(
-                                text: 'My Request',
-                                fontSize: 14,
-                                img: MyImages.emp3,
-                                colorborderleft: Color(0xFFCA8A04),
-                                image_vert: true,
-                                image: false,
-                                onTap: (){
-                                  push(context: context, screen: MyRequest_Page());
-                                },
+                                child: clickable_list_horizontal(
+                                  text: 'My Request',
+                                  fontSize: 14,
+                                  img: MyImages.emp3,
+                                  colorborderleft: Color(0xFFCA8A04),
+                                  image_vert: true,
+                                  image: false,
+                                  onTap: (){
+                                    push(context: context, screen: MyRequest_Page());
+                                  },
+                                ),
                               ),
-                            ),
 
                           ],
                         ),
@@ -239,21 +257,21 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
                               ),
                             ),
                             hSizedBox,
-                            if(dashBoardData['faceattendancemenu'].toString()=='1')
+                            if(permissionModal.dashboardMenuPermission['faceattendancemenu'].toString()=='1')
                               Expanded(
-                              child: clickable_list_horizontal(
-                                text: 'Face Recognition',
-                                img: MyImages.face_detect,
-                                colorborderleft: MyColors.orange,
-                                image_vert: true,
-                                image: false,
-                                fontSize: 14,
-                                badge: true,
-                                onTap: (){
-                                  push(context: context, screen: Face_Recognition_Start_Page());
-                                },
+                                child: clickable_list_horizontal(
+                                  text: 'Face Recognition',
+                                  img: MyImages.face_detect,
+                                  colorborderleft: MyColors.orange,
+                                  image_vert: true,
+                                  image: false,
+                                  fontSize: 14,
+                                  badge: true,
+                                  onTap: (){
+                                    push(context: context, screen: Face_Recognition_Start_Page());
+                                  },
+                                ),
                               ),
-                            ),
 
                           ],
                         ),
@@ -261,14 +279,14 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
 
                       ],
                     ),
-                  ),
-
-                ],
+                  );
+                }
               ),
-            ),
-          );
-        }
-      ),
+
+            ],
+          ),
+        ),
+      )
     );
   }
 }

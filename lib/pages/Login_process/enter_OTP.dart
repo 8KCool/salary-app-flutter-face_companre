@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -399,6 +400,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                     push(context: context, screen: Congratulations_Page(isEmp: false,));
 
                                     user=res['userData'];
+                                    // log("token ----------------${res['userData']}");
                                   }
                                   else if(res['userData']['client_emp']!=null){
                                     await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);

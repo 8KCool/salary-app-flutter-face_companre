@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salaryredesign/constants/globalkeys.dart';
 
 
 
@@ -98,8 +99,12 @@ class GlobalModal extends ChangeNotifier {
   }
 
   addUserDetail(Map userMap, BuildContext context) {
+    // loadingShow();
+    print('addUserDetail called');
+    loadingShow();
     print('object-----------258 ${userMap}');
-    MyLocalServices.updateSharedPreferences(userMap, context);
+    MyLocalServices.updateSharedPreferences(userMap, context );
+    loadingHide();
     notifyListeners();
   }
 
@@ -251,7 +256,7 @@ getAttendance(data)async{
 //
 //     log('res from api listholiday ---------------${res}');
 //     holidayData=res['data'];
-//     getBranchDepartment();
+//     // getBranchDepartment();
 //     for (var i = 0; i < res['data']['department'].length; i++) {
 //       res['data']['department'][i]['checked']=false;
 //     }
@@ -315,10 +320,10 @@ getAttendance(data)async{
 //     log(category.toString());
 //     notifyListeners();
 //   }
-  getCalendar(context)async{
+  getCalendar(context,DateTime date)async{
     load = true;
     notifyListeners();
-    var res = await Webservices.getData(ApiUrls.calender, context);
+    var res = await Webservices.getData('${ApiUrls.calender}?year=${date.year}&month=${date.month}', context);
     load = false;
     log('res from api listBranch ---------------${res.body}');
     var result = res.body;

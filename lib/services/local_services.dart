@@ -18,7 +18,7 @@ import '../widgets/showSnackbar.dart';
 // UserModal? userData;
 late SharedPreferences sharedPreference;
 class MyLocalServices{
-  static UserModal updateSharedPreferences(Map userMap, BuildContext context){
+  static UserModal updateSharedPreferences(Map userMap,BuildContext context){
 
 
     String userDataString  = convert.jsonEncode(userMap);

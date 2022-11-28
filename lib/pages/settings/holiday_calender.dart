@@ -62,10 +62,10 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
   getWeekOff(date)async{
     if( await Provider.of<GlobalModal>(context, listen: false).userData?.userId!=1){
       log("getWeekOff------------getWeekOff-----${date}");
-      await Provider.of<GlobalModal>(context, listen: false).loadingShow();
+      // await Provider.of<GlobalModal>(context, listen: false).loadingShow();
       var res = await Webservices.getData("${ApiUrls.weekoffdatebyday}?cal_date=${date}", context);
       var result1 = convert.jsonDecode(res.body);
-      await Provider.of<GlobalModal>(context, listen: false).loadingHide();
+      // await Provider.of<GlobalModal>(context, listen: false).loadingHide();
 
       log("result1------------getWeekOff-----${result1}");
       if(date==''){
@@ -79,17 +79,18 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
           .getweekoffbydate(result1['data']['getAllweekoff']);
       // await Provider.of<GlobalModal>(context, listen: false)
       //     .getweekoffbydate(result1['data']['getAllweekoff']);
-      setState(() {
-
-      });
+      // setState(() {
+      //
+      // });
 
     }
 
 
   }
-  getcalender()async{
+  getcalender(date)async{
+    Selecteddate=date;
     await Provider.of<GlobalModal>(context, listen: false)
-        .getCalendar(context);
+        .getCalendar(context,date);
     for(var i=0 ; i<await Provider.of<GlobalModal>(context, listen: false).calender.length;i++){
       selectedDays.add(DateTime.parse(await Provider.of<GlobalModal>(context, listen: false).calender[i]['holiday_date']));
 
@@ -103,7 +104,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
   @override
   void initState() {
     // TODO: implement initState
-    getcalender();
+    getcalender(DateTime.now());
     getWeekOff('');
     super.initState();
   }
@@ -128,6 +129,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TableCalendar(
+                          // shouldFillViewport: true,
                           onCalendarCreated: (aa){
                             print('he;l;llllll');
                           },
@@ -157,13 +159,17 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                                 fontSize: 12,
                               )),
                           calendarStyle: CalendarStyle(
+                            outsideDaysVisible: false,
                             holidayTextStyle: TextStyle(fontFamily: 'sf-medium', color: Colors.white) ,
                             defaultTextStyle:
                             TextStyle(fontFamily: 'sf-medium', color: Color(0xFE77838F)),
                             // weekendTextStyle:
                             // TextStyle(fontFamily: 'sf-medium', color: Colors.black),
                             todayTextStyle:
-                            TextStyle(fontFamily: 'sf-medium', color: Color(0xFE77838F)),
+                            TextStyle(fontFamily: 'sf-medium', color: Colors.white),
+                            todayDecoration:  BoxDecoration(
+                                color: MyColors.primaryColor,
+                                borderRadius: BorderRadius.circular(5)),
                             weekendDecoration:BoxDecoration(
                                 color:Colors.white,
                                 borderRadius: BorderRadius.circular(5)),
@@ -183,7 +189,9 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                           firstDay: DateTime.utc(2010, 10, 16),
                           lastDay: DateTime.utc(2030, 3, 14),
                           onPageChanged: (date)async{
+
                             print("onPageChanged---mizam-------${date}");
+                            getcalender(date);
                             if(globalModal.userData?.userId!=1){
                               getWeekOff(date);
                               log("getWeekOff------------getWeekOff-----${date}");
@@ -205,15 +213,20 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
 
                             DateTime tempDay = DateTime(
                                 day.year, day.month, day.day);
-                            print('_events------------------${globalModal.holiDaysbtdate.contains(tempDay)}');
+                            print('_events----holidayPredicate--------------${globalModal.holiDaysbtdate}');
+                            print('_events----holidayPredicate--------------${globalModal.holiDaysbtdate.contains(tempDay)}');
                             return globalModal.holiDaysbtdate.contains(tempDay);
 
                           },
+
                           selectedDayPredicate: (DateTime a) {
 
                             DateTime temp = DateTime(a.year,a.month, a.day);
                             print("predicate  ${temp}-----${selectedDays} " );
-                            // print('selectedDays.contains(a)--------${selectedDays.contains(temp)}');
+                            print('selectedDays.contains(a)--------${selectedDays}');
+                            // if(temp.month==DateTime.parse(selectedDays.toString()).month  && selectedDays.contains(temp)){
+                              return selectedDays.contains(temp);
+                            // }
                             return selectedDays.contains(temp);
 
                           },
@@ -226,7 +239,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
                             children: [
-                              // if(globalModal.userData?.userId!=1)
+                              if(globalModal.userData?.userId!=1)
                               Expanded(
                                 child:globalModal.userData?.userId!=1? Container(
                                   decoration: BoxDecoration(
@@ -258,7 +271,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                               Expanded(
                                 child: Container(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 25,
@@ -321,6 +334,11 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
                               ),
                             ],
                           ),
+                        if(globalModal.calender.length==0)
+                          Container(
+                            height: 250,
+                            child: Center(child: Text('No Holiday found.'),),
+                          )
 
                       ],
                     ),

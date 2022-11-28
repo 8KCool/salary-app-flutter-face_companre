@@ -77,9 +77,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
     userData=jsonResponse['userData'];
     // approvedBy=jsonResponse['approved_by'];
     history=jsonResponse['data'];
-    setState(() {
 
-    });
 
   }
   @override
@@ -165,11 +163,12 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                               onTap: () async {
                                                 DateTime? temp =
                                                     await showDatePicker(
+
                                                         context: context,
                                                         initialDate:
                                                             DateTime.now(),
                                                         firstDate:
-                                                            DateTime(1977),
+                                                        DateTime.now(),
                                                         lastDate:
                                                             DateTime(2099));
                                                 // showTimePicker(context: context, initialTime: initialTime)
@@ -209,7 +208,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                                     context)
                                                                 .copyWith(
                                                                     alwaysUse24HourFormat:
-                                                                        false),
+                                                                    false),
                                                             child: child!,
                                                           );
                                                         },
@@ -223,7 +222,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                             .substring(10, 15);
                                                         shiftStart = start.text;
                                                         start.text =
-                                                        '${DateFormat('hh:mm:ss').format(DateTime.parse('2000-01-01 ' + start.text))}';
+                                                        '${DateFormat.jm().format(DateTime.parse('2000-01-01 ' + start.text))}';
                                                             // '${DateFormat('hh:mm:s').format(DateTime.parse('2000-01-01 ' + start.text))}';
                                                       }
 
@@ -248,16 +247,12 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                           await showTimePicker(
                                                         context: context,
                                                         initialTime:
-                                                            TimeOfDay.now(),
+                                                        startTime!,
                                                         builder: (BuildContext
                                                                 context,
                                                             Widget? child) {
                                                           return MediaQuery(
-                                                            data: MediaQuery.of(
-                                                                    context)
-                                                                .copyWith(
-                                                                    alwaysUse24HourFormat:
-                                                                        false),
+                                                            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
                                                             child: child!,
                                                           );
                                                         },
@@ -271,7 +266,8 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                         shiftEnd = end.text;
 
                                                         end.text =
-                                                        '${DateFormat('hh:mm:ss').format(DateTime.parse('2000-01-01 ' + end.text))}';
+                                                        '${DateFormat.jm().format(DateTime.parse('2000-01-01 ' + end.text))}';
+
                                                       }
 
                                                       // setState(() {});
@@ -300,8 +296,10 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                             ),
                                             vSizedBox4,
                                             RoundEdgedButton(
+
                                               text: 'REQUEST PERMISSION',
                                               onTap: () async {
+                                                print('time -------------${startTime} , ${endTime}');
                                                 if (date.text == '') {
                                                   showSnackbar(context,
                                                       'Please choose date.');
@@ -314,11 +312,16 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                 } else if (reason.text == '') {
                                                   showSnackbar(context,
                                                       'Please enter reason.');
-                                                } else {
+                                                }
+                                             else if(DateTime.parse('${DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse('2000-01-01 ' + startTime.toString().substring(10,15)))}').compareTo(DateTime.parse('${DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse('2000-01-01 ' + endTime.toString().substring(10,15)))}')) > 0){
+                                                  showSnackbar(context,
+                                                      'Please enter valid time.');
+                                                }
+                                                else {
                                                   Map<String, dynamic> data = {
                                                     'date': date.text,
-                                                    'start_time': start.text,
-                                                    'end_time': end.text,
+                                                    'start_time': startTime.toString().substring(10,15),
+                                                    'end_time':endTime.toString().substring(10,15),
                                                     'reason': reason.text
                                                   };
                                                   print('object-------$data');
@@ -332,10 +335,15 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                   showSnackbar(
                                                       context, res['message']);
                                                   getHistory();
-                                                  date.text='';
-                                                  start.text='';
-                                                  end.text='';
-                                                  reason.text='';
+                                                  log("res---------$res");
+                                                  if(res['success'].toString()=='true'){
+                                                    date.text='';
+                                                    start.text='';
+                                                    end.text='';
+                                                    reason.text='';
+                                                  }
+
+
 
                                                   DefaultTabController.of(context)?.animateTo(2);
 
@@ -364,9 +372,11 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                   chipcolor: history[i]['status'].toString()=='1'?MyColors.secondarycolor:history[i]['status'].toString()=='2'?MyColors.red:MyColors.yellow,
 
                                                   chiptextcolor: MyColors.white,
-                                                  chiptext: history[i]['status'].toString()=='1'?'Approve':history[i]['status'].toString()=='2'?'Rejected':'Pending',
+                                                  chiptext: history[i]['status'].toString()=='1'?'Approved':history[i]['status'].toString()=='2'?'Rejected':'Pending',
                                                   location: false,
-                                                  privilaged_leave: true, date: '${history[i]['date']}', start: '${history[i]['start_time']}', end: '${history[i]['end_time']}', total: '${double.parse(history[i]['total_minute'])/60}',
+                                                  privilaged_leave: true, date: '${history[i]['date']}',
+                                                  start: '${DateFormat.jm().format(DateTime.parse('2022-11-19 ${history[i]['start_time']}.000Z'))}',
+                                                  end: '${DateFormat.jm().format(DateTime.parse('2022-11-19 ${history[i]['end_time']}.000Z'))}', total: history[i]['total_minute'],
                                                 ),
                                                 onTap: () {
                                                   bottomsheet(
@@ -386,6 +396,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                           ),
                                                           vSizedBox,
                                                           Permission_Request_list(
+                                                            permission_hours:false,
                                                             description: '${history[i]['reason']}',
                                                             chiptext: history[i]['status'].toString()=='1'?'Approved':history[i]['status'].toString()=='2'?'Rejected':'Pending',
                                                             text:
@@ -399,10 +410,14 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                                 MyColors.white,
                                                             horizontalpad: 0,
                                                             btns: false,
-                                                            privilaged_leave: true, date: '${history[i]['date']}', start: '${history[i]['start_time']}', end: '${history[i]['end_time']}', total: '${double.parse(history[i]['total_minute'])/60}',
+                                                            privilaged_leave: true,
+                                                            date: '${history[i]['date']}',
+                                                            start: '${DateFormat('hh:mm a').format(DateTime.parse('2022-11-19 ${history[i]['start_time']}.000Z'))}',
+                                                            end: '${DateFormat('hh:mm a').format(DateTime.parse('2022-11-19 ${history[i]['end_time']}.000Z'))}',
+                                                            total: history[i]['total_minute'],
 
-                                                            permission_hours:
-                                                                true,
+                                                            // permission_hours:
+                                                            //     true,
                                                           ),
                                                           Column(
                                                             crossAxisAlignment:
@@ -412,7 +427,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                                               if(history[i]['approve_by']!=null)
                                                               MainHeadingText(
                                                                 text:
-                                                                    '${history[i]['approved_byname']??'-'}',
+                                                                    '${history[i]['approve_by']??''}',
                                                                 fontSize: 15,
                                                               ),
                                                               vSizedBox05,

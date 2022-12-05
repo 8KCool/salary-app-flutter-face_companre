@@ -92,7 +92,7 @@ class _Employee_Work_DetailsState extends State<Employee_Work_Details> {
     staffDes=jsonResponse['empDes'];
     roleList=jsonResponse['allRole'];
     state.text=jsonResponse['data']['branch_id'].toString()=='0'?'':jsonResponse['data']['branch_id'].toString();
-    print('${jsonResponse['data']['category_id']}--------------868');
+    // print('${jsonResponse['data']['category_id']}--------------868');
     staff=jsonResponse['data']['category_id'].toString()=='0' || jsonResponse['data']['category_id'].toString()=='null'?'':jsonResponse['data']['category_id'].toString();
  if(jsonResponse['data']['branch_id'].toString()!='0'){
    if(jsonResponse['data']['department_id'].toString()!='0'){
@@ -107,12 +107,12 @@ class _Employee_Work_DetailsState extends State<Employee_Work_Details> {
     staffdesignation=jsonResponse['data']['designation_id'].toString()=='0' || jsonResponse['data']['designation_id'].toString()=='null'?'':jsonResponse['data']['designation_id'].toString();
     shift=jsonResponse['data']['shift_setting'].toString()=='0'?'':jsonResponse['data']['shift_setting'].toString();
     role=jsonResponse['data']['role'].toString()=='0'?'':jsonResponse['data']['role'].toString();
-    start.text='${DateFormat.jm().format(DateTime.parse('2000-01-01 ' + jsonResponse['data']['start_time']))}';
-    end.text='${DateFormat.jm().format(DateTime.parse('2000-01-01 ' + jsonResponse['data']['end_time']))}';
+    start.text=jsonResponse['data']['start_time']!=null?'${DateFormat.jm().format(DateTime.parse('2000-01-01 ' + jsonResponse['data']['start_time']))}':'';
+    end.text=jsonResponse['data']['end_time']!=null?'${DateFormat.jm().format(DateTime.parse('2000-01-01 ' + jsonResponse['data']['end_time']))}':'';
     // start.text=jsonResponse['data']['start_time'].toString();
     // end.text=jsonResponse['data']['end_time'].toString();
-    employee_id.text=jsonResponse['data']['employeeID'].toString();
-    doj.text= jsonResponse['data']['doj'].toString();
+    employee_id.text=jsonResponse['data']['employeeID']!=null?jsonResponse['data']['employeeID'].toString():'';
+    doj.text= jsonResponse['data']['doj']!=null?jsonResponse['data']['doj'].toString():'';
     resignation_date.text=jsonResponse['data']['resignation_date'].toString()!='null'?jsonResponse['data']['resignation_date'].toString():'';
     log("shiftList    --------${shiftList}");
     Provider.of<GlobalModal>(context, listen: false).loadingHide();
@@ -125,7 +125,7 @@ class _Employee_Work_DetailsState extends State<Employee_Work_Details> {
     branchdepartmentList=[];
     for(int i=0 ; i<departmentList.length;i++){
      if(Id==departmentList[i]['branch_id'].toString()){
-       print('branchdepartmentList         ${branchdepartmentList}');
+       print('branchdepartmentList ${branchdepartmentList}');
        branchdepartmentList.add(departmentList[i]);
      }
     }

@@ -63,6 +63,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
     // TODO: implement initState
     super.initState();
     newotp=widget.otp;
+    Provider.of<GlobalModal>(context, listen: false).isShow=false;
 
   }
   @override
@@ -92,6 +93,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                           children: [
                             IconButton(
                                 onPressed: (){
+                                  globalModal.cancelTimer();
                                   Navigator.of(context).pop();
                                 },
                                 icon: Icon(Icons.arrow_back, color: Colors.white,)
@@ -344,6 +346,10 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                   showSnackbar(context, res['message'].toString());
                                   print('otp------------${res['data']['otp']}');
                                   newotp=res['data']['otp'].toString();
+                                  globalModal.cancelTimer();
+                                  globalModal.isShow=false;
+                                  globalModal.startTimer();
+
                                   //token
                                   // Provider.of<GlobalModal>(context, listen: false).startTimer();
                                 }

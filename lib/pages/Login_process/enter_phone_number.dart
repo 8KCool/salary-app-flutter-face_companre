@@ -111,6 +111,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                     text: 'Get OTP',
                     textColor: Colors.white,
                     onTap: () async {
+                      globalModal.loadingShow();
                       print('get otp --------------------');
                       String phonePattern =
                           r'^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10}\s*,?$';
@@ -127,7 +128,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                           'phone':mobilenumber.text
                         };
                         // Provider.of<GlobalModal>(context, listen: false).loadingShow();
-                        globalModal.loadingShow();
+
 
                         var res = await Webservices.postData(
                             apiUrl: ApiUrls.login,

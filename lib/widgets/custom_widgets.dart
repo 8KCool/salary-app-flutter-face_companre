@@ -183,7 +183,7 @@ class clickable_list extends StatelessWidget {
               ],
             ),
             if(isLoader)
-               const CustomLoader(radius:10.0),
+                CustomLoader(radius:10.0),
             if(!isLoader)
             Icon(Icons.chevron_right_outlined, size: 25, color: MyColors.labelcolor,)
 

@@ -31,7 +31,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
       backgroundColor: Colors.white,
       body:Consumer<GlobalModal>(
         builder: (context,globalModal,child) {
-      return Column(
+      return globalModal.load?CustomLoader():Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Container(

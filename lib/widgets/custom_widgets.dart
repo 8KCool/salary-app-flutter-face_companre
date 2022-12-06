@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
+import 'package:salaryredesign/widgets/CustomLoader.dart';
 import 'package:salaryredesign/widgets/customtextfield.dart';
 import '../constants/colors.dart';
 import '../functions/navigation_functions.dart';
+
 import 'CustomTexts.dart';
 import 'buttons.dart';
 
@@ -118,6 +120,7 @@ class clickable_list extends StatelessWidget {
   final bool underlined;
   final Function()? onTap;
   final bool image;
+  final bool isLoader;
   // final Color textcolor;
 
   const clickable_list({
@@ -136,6 +139,7 @@ class clickable_list extends StatelessWidget {
     this.underlined = false,
     this.onTap,
     this.image = true,
+    this.isLoader = false,
     // this.icon = false,
     // this.textcolor,
 
@@ -178,6 +182,9 @@ class clickable_list extends StatelessWidget {
                 ),
               ],
             ),
+            if(isLoader)
+               const CustomLoader(radius:10.0),
+            if(!isLoader)
             Icon(Icons.chevron_right_outlined, size: 25, color: MyColors.labelcolor,)
 
           ],

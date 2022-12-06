@@ -114,10 +114,11 @@ class _Employee_Work_DetailsState extends State<Employee_Work_Details> {
     employee_id.text=jsonResponse['data']['employeeID']!=null?jsonResponse['data']['employeeID'].toString():'';
     doj.text= jsonResponse['data']['doj']!=null?jsonResponse['data']['doj'].toString():'';
     resignation_date.text=jsonResponse['data']['resignation_date'].toString()!='null'?jsonResponse['data']['resignation_date'].toString():'';
-    log("shiftList    --------${shiftList}");
+    log("resignation_date.text    --------${jsonResponse['data']['resignation_date']}");
     Provider.of<GlobalModal>(context, listen: false).loadingHide();
 
     setState(() {
+      log("resignation_date.text    --------${resignation_date.text}");
       load=false;
     });
   }

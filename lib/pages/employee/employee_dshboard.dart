@@ -85,7 +85,8 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
       appBar: appBar(
           context: context,
           titlecenter: false,
-          title: 'Salary',
+        leadingWidth:350,
+          // title: 'Salary',
           appBarColor: MyColors.white,
           titleColor: MyColors.black,
         fontsize: 20,
@@ -94,7 +95,7 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(MyImages.logo2, height: 38,),
+            Image.asset('assets/images/full-logo.png',),
           ],
         ),
 

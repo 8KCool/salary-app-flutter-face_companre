@@ -650,7 +650,7 @@ class _Personal_details_PageState extends State<Personal_details_Page> {
                             load=false;
                           });
                           if (res['success'].toString() == 'true') {
-                            showSnackbar(context, res['message']);
+                            // showSnackbar(context, res['message']);
 
                             Map<String, dynamic>data = {
                               'phone': phone.text

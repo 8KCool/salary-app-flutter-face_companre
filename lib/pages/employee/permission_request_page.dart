@@ -68,7 +68,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
   Map approvedBy={};
   List history=[];
   getHistory()async{
-    Provider.of<GlobalModal>(context, listen: false).loadingShow();
+    Provider.of<GlobalModal>(context, listen: false).load=true;
     var res = await Webservices.getData(ApiUrls.permissionhistoryview,context);
     Provider.of<GlobalModal>(context, listen: false).loadingHide();
     log("res------permissionhistoryview-------$res");
@@ -93,9 +93,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
       appBar: appBar(
           context: context, title: 'Permission Request', titlecenter: false),
       body: Consumer<GlobalModal>(builder: (context, globalModal, child) {
-        return globalModal.load
-            ? CustomLoader()
-            : SingleChildScrollView(
+        return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -355,7 +353,9 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
                                         ),
                                       ),
                                     ),
-                                    SingleChildScrollView(
+                                    globalModal.load
+                                        ? CustomLoader()
+                                        : SingleChildScrollView(
                                       child: Container(
                                         color: MyColors.disabledcolor,
                                         padding:

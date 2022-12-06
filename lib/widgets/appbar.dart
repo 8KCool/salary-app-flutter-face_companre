@@ -11,6 +11,7 @@ AppBar appBar(
       bool implyLeading = true,
       IconData backIcon = Icons.chevron_left_outlined,
       double fontsize = 16,
+      double leadingWidth = 50,
       double size = 25,
       // double toolbarHeight = 50,
       String badge = '0',
@@ -24,6 +25,7 @@ AppBar appBar(
     backgroundColor: appBarColor,
     elevation: 0,
     centerTitle: titlecenter,
+    leadingWidth: leadingWidth,
     title: title == null
         ? null
         : AppBarHeadingText(

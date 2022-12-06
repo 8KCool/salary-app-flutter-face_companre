@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
 
@@ -112,10 +113,28 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
       body: Center(
-        child: Image.asset(
-          'assets/images/splash-logo.png',
-          width: MediaQuery.of(context).size.width - 120,
-          fit: BoxFit.fitWidth,
+        child: Container(
+          padding: EdgeInsets.all(30),
+          decoration: BoxDecoration(
+            color: MyColors.white,
+            borderRadius: BorderRadius.circular(100),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.white,
+                  offset: const Offset(
+                    0.0,
+                    0.0,
+                  ),
+                  blurRadius: 10.0,
+                  spreadRadius: 0.0,
+                ),
+              ]
+          ),
+          child: Image.asset(
+            'assets/images/logo-new.png',
+            width: MediaQuery.of(context).size.width - 300,
+            fit: BoxFit.fitWidth,
+          ),
         ),
       ),
     );

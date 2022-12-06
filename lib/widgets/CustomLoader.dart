@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart' as cupertino;
 import '../constants/colors.dart';
 class CustomLoader extends StatelessWidget {
   final Color? color;
-  const CustomLoader({Key? key, this.color}) : super(key: key);
+  final double? radius;
+   CustomLoader({Key? key, this.color,this.radius}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class CustomLoader extends StatelessWidget {
     return Center(
         child: cupertino.CupertinoActivityIndicator(
           color:color?? MyColors.primaryColor,
-          radius: 24,
+          radius:radius?? 24,
         )
     );
     // return cupertino.CupertinoActivityIndicator

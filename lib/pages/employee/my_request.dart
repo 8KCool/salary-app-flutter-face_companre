@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:convert' as convert;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
@@ -17,6 +18,8 @@ import 'package:salaryredesign/services/webservices.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:salaryredesign/widgets/custom_widgets.dart';
 
+import '../../providers/clock.dart';
+import '../../widgets/CustomLoader.dart';
 import '../settings/accessDenied.dart';
 
 class MyRequest_Page extends StatefulWidget {
@@ -45,33 +48,39 @@ class _MyRequest_PageState extends State<MyRequest_Page> {
                 push(context: context, screen: My_Leave_Request_Page());
               },
             ),
-            clickable_list(
-              text: 'Permission Request',
-              img: 'assets/images/permission_request_nw-1.png',
-              colorborderleft: MyColors.yellow,
-              onTap: ()async{
-                var res =await Webservices.getData(ApiUrls.permissionadd, context);
-                log("Res -----${res.statusCode}");
-                if(res.statusCode==422){
-                  push(context: context, screen: AccessDenied(title: 'Permission Request',));
-                }
-                else if(res.statusCode==200){
-                  var jsonResponse = convert.jsonDecode(res.body);
-                  if(jsonResponse['success'].toString()=='true'){
-                    push(context: context, screen: MyPermission_Request_Page());
-                  }
-                  else{
+            Consumer<GlobalModal>(
+                builder: (context,globalModal,child) {
+                return clickable_list(
+                  text: 'Permission Request',
+                  img: 'assets/images/permission_request_nw-1.png',
+                  isLoader: globalModal.load?true:false,
+                  colorborderleft: MyColors.yellow,
+                  onTap:globalModal.load?(){}: ()async{
+                    globalModal.loadingShow();
+                    var res =await Webservices.getData(ApiUrls.permissionadd, context);
+                    log("Res -----${res.statusCode}");
+                    if(res.statusCode==422){
+                      push(context: context, screen: AccessDenied(title: 'Permission Request',));
+                    }
+                    else if(res.statusCode==200){
+                      var jsonResponse = convert.jsonDecode(res.body);
+                      if(jsonResponse['success'].toString()=='true'){
+                        push(context: context, screen: MyPermission_Request_Page());
+                      }
+                      else{
 
-                  }
+                      }
 
-                }
+                    }
 
-                // var jsonResponse = convert.jsonDecode(res.body);
-                // log("Res -----$jsonResponse");
+                    // var jsonResponse = convert.jsonDecode(res.body);
+                    // log("Res -----$jsonResponse");
 
 
-                // push(context: context, screen: MyPermission_Request_Page());
-              },
+                    // push(context: context, screen: MyPermission_Request_Page());
+                  },
+                );
+              }
             ),
           ],
         ),

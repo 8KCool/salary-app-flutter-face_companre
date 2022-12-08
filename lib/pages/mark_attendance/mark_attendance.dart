@@ -68,13 +68,15 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
       print('the dataa id foutndddddddd ${scanData.format.name}');
       result = scanData;
       print('result------------${result!.code.toString()}');
-      var code = result!.code.toString().split('.com/')[1];
-      var emp_code = code.split('/')[1].toString();
-      var qr_code = code.split('/')[0].toString();
-
-      print("codeee-----$code");
-      print("emp_code-----$emp_code");
-      print("qr_code-----$qr_code");
+      Uri url =Uri.parse(result!.code.toString());
+      log('result----------251--${url.path}');
+      String u = url.path.substring(1);
+      log('result----------253--${u}');
+      var code = u.split('/');
+      // log('cccc-----'+code.toString());
+      var emp_code = code[1].toString();
+      var qr_code = code[0].toString();
+      //
       qrBranchcode = qr_code;
       qrEmployerid = emp_code;
       is_in = true;
@@ -195,7 +197,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
 
   getDetails() async {
     Map<String, dynamic> data = {};
-    Provider.of<GlobalModal>(context, listen: false).loadingShow();
+    Provider.of<GlobalModal>(context, listen: false).load=true;
     var res = await Webservices.postData(
         apiUrl: ApiUrls.qrattendance, body: data, context: context);
     Provider.of<GlobalModal>(context, listen: false).loadingHide();

@@ -2,7 +2,8 @@ class ApiUrls{
   static const google_map = 'AIzaSyABk-0Al27H9Ap_Rtti2t0ePxOLvl5QFzk';
 
 
-  static const baseUrl = 'https://etaskers.com/api/';
+  // static const baseUrl = 'https://etaskers.com/api/';
+  static const baseUrl = 'https://app.swipebox.in/api/';
   // static const String getpaymentMethodFromSecretKey = 'https://api.stripe.com/v1/setup_intents/';
   static const  questions_list = baseUrl +  'questions-list';
   static const signup = baseUrl + 'signup';

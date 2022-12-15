@@ -11,4 +11,8 @@ class PermissionModal extends ChangeNotifier {
 
     notifyListeners();
   }
+   showLoading(){
+    load=true;
+    notifyListeners();
+   }
 }

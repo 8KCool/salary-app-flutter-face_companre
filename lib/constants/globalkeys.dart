@@ -11,3 +11,4 @@ class MyGlobalKeys{
 
 Map user={};
 String usertoken='';
+Map faceAtt={};

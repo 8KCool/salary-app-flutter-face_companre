@@ -8,6 +8,8 @@ import 'package:salaryredesign/pages/face_recognition/face_recognition_processin
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 
+import '../employee/face_attendance.dart';
+import 'package:camera/camera.dart';
 class Face_Recognition_Start_Page extends StatefulWidget {
   const Face_Recognition_Start_Page({Key? key}) : super(key: key);
 
@@ -62,8 +64,10 @@ class _Face_Recognition_Start_PageState extends State<Face_Recognition_Start_Pag
                           text: 'START SCAN',
                           borderRadius: 5,
                           fontfamily: 'bold',
-                          onTap: (){
-                            push(context: context, screen: Face_Recognition_Processing_Page());
+                          onTap: () async {
+
+                            push(context: context, screen: CameraExampleHome());
+                            // push(context: context, screen: Face_Recognition_Processing_Page());
                           },
                         )
                       ],

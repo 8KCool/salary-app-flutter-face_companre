@@ -13,7 +13,9 @@ class ApiUrls{
   static const employerRegistration = baseUrl + 'employerRegistration';
   static const Getuserlogindetail = baseUrl + 'Getuserlogindetail';
   static const qrattendance = baseUrl + 'qrattendance';
+  static const faceattendance = baseUrl + 'faceattendace';
   static const qrattendanceStore = baseUrl + 'qrattendanceStore';
+  static const faceattendanceStore = baseUrl + 'faceattendaceStore';
   static const getUser = baseUrl + 'getUser';
   static const listBranch = baseUrl + 'listBranch';
   static const deleteBranch = baseUrl + 'deleteBranch';

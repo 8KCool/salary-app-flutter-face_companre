@@ -17,6 +17,7 @@ import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:salaryredesign/widgets/customLoader.dart';
 import 'package:salaryredesign/widgets/custom_widgets.dart';
 
+import '../../constants/globalkeys.dart';
 import '../../providers/clock.dart';
 import '../../services/webservices.dart';
 import '../../widgets/CustomCircularImage.dart';
@@ -24,6 +25,7 @@ import '../../widgets/avatar.dart';
 import '../employee_profile_detail.dart';
 import '../face_recognition/face_recognition_start_page.dart';
 import '../settings/holiday_calender.dart';
+import '../tab_pages/bottom_tab.dart';
 import 'bank_upi_page.dart';
 import 'edit_profile.dart';
 import 'my_request.dart';
@@ -39,6 +41,39 @@ class Employee_dashboard_Page extends StatefulWidget {
 class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
   // Map dashBoardData={};
   bool load=false;
+  Future<void> _showMyDialog(message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text('Alert'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children:  <Widget>[
+                // Image.asset(MyImages.cancel,width: 70,height: 70,),
+                Icon(Icons.dangerous,color: Colors.red,size: 80,),
+                vSizedBox2,
+                Text('${message.toString()}',textAlign: TextAlign.center,),
+                vSizedBox,
+
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // push(context: context, screen: TabsPage());
+                  },
+                ),
+              ],
+            ),
+          ),
+
+        );
+      },
+    );
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -268,8 +303,22 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
                                   image: false,
                                   fontSize: 14,
                                   badge: true,
-                                  onTap: (){
-                                    push(context: context, screen: Face_Recognition_Start_Page());
+                                  onTap: ()async {
+                                    permissionModal.showLoading();
+                                    var res = await Webservices.postData(
+                                        apiUrl: ApiUrls.faceattendance,
+                                        body: {},
+                                        context: context);
+                                    if (res['success'].toString() == 'true') {
+                                      faceAtt = res;
+                                      print('res from api ${res}');
+                                      if (res['data']['today_attendance']['inTime'] == null || res['data']['today_attendance']['outTime'] == null  ) {
+                                        push(context: context, screen: Face_Recognition_Start_Page());
+                                      }
+                                      else{
+                                        _showMyDialog(res['message']);
+                                      }
+                                    }
                                   },
                                 ),
                               ),
@@ -288,6 +337,8 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
           ),
         ),
       )
+
     );
+
   }
 }

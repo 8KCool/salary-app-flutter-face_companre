@@ -232,6 +232,7 @@ class Webservices {
     var url = Uri.parse(apiUrl);
     //
     log(apiUrl);
+    log('filesfiles $files');
     try {
       UserModal? user = Provider.of<GlobalModal>(context, listen: false).userData;
       var request = new http.MultipartRequest("POST", url,);
@@ -249,13 +250,13 @@ class Webservices {
       }
 
 
-      log(request.fields.toString());
+      // print("files----------------------${request.files}");
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
       log(response.body);
       var jsonResponse = convert.jsonDecode(response.body);
-
-      if (jsonResponse['status'] == 1) {
+      print('8686 error in api url $url with status code ${response.statusCode}');
+      if (jsonResponse['success'] == 1) {
         if (successAlert) {
           showSnackbar(context, jsonResponse['message']);
         }

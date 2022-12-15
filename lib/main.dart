@@ -18,10 +18,26 @@ import 'package:salaryredesign/providers/clock.dart';
 import 'package:salaryredesign/providers/newProvider.dart';
 import 'package:salaryredesign/services/local_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
+import 'package:camera/camera.dart';
+List<CameraDescription> cameras = <CameraDescription>[];
+// List<CameraDescription> frontCamera = <CameraDescription>[];
+CameraDescription? frontCamera ;
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+
+    for (int i=0;i<cameras.length;i++){
+      if(cameras[i].lensDirection==CameraLensDirection.front){
+        frontCamera=cameras[i];
+      }
+    }
+    print('cameras------------$cameras');
+  } on CameraException catch (e) {
+    print('------------$e');
+    // _logError(e.code, e.description);
+  }
   sharedPreference = await SharedPreferences.getInstance();
   runApp(
     MultiProvider(

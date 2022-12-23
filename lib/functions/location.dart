@@ -45,7 +45,9 @@ Future<Position> determinePosition() async {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    position =  await Geolocator.getCurrentPosition();
+    position =  await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high
+    );
     return  position;
     // lat = position.latitude;
     // lng = position.longitude;

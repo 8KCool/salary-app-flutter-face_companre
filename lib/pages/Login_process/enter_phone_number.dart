@@ -11,6 +11,7 @@ import 'package:salaryredesign/widgets/customtextfield.dart';
 import '../../constants/image_urls.dart';
 import '../../providers/clock.dart';
 import '../../services/api_urls.dart';
+import '../../services/local_services.dart';
 import '../../services/webservices.dart';
 import '../../widgets/CustomTexts.dart';
 import '../../widgets/customLoader.dart';
@@ -25,6 +26,12 @@ class Enter_Phone_Number extends StatefulWidget {
 
 class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
   TextEditingController mobilenumber = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    sharedPreference.setString('is_visit', 'true');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,14 +55,14 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                 // vSizedBox8,
                 Row(crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                        onPressed: (){
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(Icons.arrow_back, color: Colors.white,)
-                    ),
+                    // IconButton(
+                    //     onPressed: (){
+                    //       Navigator.of(context).pop();
+                    //     },
+                    //     icon: Icon(Icons.arrow_back_ios, color: Colors.white,)
+                    // ),
                     hSizedBox2,
-                    MainHeadingText(text: 'Enter Your Phone',
+                    MainHeadingText(text: 'Enter your mobile number',
                       color: Colors.white,
                       fontSize: 24,
                       fontFamily: 'bold',
@@ -98,7 +105,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
 
                   CustomTextFieldwithFlag(
                     controller: mobilenumber,
-                    hintText: '1234567890',
+                    hintText: '',
                     fontsize: 16,
                     label: 'Mobile Number',
                     showlabel: true,

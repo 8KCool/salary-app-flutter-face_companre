@@ -65,13 +65,13 @@ class GlobalModal extends ChangeNotifier {
   Timer? timer;
   // List<UserModel> userdata = [];
   startTimer() {
-    int min = 00;
-    int sec = 00;
+    int min = 01;
+    int sec = 59;
     timer = Timer.periodic(new Duration(seconds: 1), (timer) {
-      sec++;
-      if (sec == 60) {
-        sec = 00;
-        min++;
+      sec--;
+      if (sec == 00) {
+        sec = 59;
+        min=0;
       }
       String sec1 = '';
       if (sec < 10) {
@@ -82,10 +82,10 @@ class GlobalModal extends ChangeNotifier {
       clock = '0${min}:${sec1}';
       // debugPrint("Print after 1 seconds ------------$clock");
       // debugPrint(timer.tick.toString());
-      if (clock == '02:00') {
+      if (clock == '00:01') {
         isShow = true;
         sec = 00;
-        min = 00;
+        min = 0;
         timer.cancel();
       }
       notifyListeners();

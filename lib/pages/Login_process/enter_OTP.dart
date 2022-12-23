@@ -111,7 +111,8 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: ParagraphText(
-                            text: 'Enter the verification code we just sent\nyou on your phone number',
+                            // text: 'Enter the verification code we just sent\nyou on your phone number',
+                            text: 'Enter the verification code',
                             color: Colors.white,
                             fontSize: 16,
                             height: 1.5,
@@ -140,29 +141,29 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                           vSizedBox16,
                           vSizedBox16,
 
-                          Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(4),
-                                gradient: new LinearGradient(
-                                    stops: [0.01, 0.01],
-                                    colors: [
-                                      MyColors.orange,
-                                      MyColors.orange.withOpacity(0.1),
-                                    ]
-                                ),
-                              ),
-                              child: Center(
-                                  child: MainHeadingText(
-                                    text: 'OTP INPUT',
-                                    fontSize: 20,
-                                    fontFamily: 'bold',
-                                    color: MyColors.headingcolor,
-                                  )
-                              )
-                          ),
+                          // Container(
+                          //     width: MediaQuery.of(context).size.width,
+                          //     height: 50,
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.red,
+                          //       borderRadius: BorderRadius.circular(4),
+                          //       gradient: new LinearGradient(
+                          //           stops: [0.01, 0.01],
+                          //           colors: [
+                          //             MyColors.orange,
+                          //             MyColors.orange.withOpacity(0.1),
+                          //           ]
+                          //       ),
+                          //     ),
+                          //     child: Center(
+                          //         child: MainHeadingText(
+                          //           text: 'OTP INPUT',
+                          //           fontSize: 20,
+                          //           fontFamily: 'bold',
+                          //           color: MyColors.headingcolor,
+                          //         )
+                          //     )
+                          // ),
                           vSizedBox2,
                           vSizedBox2,
                           // CustomOtpWidget(otpLength: 6),
@@ -328,6 +329,12 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                               width: 200,
                               fontSize: 16,
                               onTap: ()async{
+                                otp1.text='';
+                                otp2.text='';
+                                otp3.text='';
+                                otp4.text='';
+                                otp5.text='';
+                                otp6.text='';
                                 print('phone-------${widget.phone}');
                                 Map<String,dynamic>data={
                                   'phone':widget.phone.toString()

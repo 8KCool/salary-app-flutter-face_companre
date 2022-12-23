@@ -39,6 +39,7 @@ class MyLocalServices{
   static void logout(){
     sharedPreference.clear();
     // userData = null;
+    sharedPreference.setString('is_visit', 'true');
 
     Navigator.popUntil(MyGlobalKeys.navigatorKey.currentContext!, (route) => route.isFirst);
     pushReplacement(context: MyGlobalKeys.navigatorKey.currentContext!, screen: Enter_Phone_Number(),);

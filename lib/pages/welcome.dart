@@ -40,12 +40,17 @@ class _Welcome_PageState extends State<Welcome_Page> {
                  child: Container(
                    width: MediaQuery.of(context).size.width,
                    padding: EdgeInsets.only(right: 16),
-                   child: ParagraphText(
-                       text: 'Skip',
-                     color: Colors.black,
-                     fontSize: 14,
-                     fontFamily: 'bold',
-                     textAlign:TextAlign.end,
+                   child: GestureDetector(
+                     onTap: (){
+                       push(context: context, screen: Enter_Phone_Number());
+                     },
+                     child: ParagraphText(
+                         text: 'Skip',
+                       color: Colors.black,
+                       fontSize: 14,
+                       fontFamily: 'bold',
+                       textAlign:TextAlign.end,
+                     ),
                    ),
                  ),
                onTap: (){
@@ -121,12 +126,17 @@ class _Welcome_PageState extends State<Welcome_Page> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.only(right: 16),
-                    child: ParagraphText(
-                      text: 'Skip',
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'bold',
-                      textAlign:TextAlign.end,
+                    child: GestureDetector(
+                      onTap: (){
+                        push(context: context, screen: Enter_Phone_Number());
+                      },
+                      child: ParagraphText(
+                        text: 'Skip',
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: 'bold',
+                        textAlign:TextAlign.end,
+                      ),
                     ),
                   ),
                   onTap: (){
@@ -202,12 +212,17 @@ class _Welcome_PageState extends State<Welcome_Page> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.only(right: 16),
-                    child: ParagraphText(
-                      text: 'Skip',
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'bold',
-                      textAlign:TextAlign.end,
+                    child: GestureDetector(
+                      onTap: (){
+                        push(context: context, screen: Enter_Phone_Number());
+                      },
+                      child: ParagraphText(
+                        text: 'Skip',
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: 'bold',
+                        textAlign:TextAlign.end,
+                      ),
                     ),
                   ),
                   onTap: (){

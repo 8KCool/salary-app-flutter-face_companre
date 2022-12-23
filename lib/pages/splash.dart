@@ -20,6 +20,7 @@ import '../providers/clock.dart';
 import '../services/api_urls.dart';
 import '../services/auth.dart';
 import '../services/webservices.dart';
+import 'Login_process/enter_phone_number.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -93,7 +94,19 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       else{
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Welcome_Page()), (Route<dynamic> route) => false);
+            Enter_Phone_Number()), (Route<dynamic> route) => false);
+        // String? isVisit =( await SharedPreferences.getInstance()).getString('is_visit');
+        // print('isVisit------------------${isVisit}');
+        // if(isVisit==null){
+        //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+        //       Welcome_Page()), (Route<dynamic> route) => false);
+        // }
+        // else{
+        //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+        //       Enter_Phone_Number()), (Route<dynamic> route) => false);
+        // }
+
+
       }
 
     });

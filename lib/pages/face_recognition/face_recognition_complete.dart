@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../widgets/CustomLoader.dart';
+import '../tabbarscreen.dart';
 
 class Face_Recognition_Complete_Page extends StatefulWidget {
   final File image;
@@ -49,6 +50,7 @@ class _Face_Recognition_Complete_PageState
   // }
   String workingHours = '';
   bool load=false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -84,7 +86,7 @@ class _Face_Recognition_Complete_PageState
                     topRight: Radius.circular(16),
                   ),
                 ),
-                height: 470,
+                height: 300,
                 padding: horizontal_pad,
                 child: Center(
                     child: Column(
@@ -107,187 +109,222 @@ class _Face_Recognition_Complete_PageState
                       textAlign: TextAlign.center,
                     ),
                     vSizedBox2,
-                    if(faceAtt['data']['today_attendance']['workinHours']==null ||faceAtt['data']['today_attendance']['workinHours'].toString()=='0')
+                    // if(faceAtt['data']['today_attendance']['workinHours']==null ||faceAtt['data']['today_attendance']['workinHours'].toString()=='0')
 
                       if(!load)
                     RoundEdgedButton(
-                      text: 'Retry',
+                      text: 'RETRY',
                       onTap: () {
                         push(context: context, screen: CameraExampleHome());
                       },
                     ),
                     vSizedBox,
-                    if(faceAtt['data']['today_attendance']['workinHours']==null ||faceAtt['data']['today_attendance']['workinHours'].toString()=='0')
-                    if(!load)
                     RoundEdgedButton(
-                      text:
-                          faceAtt['data']['today_attendance']['inTime'] == null
-                              ? 'Punch In'
-                              : 'Punch Out',
-                      borderRadius: 5,
-                      fontfamily: 'bold',
-                      onTap: () async {
-                        setState(() {
-                          load=true;
-                        });
-                        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-                        var androidDeviceInfo = await deviceInfo.androidInfo;
-                        var id = androidDeviceInfo.androidId;
-                        // String? deviceId = await _getId();
-                        Map<String, dynamic> data = {
-                          'lat':
-                              Provider.of<GlobalModal>(context, listen: false)
-                                  .location!
-                                  .Lat
-                                  .toString(),
-                          'lang':
-                              Provider.of<GlobalModal>(context, listen: false)
-                                  .location!
-                                  .Lng
-                                  .toString(),
-                          'location':
-                              Provider.of<GlobalModal>(context, listen: false)
-                                  .location!
-                                  .addressString,
-                          'device_id': id.toString()
-                        };
-                        print(data);
-                        Map<String, dynamic> files = {'image': widget.image};
-                        print('files-----------55------$files');
-                        var res = await Webservices.postDataWithImageFunction(
-                            apiUrl: ApiUrls.faceattendanceStore,
-                            body: data,
-                            context: context,
-                            files: files);
-                        setState(() {
-                          load=false;
-                        });
-                        log("res --------------$res");
-                        if (res['success'].toString() == 'true') {
-                          // permissionModal.showLoading();
-                          var res1 = await Webservices.postData(
-                              apiUrl: ApiUrls.faceattendance,
-                              body: {},
-                              context: context);
-                          if (res1['success'].toString() == 'true') {
-                            faceAtt = res1;
-                            workingHours = '${faceAtt['data']['today_attendance']['workinHours']}';
+                      text: 'COMPLETE PROFILE',
+                      onTap: ()async{
                             setState(() {
-
+                              load=true;
                             });
-                          }
+                            DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                            var androidDeviceInfo = await deviceInfo.androidInfo;
+                            var id = androidDeviceInfo.androidId;
+                            // String? deviceId = await _getId();
+                            Map<String, dynamic> data = {
+                              'device_id': id.toString()
+                            };
+                            print(data);
+                            Map<String, dynamic> files = {'image': widget.image};
+                            print('files-----------55------$files');
+                            var res = await Webservices.postDataWithImageFunction(
+                                apiUrl: ApiUrls.facereconization,
+                                body: data,
+                                context: context,
+                                files: files);
+                            setState(() {
+                              load=false;
+                            });
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                            // Navigator.of(context)
+                            //     .popUntil(ModalRoute.withName("/Tabbarscreen"));
+                            // showSnackbar(context, '${res['message']}');
+                            // pushReplacement(context: context, screen: Tabbarscreen(key: tabbarKey,));
+                           // if (res['success'].toString() == 'true') {
+                           //
+                           // }
 
-                          Future.delayed(const Duration(seconds: 10), () {
-                            push(context: context, screen: TabsPage());
-                          });
-                        }
-                        else{
-                          showSnackbar(context, 'Something went wrong ! Please try again later.');
-                          push(context: context, screen: TabsPage());
-
-                        }
-                        Future.delayed(const Duration(seconds: 10), () {
-                        });
-
-                        // token:toke after login,lat:10,lang:20,device_id:20,image
-                        // push(context: context, screen: TabsPage());
                       },
                     ),
+                    // if(faceAtt['data']['today_attendance']['workinHours']==null ||faceAtt['data']['today_attendance']['workinHours'].toString()=='0')
+                    // if(!load)
+                    // RoundEdgedButton(
+                    //   text:
+                    //       faceAtt['data']['today_attendance']['inTime'] == null
+                    //           ? 'Punch In'
+                    //           : 'Punch Out',
+                    //   borderRadius: 5,
+                    //   fontfamily: 'bold',
+                    //   onTap: () async {
+                    //     setState(() {
+                    //       load=true;
+                    //     });
+                    //     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                    //     var androidDeviceInfo = await deviceInfo.androidInfo;
+                    //     var id = androidDeviceInfo.androidId;
+                    //     // String? deviceId = await _getId();
+                    //     Map<String, dynamic> data = {
+                    //       'lat':
+                    //           Provider.of<GlobalModal>(context, listen: false)
+                    //               .location!
+                    //               .Lat
+                    //               .toString(),
+                    //       'lang':
+                    //           Provider.of<GlobalModal>(context, listen: false)
+                    //               .location!
+                    //               .Lng
+                    //               .toString(),
+                    //       'location':
+                    //           Provider.of<GlobalModal>(context, listen: false)
+                    //               .location!
+                    //               .addressString,
+                    //       'device_id': id.toString()
+                    //     };
+                    //     print(data);
+                    //     Map<String, dynamic> files = {'image': widget.image};
+                    //     print('files-----------55------$files');
+                    //     var res = await Webservices.postDataWithImageFunction(
+                    //         apiUrl: ApiUrls.faceattendanceStore,
+                    //         body: data,
+                    //         context: context,
+                    //         files: files);
+                    //     setState(() {
+                    //       load=false;
+                    //     });
+                    //     log("res --------------$res");
+                    //     if (res['success'].toString() == 'true') {
+                    //       // permissionModal.showLoading();
+                    //       var res1 = await Webservices.postData(
+                    //           apiUrl: ApiUrls.faceattendance,
+                    //           body: {},
+                    //           context: context);
+                    //       if (res1['success'].toString() == 'true') {
+                    //         faceAtt = res1;
+                    //         workingHours = '${faceAtt['data']['today_attendance']['workinHours']}';
+                    //         setState(() {
+                    //
+                    //         });
+                    //       }
+                    //
+                    //       Future.delayed(const Duration(seconds: 10), () {
+                    //         push(context: context, screen: TabsPage());
+                    //       });
+                    //     }
+                    //     else{
+                    //       showSnackbar(context, 'Something went wrong ! Please try again later.');
+                    //       push(context: context, screen: TabsPage());
+                    //
+                    //     }
+                    //     Future.delayed(const Duration(seconds: 10), () {
+                    //     });
+                    //
+                    //     // token:toke after login,lat:10,lang:20,device_id:20,image
+                    //     // push(context: context, screen: TabsPage());
+                    //   },
+                    // ),
                     vSizedBox4,
                     if(load)
                       CustomLoader(radius: 10,),
                     if(load)
 
                       vSizedBox4,
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              MainHeadingText(
-                                text: faceAtt['data']['today_attendance']
-                                            ['inTime'] ==
-                                        null
-                                    ? '--:--'
-                                    : '${faceAtt['data']['today_attendance']['inTime'].toString()}',
-                                fontSize: 24,
-                                color: MyColors.primaryColor,
-                              ),
-                              GestureDetector(
-                                child: ParagraphText(
-                                  text: 'Punch In',
-                                  fontFamily: 'bold',
-                                ),
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              MainHeadingText(
-                                text: faceAtt['data']['today_attendance']
-                                            ['outTime'] ==
-                                        null
-                                    ? '--:--'
-                                    : '${faceAtt['data']['today_attendance']['outTime'].toString()}',
-                                fontSize: 24,
-                                color: MyColors.primaryColor,
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  // globalModal.loadingShow();
-                                  // is_scan = true;
-                                  // globalModal.loadingHide();
-                                  // Future.delayed(
-                                  //     Duration(milliseconds: 100))
-                                  //     .then((value) {
-                                  //   controller?.resumeCamera();
-                                  //   // setState(() {
-                                  //   // });
-                                  // });
-                                  try {
-                                    // Future.delayed(Duration(seconds: 2))
-                                    //     .then((value) {
-                                    //   controller?.resumeCamera();
-                                    //   // setState(() {
-                                    //   // });
-                                    // });
-                                  } catch (e) {
-                                    print('Error in catch block $e');
-                                  }
-                                },
-                                child: ParagraphText(
-                                  text: 'Punch Out',
-                                  fontFamily: 'bold',
-                                ),
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              MainHeadingText(
-                                text: workingHours == '' || workingHours == '0'
-                                    ? '--:--'
-                                    : workingHours,
-                                fontSize: 24,
-                                color: MyColors.primaryColor,
-                              ),
-                              ParagraphText(
-                                text: 'Working Hrs',
-                                fontFamily: 'bold',
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    vSizedBox2,
-                    RoundEdgedButton(text: 'Go to Home',onTap: (){
-                      push(context: context, screen: TabsPage());
-
-                    },)
+                    //
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Column(
+                    //         children: [
+                    //           MainHeadingText(
+                    //             text: faceAtt['data']['today_attendance']
+                    //                         ['inTime'] ==
+                    //                     null
+                    //                 ? '--:--'
+                    //                 : '${faceAtt['data']['today_attendance']['inTime'].toString()}',
+                    //             fontSize: 24,
+                    //             color: MyColors.primaryColor,
+                    //           ),
+                    //           GestureDetector(
+                    //             child: ParagraphText(
+                    //               text: 'Punch In',
+                    //               fontFamily: 'bold',
+                    //             ),
+                    //           )
+                    //         ],
+                    //       ),
+                    //       Column(
+                    //         children: [
+                    //           MainHeadingText(
+                    //             text: faceAtt['data']['today_attendance']
+                    //                         ['outTime'] ==
+                    //                     null
+                    //                 ? '--:--'
+                    //                 : '${faceAtt['data']['today_attendance']['outTime'].toString()}',
+                    //             fontSize: 24,
+                    //             color: MyColors.primaryColor,
+                    //           ),
+                    //           GestureDetector(
+                    //             onTap: () async {
+                    //               // globalModal.loadingShow();
+                    //               // is_scan = true;
+                    //               // globalModal.loadingHide();
+                    //               // Future.delayed(
+                    //               //     Duration(milliseconds: 100))
+                    //               //     .then((value) {
+                    //               //   controller?.resumeCamera();
+                    //               //   // setState(() {
+                    //               //   // });
+                    //               // });
+                    //               try {
+                    //                 // Future.delayed(Duration(seconds: 2))
+                    //                 //     .then((value) {
+                    //                 //   controller?.resumeCamera();
+                    //                 //   // setState(() {
+                    //                 //   // });
+                    //                 // });
+                    //               } catch (e) {
+                    //                 print('Error in catch block $e');
+                    //               }
+                    //             },
+                    //             child: ParagraphText(
+                    //               text: 'Punch Out',
+                    //               fontFamily: 'bold',
+                    //             ),
+                    //           )
+                    //         ],
+                    //       ),
+                    //       Column(
+                    //         children: [
+                    //           MainHeadingText(
+                    //             text: workingHours == '' || workingHours == '0'
+                    //                 ? '--:--'
+                    //                 : workingHours,
+                    //             fontSize: 24,
+                    //             color: MyColors.primaryColor,
+                    //           ),
+                    //           ParagraphText(
+                    //             text: 'Working Hrs',
+                    //             fontFamily: 'bold',
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // vSizedBox2,
+                    // RoundEdgedButton(text: 'Go to Home',onTap: (){
+                    //   push(context: context, screen: TabsPage());
+                    //
+                    // },)
                   ],
                 )),
               ),

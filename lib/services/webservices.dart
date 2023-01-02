@@ -74,18 +74,23 @@ class Webservices {
     http.Response response =
     http.Response('{"message":"failure","status":0}', 404);
     try {
-      Map<dynamic,dynamic> headers={};
+      Map<String, String>? headers={};
+
       UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
-      // print('object----------585 ${user}');
+      if(user==null){
+        headers={};
+      }else{
+        headers= {'Authorization':'Bearer ${user.token}'};
+      }
+      print('object----------585 ${headers}');
       response = await http.post(Uri.parse(apiUrl),
         body: body,
-        headers:user==null?{}:
-      {'Authorization':'Bearer ${user.token}'},
+        headers:headers,
       );
 
 
       if (response.statusCode == 200) {
-        // print('object----------999 ${user!.token}');
+        // print('object--token--------999 Bearer ${user!.token}');
 
         var jsonResponse = convert.jsonDecode(response.body);
         log('the response for $apiUrl is $jsonResponse');
@@ -103,7 +108,7 @@ class Webservices {
     }
     print('Error in api failed of url $apiUrl with response code ${response.statusCode} and body ${response.body}');
     log(response.body);
-    return {"status": 0, "message": "api failed"};
+    return {"status": 0, "message": "Something went wrong . Please try again later."};
   }
 
   // static Future<http.Response> postMultipartData({required String url, required Map<String, dynamic> request})async{

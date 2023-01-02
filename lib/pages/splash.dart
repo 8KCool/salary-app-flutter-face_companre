@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
+import 'package:salaryredesign/pages/tabbarscreen.dart';
 
 import 'package:salaryredesign/pages/welcome.dart';
+import 'package:salaryredesign/widgets/showSnackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -52,64 +54,87 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
+
   }
   test()async{
     // await logout();
     // print("provider---------------"+Provider.of<GlobalModal>(context, listen: false).userData.toString());
     // print("provider---------------"+Provider.of<GlobalModal>(context, listen: false).userData.toString());
+    try{
+      Future.delayed(Duration(seconds: 2)).then((value) async {
+        try{
+          await Provider.of<GlobalModal>(context, listen: false).getLocation();
 
-    Future.delayed(Duration(seconds: 2)).then((value) async {
-      await Provider.of<GlobalModal>(context, listen: false).getLocation();
-      SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
-      print(sharedPreferences.getString('userData'));
-      if (sharedPreferences.getString('userData') != null) {
-        Map userMap = jsonDecode(sharedPreferences.getString('userData')!);
-        Map<String,dynamic>data={};
-        UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+        }catch(err){
+          print('err from location ---------------$err');
+          showSnackbar(context, err.toString());
+        }
+        SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+        print(sharedPreferences.getString('userData'));
+        if (sharedPreferences.getString('userData') != null) {
+          Map userMap = jsonDecode(sharedPreferences.getString('userData')!);
+          // showSnackbar(context, 'userMap ${userMap}');
 
-        // if(user!=null){
+
+          Map<String,dynamic>data={};
+          UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+
+          // if(user!=null){
           var res = await Webservices.postData(apiUrl: ApiUrls.getUser, body: data, context: context);
+          // showSnackbar(context, 'res from postdata api${res}');
           if(res['status'].toString()==true);
           await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
 
           log('dkljslfkj--------${userMap['client_emp'].toString()}');
           if(userMap['client_emp'].toString()=='null'){
-
+            // showSnackbar(context, 'userMap  client_emp ${userMap['client_emp'].toString()}');
+            //
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     TabsPage()), (Route<dynamic> route) => false);
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                TabsPage()), (Route<dynamic> route) => false);
+                Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
           }
           else{
+            // showSnackbar(context, 'login as a company owner');
+
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                TabsPage()), (Route<dynamic> route) => false);
+                Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
           }
-        // }
+          // }
 
-        // else{
-        //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-        //       Welcome_Page()), (Route<dynamic> route) => false);
-        // }
-
-
-      }
-      else{
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Enter_Phone_Number()), (Route<dynamic> route) => false);
-        // String? isVisit =( await SharedPreferences.getInstance()).getString('is_visit');
-        // print('isVisit------------------${isVisit}');
-        // if(isVisit==null){
-        //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-        //       Welcome_Page()), (Route<dynamic> route) => false);
-        // }
-        // else{
-        //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-        //       Enter_Phone_Number()), (Route<dynamic> route) => false);
-        // }
+          // else{
+          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          //       Welcome_Page()), (Route<dynamic> route) => false);
+          // }
 
 
-      }
+        }
+        else{
+          // showSnackbar(context, 'new user');
+            // push(context: context, screen: Enter_Phone_Number());
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              Enter_Phone_Number()), (Route<dynamic> route) => false);
+          // String? isVisit =( await SharedPreferences.getInstance()).getString('is_visit');
+          // print('isVisit------------------${isVisit}');
+          // if(isVisit==null){
+          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          //       Welcome_Page()), (Route<dynamic> route) => false);
+          // }
+          // else{
+          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          //       Enter_Phone_Number()), (Route<dynamic> route) => false);
+          // }
 
-    });
+
+        }
+
+      });
+    }  catch(e){
+      showSnackbar(context, e.toString());
+    }
+    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+    //          Enter_Phone_Number()), (Route<dynamic> route) => false);
   }
 
   @override

@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
+import 'package:salaryredesign/widgets/showSnackbar.dart';
 
 
 
@@ -141,10 +142,16 @@ getAttendance(data)async{
       location = LocationModal(
           Lat: res.latitude, Lng: res.longitude, addressString: address);
       load = false;
-      notifyListeners();
+
     } catch (e) {
+      print('error in location ()------------$location');
+
+      load = false;
+      // showSnackbar(MyGlobalKeys.navigatorKey.currentContext!, '${e}');
+      //  return '$e';
       print('error in location ()------------$e');
     }
+    notifyListeners();
   }
 
 //   getBranch(context) async {
@@ -328,8 +335,11 @@ getAttendance(data)async{
     log('res from api listBranch ---------------${res.body}');
     var result = res.body;
     var result1 = convert.jsonDecode(result);
-    calender=result1['data']['holiday'];
-    load=false;
+    if(result1['success'].toString()=='true'){
+      calender=result1['data']['holiday'];
+
+    }
+    // load=false;
     notifyListeners();
   }
 //

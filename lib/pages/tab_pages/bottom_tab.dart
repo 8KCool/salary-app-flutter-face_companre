@@ -7,6 +7,7 @@ import 'package:salaryredesign/pages/tab_pages/dashboard.dart';
 import 'package:salaryredesign/providers/clock.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_urls.dart';
+import '../attendance/attendance_step1.dart';
 import '../employee/employee_dshboard.dart';
 
 /// This is the stateful widget that the main application instantiates.
@@ -26,9 +27,10 @@ class _TabsPageState extends State<TabsPage> {
       fontSize: 30,
       fontWeight: FontWeight.bold
   );
-  static List<Widget> _widgetOptions = <Widget>[
-    Employee_dashboard_Page(),
 
+  late List<Widget> _widgetOptions = <Widget>[
+    Employee_dashboard_Page(),
+    // CheckAttStatusPage(navigatorKey: null,),
       Mark_Attendance_Page(),
     // MyPorfile_Page(),
     Settings_Page(),
@@ -51,6 +53,11 @@ class _TabsPageState extends State<TabsPage> {
     }
 
   }
+  // Map<int, GlobalKey> navigatorKeys = {
+  //   0: GlobalKey(),
+  //   1: GlobalKey(),
+  //   2: GlobalKey(),
+  // };
 @override
   void initState() {
     // TODO: implement initState

@@ -32,6 +32,8 @@ import 'my_request.dart';
 
 
 class Employee_dashboard_Page extends StatefulWidget {
+  // final GlobalKey? navigatorKey;,this.navigatorKey
+
   const Employee_dashboard_Page({Key? key}) : super(key: key);
 
   @override
@@ -116,229 +118,688 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.scaffold,
-      appBar: appBar(
+        backgroundColor: MyColors.scaffold,
+        appBar: appBar(
           context: context,
           titlecenter: false,
-        leadingWidth:350,
+          leadingWidth:350,
           // title: 'Salary',
           appBarColor: MyColors.white,
           titleColor: MyColors.black,
-        fontsize: 20,
-        fontfamily: 'bold',
-        implyLeading: false,
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/full-logo.png',),
-          ],
-        ),
-
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-
-          child: Column(
+          fontsize: 20,
+          fontfamily: 'bold',
+          implyLeading: false,
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Consumer<GlobalModal>(
-                builder: (context,globalModal,child) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: MyColors.primaryColor,
-                    ),
-                    margin: EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        vSizedBox2,
-                        Stack(
-                          children: [
-                            if(globalModal.userData!.profile_img!='')
-                            Container(
-                              child: CustomCircularImage(
-                                // borderradius: 100,
-                                // image:MyImages.logo2,
-                                // image:'${dashBoardData['profileImage']??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg'}',
-                                // isnetwork: true,
-                                height: 100,
-                                width: 100, imageUrl:globalModal.userData!.profile_img,
-                                fileType: CustomFileType.network,
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      color: Colors.white,
-                                      width: 3
-                                  )
-                              ),
-                            ),
-                            // Positioned(
-                            //   bottom: 10,
-                            //     right: 0,
-                            //     child: Image.asset(MyImages.camera_white,height: 30,)
-                            // )
-                          ],
-                        ),
-                        vSizedBox,
-                        ParagraphText(
-                          text: globalModal.userData!.name??'',
-                          // text: '${dashBoardData['name']}',
-                          fontSize: 20,
-                          fontFamily: 'semibold',
-                          color: MyColors.white,
-                        ),
-                        vSizedBox05,
-                        ParagraphText(
-                          text: globalModal.userData!.companyName??'',
-                          // text: '${dashBoardData['company_name']??''}',
-                          fontSize: 14,
-                          color: MyColors.white,
-                        ),
-                        vSizedBox2,
-                      ],
-                    ),
-                  );
-                }
-              ),
-              vSizedBox2,
-              Consumer<PermissionModal>(
-                builder: (context,permissionModal,child) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child:permissionModal.load?CustomLoader(): Column(
-                      children: [
-                        if(permissionModal.dashboardMenuPermission['profileemenu'].toString()=='1')
-
-                          clickable_list(
-                          text: 'Personal Detail',
-                          image: false,
-                          colorborderleft: MyColors.primaryColor,
-                          onTap: ()async{
-                            await push(context: context, screen: Personal_details_Page());
-                            getDetail();
-                          },
-                        ),
-                        if(permissionModal.dashboardMenuPermission['workmenu'].toString()=='1')
-                          clickable_list(
-                            text: 'Work',
-                            image: false,
-                            img: MyImages.emp2,
-                            colorborderleft: MyColors.red,
-                            onTap: (){
-                              push(context: context, screen: Employee_Work_Details());
-                            },
-                          ),
-                        if(permissionModal.dashboardMenuPermission['Bankmenu'].toString()=='1')
-
-                          clickable_list(
-                            text: 'Bank / UPI',
-                            image: false,
-                            img: MyImages.emp3,
-                            colorborderleft: MyColors.secondarycolor,
-                            onTap: (){
-                              push(context: context, screen: Bank_UPI_Page());
-                            },
-                          ),
-
-                        Row(
-                          children: [
-                            if(permissionModal.dashboardMenuPermission['myattendancemenu'].toString()=='1')
-
-                              Expanded(
-                                child: clickable_list_horizontal(
-                                  text: 'My Attendance',
-                                  img: MyImages.emp2,
-                                  colorborderleft: MyColors.primaryColor,
-                                  image_vert: true,
-                                  image: false,
-                                  fontSize: 14,
-                                  onTap: (){
-                                    push(context: context, screen: Employee_Profile_Details());
-                                  },
-                                ),
-                              ),
-                            hSizedBox,
-                            if(permissionModal.dashboardMenuPermission['myrequestemenu'].toString()=='1')
-
-                              Expanded(
-                                child: clickable_list_horizontal(
-                                  text: 'My Request',
-                                  fontSize: 14,
-                                  img: MyImages.emp3,
-                                  colorborderleft: Color(0xFFCA8A04),
-                                  image_vert: true,
-                                  image: false,
-                                  onTap: (){
-                                    push(context: context, screen: MyRequest_Page());
-                                  },
-                                ),
-                              ),
-
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: clickable_list_horizontal(
-                                text: 'Holiday List',
-                                img: MyImages.emp4,
-                                colorborderleft: MyColors.green,
-                                fontSize: 14,
-                                image_vert: true,
-                                image: false,
-                                onTap: (){
-                                  push(context: context, screen: Holiday_Calender_Page());
-                                },
-                              ),
-                            ),
-                            hSizedBox,
-                            if(permissionModal.dashboardMenuPermission['faceattendancemenu'].toString()=='1')
-                              Expanded(
-                                child: clickable_list_horizontal(
-                                  text: 'Face Recognition',
-                                  img: MyImages.face_detect,
-                                  colorborderleft: MyColors.orange,
-                                  image_vert: true,
-                                  image: false,
-                                  fontSize: 14,
-                                  badge: true,
-                                  onTap: ()async {
-                                    permissionModal.showLoading();
-                                    var res = await Webservices.postData(
-                                        apiUrl: ApiUrls.faceattendance,
-                                        body: {},
-                                        context: context);
-                                    if (res['success'].toString() == 'true') {
-                                      faceAtt = res;
-                                      print('res from api ${res}');
-                                      if (res['data']['today_attendance']['inTime'] == null || res['data']['today_attendance']['outTime'] == null  ) {
-                                        push(context: context, screen: Face_Recognition_Start_Page());
-                                      }
-                                      else{
-                                        _showMyDialog(res['message']);
-                                      }
-                                    }
-                                  },
-                                ),
-                              ),
-
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-                  );
-                }
-              ),
-
+              Image.asset('assets/images/full-logo.png',),
             ],
           ),
+
         ),
-      )
+        body: SingleChildScrollView(
+          child: Container(
+
+            child: Column(
+              children: [
+                Consumer<GlobalModal>(
+                    builder: (context,globalModal,child) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: MyColors.primaryColor,
+                        ),
+                        margin: EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            vSizedBox2,
+                            Stack(
+                              children: [
+                                if(globalModal.userData!.profile_img!='')
+                                  Container(
+                                    child: CustomCircularImage(
+                                      // borderradius: 100,
+                                      // image:MyImages.logo2,
+                                      // image:'${dashBoardData['profileImage']??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg'}',
+                                      // isnetwork: true,
+                                      height: 100,
+                                      width: 100, imageUrl:globalModal.userData!.profile_img,
+                                      fileType: CustomFileType.network,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(100),
+                                        border: Border.all(
+                                            color: Colors.white,
+                                            width: 3
+                                        )
+                                    ),
+                                  ),
+                                // Positioned(
+                                //   bottom: 10,
+                                //     right: 0,
+                                //     child: Image.asset(MyImages.camera_white,height: 30,)
+                                // )
+                              ],
+                            ),
+                            vSizedBox,
+                            ParagraphText(
+                              text: globalModal.userData!.name??'',
+                              // text: '${dashBoardData['name']}',
+                              fontSize: 20,
+                              fontFamily: 'semibold',
+                              color: MyColors.white,
+                            ),
+                            vSizedBox05,
+                            ParagraphText(
+                              text: globalModal.userData!.companyName??'',
+                              // text: '${dashBoardData['company_name']??''}',
+                              fontSize: 14,
+                              color: MyColors.white,
+                            ),
+                            vSizedBox2,
+                          ],
+                        ),
+                      );
+                    }
+                ),
+                vSizedBox2,
+                Consumer<PermissionModal>(
+                    builder: (context,permissionModal,child) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child:permissionModal.load?CustomLoader(): Column(
+                          children: [
+                            if(permissionModal.dashboardMenuPermission['profileemenu'].toString()=='1')
+
+                              clickable_list(
+                                text: 'Personal Detail',
+                                image: false,
+                                colorborderleft: MyColors.primaryColor,
+                                onTap: ()async{
+                                  await push(context: context, screen: Personal_details_Page());
+                                  getDetail();
+                                },
+                              ),
+                            if(permissionModal.dashboardMenuPermission['workmenu'].toString()=='1')
+                              clickable_list(
+                                text: 'Work',
+                                image: false,
+                                img: MyImages.emp2,
+                                colorborderleft: MyColors.red,
+                                onTap: (){
+                                  push(context: context, screen: Employee_Work_Details());
+                                },
+                              ),
+                            if(permissionModal.dashboardMenuPermission['Bankmenu'].toString()=='1')
+
+                              clickable_list(
+                                text: 'Bank / UPI',
+                                image: false,
+                                img: MyImages.emp3,
+                                colorborderleft: MyColors.secondarycolor,
+                                onTap: (){
+                                  push(context: context, screen: Bank_UPI_Page());
+                                },
+                              ),
+
+                            Row(
+                              children: [
+                                if(permissionModal.dashboardMenuPermission['myattendancemenu'].toString()=='1')
+
+                                  Expanded(
+                                    child: clickable_list_horizontal(
+                                      text: 'My Attendance',
+                                      img: MyImages.emp2,
+                                      colorborderleft: MyColors.primaryColor,
+                                      image_vert: true,
+                                      image: false,
+                                      fontSize: 14,
+                                      onTap: (){
+                                        push(context: context, screen: Employee_Profile_Details());
+                                      },
+                                    ),
+                                  ),
+                                hSizedBox,
+                                if(permissionModal.dashboardMenuPermission['myrequestemenu'].toString()=='1')
+
+                                  Expanded(
+                                    child: clickable_list_horizontal(
+                                      text: 'My Request',
+                                      fontSize: 14,
+                                      img: MyImages.emp3,
+                                      colorborderleft: Color(0xFFCA8A04),
+                                      image_vert: true,
+                                      image: false,
+                                      onTap: (){
+                                        push(context: context, screen: MyRequest_Page());
+                                      },
+                                    ),
+                                  ),
+
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: clickable_list_horizontal(
+                                    text: 'Holiday List',
+                                    img: MyImages.emp4,
+                                    colorborderleft: MyColors.green,
+                                    fontSize: 14,
+                                    image_vert: true,
+                                    image: false,
+                                    onTap: (){
+                                      push(context: context, screen: Holiday_Calender_Page());
+                                    },
+                                  ),
+                                ),
+                                hSizedBox,
+                                if(permissionModal.dashboardMenuPermission['faceattendancemenu'].toString()=='1')
+                                  Expanded(
+                                    child: clickable_list_horizontal(
+                                      text: 'Face Recognition',
+                                      img: MyImages.face_detect,
+                                      colorborderleft: MyColors.orange,
+                                      image_vert: true,
+                                      image: false,
+                                      fontSize: 14,
+                                      badge: true,
+                                      onTap: ()async {
+                                        // permissionModal.showLoading();
+                                        var res = await Webservices.postData(
+                                            apiUrl: ApiUrls.faceattendance,
+                                            body: {},
+                                            context: context);
+                                        if (res['success'].toString() == 'true') {
+                                          faceAtt = res;
+                                          print('res from api ${res}');
+                                          // if (res['data']['today_attendance']['inTime'] == null || res['data']['today_attendance']['outTime'] == null  ) {
+                                            push(context: context, screen: Face_Recognition_Start_Page());
+                                          }
+                                          else{
+                                            _showMyDialog(res['message']);
+                                          }
+                                        }
+                                      // },
+                                    ),
+                                  ),
+
+                              ],
+                            ),
+
+
+                          ],
+                        ),
+                      );
+                    }
+                ),
+
+              ],
+            ),
+          ),
+        )
 
     );
+    // return Navigator(
+    //     key: widget.navigatorKey,
+    //     onGenerateRoute: (RouteSettings settings) {
+    //       return MaterialPageRoute(
+    //         settings: settings,
+    //           builder:  (context) {
+    //           return Scaffold(
+    //               backgroundColor: MyColors.scaffold,
+    //               appBar: appBar(
+    //                 context: context,
+    //                 titlecenter: false,
+    //                 leadingWidth:350,
+    //                 // title: 'Salary',
+    //                 appBarColor: MyColors.white,
+    //                 titleColor: MyColors.black,
+    //                 fontsize: 20,
+    //                 fontfamily: 'bold',
+    //                 implyLeading: false,
+    //                 leading: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: [
+    //                     Image.asset('assets/images/full-logo.png',),
+    //                   ],
+    //                 ),
+    //
+    //               ),
+    //               body: SingleChildScrollView(
+    //                 child: Container(
+    //
+    //                   child: Column(
+    //                     children: [
+    //                       Consumer<GlobalModal>(
+    //                           builder: (context,globalModal,child) {
+    //                             return Container(
+    //                               width: MediaQuery.of(context).size.width,
+    //                               decoration: BoxDecoration(
+    //                                 borderRadius: BorderRadius.circular(12),
+    //                                 color: MyColors.primaryColor,
+    //                               ),
+    //                               margin: EdgeInsets.all(16),
+    //                               child: Column(
+    //                                 children: [
+    //                                   vSizedBox2,
+    //                                   Stack(
+    //                                     children: [
+    //                                       if(globalModal.userData!.profile_img!='')
+    //                                         Container(
+    //                                           child: CustomCircularImage(
+    //                                             // borderradius: 100,
+    //                                             // image:MyImages.logo2,
+    //                                             // image:'${dashBoardData['profileImage']??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg'}',
+    //                                             // isnetwork: true,
+    //                                             height: 100,
+    //                                             width: 100, imageUrl:globalModal.userData!.profile_img,
+    //                                             fileType: CustomFileType.network,
+    //                                           ),
+    //                                           decoration: BoxDecoration(
+    //                                               borderRadius: BorderRadius.circular(100),
+    //                                               border: Border.all(
+    //                                                   color: Colors.white,
+    //                                                   width: 3
+    //                                               )
+    //                                           ),
+    //                                         ),
+    //                                       // Positioned(
+    //                                       //   bottom: 10,
+    //                                       //     right: 0,
+    //                                       //     child: Image.asset(MyImages.camera_white,height: 30,)
+    //                                       // )
+    //                                     ],
+    //                                   ),
+    //                                   vSizedBox,
+    //                                   ParagraphText(
+    //                                     text: globalModal.userData!.name??'',
+    //                                     // text: '${dashBoardData['name']}',
+    //                                     fontSize: 20,
+    //                                     fontFamily: 'semibold',
+    //                                     color: MyColors.white,
+    //                                   ),
+    //                                   vSizedBox05,
+    //                                   ParagraphText(
+    //                                     text: globalModal.userData!.companyName??'',
+    //                                     // text: '${dashBoardData['company_name']??''}',
+    //                                     fontSize: 14,
+    //                                     color: MyColors.white,
+    //                                   ),
+    //                                   vSizedBox2,
+    //                                 ],
+    //                               ),
+    //                             );
+    //                           }
+    //                       ),
+    //                       vSizedBox2,
+    //                       Consumer<PermissionModal>(
+    //                           builder: (context,permissionModal,child) {
+    //                             return Container(
+    //                               padding: EdgeInsets.symmetric(horizontal: 16),
+    //                               child:permissionModal.load?CustomLoader(): Column(
+    //                                 children: [
+    //                                   if(permissionModal.dashboardMenuPermission['profileemenu'].toString()=='1')
+    //
+    //                                     clickable_list(
+    //                                       text: 'Personal Detail',
+    //                                       image: false,
+    //                                       colorborderleft: MyColors.primaryColor,
+    //                                       onTap: ()async{
+    //                                         await push(context: context, screen: Personal_details_Page());
+    //                                         getDetail();
+    //                                       },
+    //                                     ),
+    //                                   if(permissionModal.dashboardMenuPermission['workmenu'].toString()=='1')
+    //                                     clickable_list(
+    //                                       text: 'Work',
+    //                                       image: false,
+    //                                       img: MyImages.emp2,
+    //                                       colorborderleft: MyColors.red,
+    //                                       onTap: (){
+    //                                         push(context: context, screen: Employee_Work_Details());
+    //                                       },
+    //                                     ),
+    //                                   if(permissionModal.dashboardMenuPermission['Bankmenu'].toString()=='1')
+    //
+    //                                     clickable_list(
+    //                                       text: 'Bank / UPI',
+    //                                       image: false,
+    //                                       img: MyImages.emp3,
+    //                                       colorborderleft: MyColors.secondarycolor,
+    //                                       onTap: (){
+    //                                         push(context: context, screen: Bank_UPI_Page());
+    //                                       },
+    //                                     ),
+    //
+    //                                   Row(
+    //                                     children: [
+    //                                       if(permissionModal.dashboardMenuPermission['myattendancemenu'].toString()=='1')
+    //
+    //                                         Expanded(
+    //                                           child: clickable_list_horizontal(
+    //                                             text: 'My Attendance',
+    //                                             img: MyImages.emp2,
+    //                                             colorborderleft: MyColors.primaryColor,
+    //                                             image_vert: true,
+    //                                             image: false,
+    //                                             fontSize: 14,
+    //                                             onTap: (){
+    //                                               push(context: context, screen: Employee_Profile_Details());
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //                                       hSizedBox,
+    //                                       if(permissionModal.dashboardMenuPermission['myrequestemenu'].toString()=='1')
+    //
+    //                                         Expanded(
+    //                                           child: clickable_list_horizontal(
+    //                                             text: 'My Request',
+    //                                             fontSize: 14,
+    //                                             img: MyImages.emp3,
+    //                                             colorborderleft: Color(0xFFCA8A04),
+    //                                             image_vert: true,
+    //                                             image: false,
+    //                                             onTap: (){
+    //                                               push(context: context, screen: MyRequest_Page());
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //
+    //                                     ],
+    //                                   ),
+    //                                   Row(
+    //                                     children: [
+    //                                       Expanded(
+    //                                         child: clickable_list_horizontal(
+    //                                           text: 'Holiday List',
+    //                                           img: MyImages.emp4,
+    //                                           colorborderleft: MyColors.green,
+    //                                           fontSize: 14,
+    //                                           image_vert: true,
+    //                                           image: false,
+    //                                           onTap: (){
+    //                                             push(context: context, screen: Holiday_Calender_Page());
+    //                                           },
+    //                                         ),
+    //                                       ),
+    //                                       hSizedBox,
+    //                                       if(permissionModal.dashboardMenuPermission['faceattendancemenu'].toString()=='1')
+    //                                         Expanded(
+    //                                           child: clickable_list_horizontal(
+    //                                             text: 'Face Recognition',
+    //                                             img: MyImages.face_detect,
+    //                                             colorborderleft: MyColors.orange,
+    //                                             image_vert: true,
+    //                                             image: false,
+    //                                             fontSize: 14,
+    //                                             badge: true,
+    //                                             onTap: ()async {
+    //                                               permissionModal.showLoading();
+    //                                               var res = await Webservices.postData(
+    //                                                   apiUrl: ApiUrls.faceattendance,
+    //                                                   body: {},
+    //                                                   context: context);
+    //                                               if (res['success'].toString() == 'true') {
+    //                                                 faceAtt = res;
+    //                                                 print('res from api ${res}');
+    //                                                 if (res['data']['today_attendance']['inTime'] == null || res['data']['today_attendance']['outTime'] == null  ) {
+    //                                                   push(context: context, screen: Face_Recognition_Start_Page());
+    //                                                 }
+    //                                                 else{
+    //                                                   _showMyDialog(res['message']);
+    //                                                 }
+    //                                               }
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //
+    //                                     ],
+    //                                   ),
+    //
+    //
+    //                                 ],
+    //                               ),
+    //                             );
+    //                           }
+    //                       ),
+    //
+    //                     ],
+    //                   ),
+    //                 ),
+    //               )
+    //
+    //           );
+    //           });
+    //     }
+      // builder: (context) {
+      //   return Scaffold(
+      //     backgroundColor: MyColors.scaffold,
+      //     appBar: appBar(
+      //         context: context,
+      //         titlecenter: false,
+      //       leadingWidth:350,
+      //         // title: 'Salary',
+      //         appBarColor: MyColors.white,
+      //         titleColor: MyColors.black,
+      //       fontsize: 20,
+      //       fontfamily: 'bold',
+      //       implyLeading: false,
+      //       leading: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           Image.asset('assets/images/full-logo.png',),
+      //         ],
+      //       ),
+      //
+      //     ),
+      //     body: SingleChildScrollView(
+      //       child: Container(
+      //
+      //         child: Column(
+      //           children: [
+      //             Consumer<GlobalModal>(
+      //               builder: (context,globalModal,child) {
+      //                 return Container(
+      //                   width: MediaQuery.of(context).size.width,
+      //                   decoration: BoxDecoration(
+      //                     borderRadius: BorderRadius.circular(12),
+      //                     color: MyColors.primaryColor,
+      //                   ),
+      //                   margin: EdgeInsets.all(16),
+      //                   child: Column(
+      //                     children: [
+      //                       vSizedBox2,
+      //                       Stack(
+      //                         children: [
+      //                           if(globalModal.userData!.profile_img!='')
+      //                           Container(
+      //                             child: CustomCircularImage(
+      //                               // borderradius: 100,
+      //                               // image:MyImages.logo2,
+      //                               // image:'${dashBoardData['profileImage']??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg'}',
+      //                               // isnetwork: true,
+      //                               height: 100,
+      //                               width: 100, imageUrl:globalModal.userData!.profile_img,
+      //                               fileType: CustomFileType.network,
+      //                             ),
+      //                             decoration: BoxDecoration(
+      //                                 borderRadius: BorderRadius.circular(100),
+      //                                 border: Border.all(
+      //                                     color: Colors.white,
+      //                                     width: 3
+      //                                 )
+      //                             ),
+      //                           ),
+      //                           // Positioned(
+      //                           //   bottom: 10,
+      //                           //     right: 0,
+      //                           //     child: Image.asset(MyImages.camera_white,height: 30,)
+      //                           // )
+      //                         ],
+      //                       ),
+      //                       vSizedBox,
+      //                       ParagraphText(
+      //                         text: globalModal.userData!.name??'',
+      //                         // text: '${dashBoardData['name']}',
+      //                         fontSize: 20,
+      //                         fontFamily: 'semibold',
+      //                         color: MyColors.white,
+      //                       ),
+      //                       vSizedBox05,
+      //                       ParagraphText(
+      //                         text: globalModal.userData!.companyName??'',
+      //                         // text: '${dashBoardData['company_name']??''}',
+      //                         fontSize: 14,
+      //                         color: MyColors.white,
+      //                       ),
+      //                       vSizedBox2,
+      //                     ],
+      //                   ),
+      //                 );
+      //               }
+      //             ),
+      //             vSizedBox2,
+      //             Consumer<PermissionModal>(
+      //               builder: (context,permissionModal,child) {
+      //                 return Container(
+      //                   padding: EdgeInsets.symmetric(horizontal: 16),
+      //                   child:permissionModal.load?CustomLoader(): Column(
+      //                     children: [
+      //                       if(permissionModal.dashboardMenuPermission['profileemenu'].toString()=='1')
+      //
+      //                         clickable_list(
+      //                         text: 'Personal Detail',
+      //                         image: false,
+      //                         colorborderleft: MyColors.primaryColor,
+      //                         onTap: ()async{
+      //                           await push(context: context, screen: Personal_details_Page());
+      //                           getDetail();
+      //                         },
+      //                       ),
+      //                       if(permissionModal.dashboardMenuPermission['workmenu'].toString()=='1')
+      //                         clickable_list(
+      //                           text: 'Work',
+      //                           image: false,
+      //                           img: MyImages.emp2,
+      //                           colorborderleft: MyColors.red,
+      //                           onTap: (){
+      //                             push(context: context, screen: Employee_Work_Details());
+      //                           },
+      //                         ),
+      //                       if(permissionModal.dashboardMenuPermission['Bankmenu'].toString()=='1')
+      //
+      //                         clickable_list(
+      //                           text: 'Bank / UPI',
+      //                           image: false,
+      //                           img: MyImages.emp3,
+      //                           colorborderleft: MyColors.secondarycolor,
+      //                           onTap: (){
+      //                             push(context: context, screen: Bank_UPI_Page());
+      //                           },
+      //                         ),
+      //
+      //                       Row(
+      //                         children: [
+      //                           if(permissionModal.dashboardMenuPermission['myattendancemenu'].toString()=='1')
+      //
+      //                             Expanded(
+      //                               child: clickable_list_horizontal(
+      //                                 text: 'My Attendance',
+      //                                 img: MyImages.emp2,
+      //                                 colorborderleft: MyColors.primaryColor,
+      //                                 image_vert: true,
+      //                                 image: false,
+      //                                 fontSize: 14,
+      //                                 onTap: (){
+      //                                   push(context: context, screen: Employee_Profile_Details());
+      //                                 },
+      //                               ),
+      //                             ),
+      //                           hSizedBox,
+      //                           if(permissionModal.dashboardMenuPermission['myrequestemenu'].toString()=='1')
+      //
+      //                             Expanded(
+      //                               child: clickable_list_horizontal(
+      //                                 text: 'My Request',
+      //                                 fontSize: 14,
+      //                                 img: MyImages.emp3,
+      //                                 colorborderleft: Color(0xFFCA8A04),
+      //                                 image_vert: true,
+      //                                 image: false,
+      //                                 onTap: (){
+      //                                   push(context: context, screen: MyRequest_Page());
+      //                                 },
+      //                               ),
+      //                             ),
+      //
+      //                         ],
+      //                       ),
+      //                       Row(
+      //                         children: [
+      //                           Expanded(
+      //                             child: clickable_list_horizontal(
+      //                               text: 'Holiday List',
+      //                               img: MyImages.emp4,
+      //                               colorborderleft: MyColors.green,
+      //                               fontSize: 14,
+      //                               image_vert: true,
+      //                               image: false,
+      //                               onTap: (){
+      //                                 push(context: context, screen: Holiday_Calender_Page());
+      //                               },
+      //                             ),
+      //                           ),
+      //                           hSizedBox,
+      //                           if(permissionModal.dashboardMenuPermission['faceattendancemenu'].toString()=='1')
+      //                             Expanded(
+      //                               child: clickable_list_horizontal(
+      //                                 text: 'Face Recognition',
+      //                                 img: MyImages.face_detect,
+      //                                 colorborderleft: MyColors.orange,
+      //                                 image_vert: true,
+      //                                 image: false,
+      //                                 fontSize: 14,
+      //                                 badge: true,
+      //                                 onTap: ()async {
+      //                                   permissionModal.showLoading();
+      //                                   var res = await Webservices.postData(
+      //                                       apiUrl: ApiUrls.faceattendance,
+      //                                       body: {},
+      //                                       context: context);
+      //                                   if (res['success'].toString() == 'true') {
+      //                                     faceAtt = res;
+      //                                     print('res from api ${res}');
+      //                                     if (res['data']['today_attendance']['inTime'] == null || res['data']['today_attendance']['outTime'] == null  ) {
+      //                                       push(context: context, screen: Face_Recognition_Start_Page());
+      //                                     }
+      //                                     else{
+      //                                       _showMyDialog(res['message']);
+      //                                     }
+      //                                   }
+      //                                 },
+      //                               ),
+      //                             ),
+      //
+      //                         ],
+      //                       ),
+      //
+      //
+      //                     ],
+      //                   ),
+      //                 );
+      //               }
+      //             ),
+      //
+      //           ],
+      //         ),
+      //       ),
+      //     )
+      //
+      //   );
+      // }
+    // );
 
   }
 }

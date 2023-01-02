@@ -1,24 +1,39 @@
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../constants/colors.dart';
+import '../../constants/globalkeys.dart';
+import '../../constants/image_urls.dart';
+import '../../constants/sized_box.dart';
 import '../../functions/navigation_functions.dart';
 import '../../main.dart';
+import '../../providers/clock.dart';
+import '../../services/api_urls.dart';
+import '../../services/webservices.dart';
+import '../../widgets/CustomTexts.dart';
+import '../../widgets/avatar.dart';
+import '../../widgets/buttons.dart';
 import '../face_recognition/face_recognition_processing.dart';
+import 'package:slide_digital_clock/slide_digital_clock.dart';
+import 'package:intl/intl.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 /// Camera example home widget.
-class CameraExampleHome extends StatefulWidget {
+class FaceCameraAttendance extends StatefulWidget {
   /// Default Constructor
-  const CameraExampleHome({Key? key}) : super(key: key);
+  const FaceCameraAttendance({Key? key}) : super(key: key);
 
   @override
-  State<CameraExampleHome> createState() {
-    return _CameraExampleHomeState();
+  State<FaceCameraAttendance> createState() {
+    return _FaceCameraAttendanceState();
   }
 }
 
@@ -41,7 +56,7 @@ void _logError(String code, String? message) {
   print('Error: $code${message == null ? '' : '\nError Message: $message'}');
 }
 
-class _CameraExampleHomeState extends State<CameraExampleHome>
+class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   CameraController? controller;
   XFile? imageFile;
@@ -65,10 +80,77 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
 
   // Counting pointers (number of user fingers on screen)
   int _pointers = 0;
+  String workingHours = '';
+  bool load=false;
+  Map att_detail={};
+  getDetails() async {
+    try{
+      var m = Provider.of<GlobalModal>(context, listen: false).location;
+      print('object-----222---${Provider.of<GlobalModal>(context, listen: false).location}');
+      // Provider.of<GlobalModal>(context, listen: false).location
+      if(m!=null){
+        Map<String, dynamic> data = {};
+        Provider.of<GlobalModal>(context, listen: false).load=true;
+        var res = await Webservices.postData(
+            apiUrl: ApiUrls.qrattendance, body: data, context: context);
+        log("res from qrattendance------------$res");
+        Provider.of<GlobalModal>(context, listen: false).loadingHide();
+        if (res['success'].toString() == 'true') {
+          att_detail = res;
+          print('res from api ${res}');
+          if (res['data']['today_attendance']['inTime'] != null) {
+            // is_in = true;
+          }
+          if (res['data']['today_attendance']['inTime'] != null &&
+              res['data']['today_attendance']['outTime'] == null) {
+            // is_out = true;
+          }
+          if (res['data']['today_attendance']['inTime'] != null &&
+              res['data']['today_attendance']['outTime'] != null) {
+            print('working hours-----------');
 
+
+
+            workingHours = '${res['data']['today_attendance']['workinHours']}';
+            // workingHoursBreak = '${res['data']['today_break']['workinhours']}';
+
+          }
+        }
+        else{
+          // showSnackbar(context, res['message']);
+          // message=res['message'];
+          // _showMyDialog();
+          // }
+        }
+      }
+      else{
+        // message='Please turn on your location';
+        //
+        // _showMyDialog();
+      }
+
+    }catch(err){
+      // message='Please turn on location';
+      //
+      // _showMyDialog();
+    }
+    // print('location---------------${Provider.of<GlobalModal>(context, listen: false).location}');
+
+
+
+
+
+
+  }
   @override
   void initState() {
     super.initState();
+    getDetails();
+    if(faceAtt['data']!=null){
+      workingHours = '${faceAtt['data']['today_attendance']['workinHours']}';
+
+    }
+    // print('dgfgsrfhdgfh--------------${faceAtt['data']['today_attendance']['workinHours']}');
     WidgetsBinding.instance.addObserver(this);
 
     _flashModeControlRowAnimationController = AnimationController(
@@ -97,7 +179,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
     );
     // cameras=[CameraDescription(1, CameraLensDirection.front, 270)];
     if(frontCamera!=null)
-    onNewCameraSelected(frontCamera!);
+      onNewCameraSelected(frontCamera!);
 
 
     Future.delayed(Duration(seconds: 3)).then((value) async {
@@ -147,49 +229,366 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Face Recognition'),
+        title: const Text('Face Attendance'),
       ),
       body: Column(
         children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color:
-                  controller != null && controller!.value.isRecordingVideo
-                      ? Colors.redAccent
-                      : Colors.grey,
-                  width: 3.0,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('wait for a minute...'),
-                    ),
-                    Center(
-                      child: _cameraPreviewWidget(),
-                    ),
-                  ],
-                ),
-              ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            // margin: EdgeInsets.symmetric(horizontal: 0),
+            height: MediaQuery.of(context).size.height - 161,
+            decoration: BoxDecoration(
+                color: MyColors.white,
+                borderRadius: BorderRadius.circular(4)),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  vSizedBox4,
+                  // if (attendance)
+                  Column(
+                    children: [
+                      // vSizedBox2,
+                      Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          DigitalClock(
+                            areaDecoration: BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            hourMinuteDigitTextStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 50,
+                            ),
+                            amPmDigitTextStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            areaWidth: 250,
+                            secondDigitTextStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 50,
+                            ),
+                          ),
+
+                        ],
+                      ),
+                      // MainHeadingText(text: '08:54:45 AM', fontSize: 32,),
+                      vSizedBox05,
+                      ParagraphText(
+                        text:
+                        '${DateFormat.EEEE().format(DateTime.parse(DateTime.now().toString()))}, ${DateFormat.yMMMd().format(DateTime.parse(DateTime.now().toString()))}',
+                      ),
+                      // vSizedBox2,
+                      //
+                      // Container(
+                      //   width: 180,
+                      //   // height: 50,
+                      //   child: Chip_Custom(
+                      //     text: att_detail['data']
+                      //                         ['today_attendance']
+                      //                     ['inTime'] ==
+                      //                 null &&
+                      //             att_detail['data']
+                      //                         ['today_attendance']
+                      //                     ['outTime'] ==
+                      //                 null
+                      //         ? 'Not Punched'
+                      //         : att_detail['data'][
+                      //                             'today_attendance']
+                      //                         ['inTime'] !=
+                      //                     null &&
+                      //                 att_detail['data'][
+                      //                             'today_attendance']
+                      //                         ['outTime'] ==
+                      //                     null
+                      //             ? 'punching'
+                      //             : 'Punched',
+                      //     fontsize: 14,
+                      //
+                      //     // fontfamily: 'medium',
+                      //     background: Color(0xFFEFEFEF),
+                      //     textcolor: MyColors.labelcolor,
+                      //   ),
+                      // ),
+                      vSizedBox4,
+                      GestureDetector(
+                        onTap: () async {
+
+                          // globalModal.loadingShow();
+                          // is_scan = true;
+                          // globalModal.loadingHide();
+                          // Future.delayed(
+                          // Duration(milliseconds: 100))
+                          //     .then((value) {
+                          // controller?.resumeCamera();
+                          // // setState(() {
+                          // // });
+                          // });
+                          // try {
+                          // Future.delayed(Duration(seconds: 2))
+                          //     .then((value) {
+                          // controller?.resumeCamera();
+                          // // setState(() {
+                          // // });
+                          // });
+                          // } catch (e) {
+                          // print('Error in catch block $e');
+                          // } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
+
+                        },
+                        child: Container(
+                          height: 260,
+                          width: 298,
+                          // child: _buildQrView(context),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(16),
+                              // color: Color(0xFFD9D9D9)
+                            ),
+                          child: _cameraPreviewWidget(),
+                        ),
+                      ),
+                      vSizedBox,
+                      // GestureDetector(
+                      //   onTap: () async {
+                      //
+                      //     globalModal.loadingShow();
+                      //     is_scan = true;
+                      //     globalModal.loadingHide();
+                      //     Future.delayed(
+                      //         Duration(milliseconds: 100))
+                      //         .then((value) {
+                      //       controller?.resumeCamera();
+                      //       // setState(() {
+                      //       // });
+                      //     });
+                      //     try {
+                      //       Future.delayed(Duration(seconds: 2))
+                      //           .then((value) {
+                      //         controller?.resumeCamera();
+                      //         // setState(() {
+                      //         // });
+                      //       });
+                      //     } catch (e) {
+                      //       print('Error in catch block $e');
+                      //     } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
+                      //   },
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(4.0),
+                      //     child: Text('Click here to scan QR'),
+                      //   ),
+                      // ),
+                      GestureDetector(
+                        // onTap: () {
+                        // globalModal.loadingShow();
+                        // is_scan = true;
+                        // globalModal.loadingHide();
+                        // Future.delayed(
+                        // Duration(milliseconds: 100))
+                        //     .then((value) {
+                        // controller?.resumeCamera();
+                        // // setState(() {
+                        // // });
+                        // });
+                        // try {
+                        // Future.delayed(Duration(seconds: 2))
+                        //     .then((value) {
+                        // controller?.resumeCamera();
+                        // // setState(() {
+                        // // });
+                        // });
+                        // } catch (e) {
+                        // print('Error in catch block $e');
+                        // }
+                        // },
+                        child: Image.asset(
+                          MyImages.camera_turn,
+                          height: 24,
+                        ),
+                      ),
+                      // vSizedBox4,
+
+                      Row(
+                        children: [
+                          // if (att_detail['data']['today_attendance']
+                          // ['inTime'] ==
+                          // null &&
+                          // att_detail['data']['today_attendance']
+                          // ['outTime'] ==
+                          // null)
+                          // Expanded(
+                          // child: GestureDetector(
+                          //
+                          // child: RoundEdgedButton(
+                          // text: 'PUNCH IN',
+                          // // onTap: () {
+                          // // if(result==''){
+                          // // showSnackbar(context, 'Scan Qr');
+                          // // }
+                          // //
+                          // // if(globalModal.location?.addressString==''){
+                          // // showSnackbar(context, 'Please wait while we fatching your  location.');
+                          // // return;
+                          // // }
+                          // // else{
+                          // // globalModal.loadingShow();
+                          // // is_scan = true;
+                          // // globalModal.loadingHide();
+                          // // Future.delayed(
+                          // // Duration(milliseconds: 100))
+                          // //     .then((value) {
+                          // // controller?.resumeCamera();
+                          // // // setState(() {
+                          // // // });
+                          // // });
+                          // // try {
+                          // // Future.delayed(Duration(seconds: 2))
+                          // //     .then((value) {
+                          // // controller?.resumeCamera();
+                          // // // setState(() {
+                          // // // });
+                          // // });
+                          // // } catch (e) {
+                          // // print('Error in catch block $e');
+                          // // }
+                          // // }
+                          //
+                          // // },
+                          // ),
+                          // ),
+                          // ),
+                          hSizedBox,
+
+                        ],
+                      ),
+                      vSizedBox4,
+                      vSizedBox4,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0),
+                        child: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                MainHeadingText(
+                                  text: '--:--',
+                                  fontSize: 24,
+                                  color: MyColors.primaryColor,
+                                ),
+                                GestureDetector(
+
+                                  child: ParagraphText(
+                                    text: 'Punch In',
+                                    fontFamily: 'bold',
+                                  ),
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                MainHeadingText(
+                                  text: '--:--',
+
+                                  fontSize: 24,
+                                  color: MyColors.primaryColor,
+                                ),
+                                GestureDetector(
+                                  // onTap: () async {
+                                  //
+                                  // // globalModal.loadingShow();
+                                  // is_scan = true;
+                                  // // globalModal.loadingHide();
+                                  // Future.delayed(
+                                  // Duration(milliseconds: 100))
+                                  //     .then((value) {
+                                  // controller?.resumeCamera();
+                                  // // setState(() {
+                                  // // });
+                                  // });
+                                  // try {
+                                  // Future.delayed(Duration(seconds: 2))
+                                  //     .then((value) {
+                                  // controller?.resumeCamera();
+                                  // // setState(() {
+                                  // // });
+                                  // });
+                                  // } catch (e) {
+                                  // print('Error in catch block $e');
+                                  // }
+                                  // },
+                                  child: ParagraphText(
+                                    text: 'Punch Out',
+                                    fontFamily: 'bold',
+                                  ),
+                                )
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                MainHeadingText(
+                                  text: '--:--',
+
+                                  fontSize: 24,
+                                  color: MyColors.primaryColor,
+                                ),
+                                ParagraphText(
+                                  text: 'Working Hrs',
+                                  fontFamily: 'bold',
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ]
             ),
           ),
-          // _captureControlRowWidget(),
-          // _modeControlRowWidget(),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              children: <Widget>[
-                // _cameraTogglesRowWidget(),
-                // _thumbnailWidget(),
-              ],
-            ),
-          ),
+          // Expanded(
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       border: Border.all(
+          //         color:
+          //         controller != null && controller!.value.isRecordingVideo
+          //             ? Colors.redAccent
+          //             : Colors.grey,
+          //         width: 3.0,
+          //       ),
+          //     ),
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(1.0),
+          //       child: Column(
+          //         children: [
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: Text('wait for a minute...'),
+          //           ),
+          //           Center(
+          //             child: _cameraPreviewWidget(),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // // _captureControlRowWidget(),
+          // // _modeControlRowWidget(),
+          // Padding(
+          //   padding: const EdgeInsets.all(5.0),
+          //   child: Row(
+          //     children: <Widget>[
+          //       // _cameraTogglesRowWidget(),
+          //       // _thumbnailWidget(),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -549,7 +948,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
           onPressed: cameraController != null &&
               cameraController.value.isInitialized &&
               !cameraController.value.isRecordingVideo
-              ? onTakePictureButtonPressed
+              ? null
               : null,
         ),
         // IconButton(
@@ -760,7 +1159,192 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
           videoController = null;
         });
         if (file != null) {
-          push(context: context, screen: Face_Recognition_Processing_Page(image: n,));
+  print('object--file');
+          // showPop(n);
+  await showCustomDialogBox(
+      context:context,
+      child: Column(
+        children: [
+          vSizedBox,
+          ParagraphText(
+            text: 'Are you sure?',
+            color: MyColors.black,
+            fontFamily: 'bold',
+          ),
+          vSizedBox,
+          CircleAvatarcustom(
+            isnetwork:true,
+            image:
+            '${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}',
+          ),
+          vSizedBox2,
+          Row(
+            children: [
+              Image.asset(
+                MyImages.time,
+                height: 20,
+                width: 20,
+              ),
+              hSizedBox,
+              Expanded(
+                  child: ParagraphText(
+                    text: '${DateFormat.Hms().format(DateTime.parse(DateTime.now().toString()))}, ${DateFormat.yMMMd().format(DateTime.parse(DateTime.now().toString()))}',
+                    fontSize: 16,
+                    color: MyColors.labelcolor,
+                  ))
+            ],
+          ),
+          vSizedBox,
+          Row(
+            children: [
+              Image.asset(
+                MyImages.map_green,
+                height: 24,
+                width: 24,
+              ),
+              hSizedBox,
+              Expanded(
+                  child: ParagraphText(
+                    text: '${Provider.of<GlobalModal>(context, listen: false).location!.addressString}',
+                    fontSize: 16,
+                    color: MyColors.labelcolor,
+                  ))
+            ],
+          ),
+          vSizedBox2,
+          Row(
+            children: [
+              Expanded(
+                child: RoundEdgedButton(
+                  text: 'CANCEL',
+                  color: MyColors.disabledcolor,
+                  textColor: MyColors.black,
+                  height: 40,
+                  onTap: () {
+
+                    Future.delayed(Duration(seconds: 3)).then((value) async {
+
+                      final CameraController? cameraController = controller;
+                      if( cameraController != null &&
+                          cameraController.value.isInitialized &&
+                          !cameraController.value.isRecordingVideo
+                      ){
+                        onTakePictureButtonPressed();
+
+                      }
+                      else{
+
+                      }
+                    });
+                    Navigator.of(context, rootNavigator: true).pop();
+
+
+                    // Navigator.pop(context);
+                    // is_popup=false;
+
+                  },
+                ),
+              ),
+              hSizedBox,
+              Expanded(
+                child: RoundEdgedButton(
+                  text: att_detail['data']['today_attendance']['inTime'] ==
+                      null &&
+                      att_detail['data']['today_attendance']['outTime'] ==
+                          null
+                      ? 'PUNCH IN'
+                      : att_detail['data']['today_attendance']['inTime'] !=
+                      null &&
+                      att_detail['data']['today_attendance']
+                      ['outTime'] ==
+                          null
+                      ? 'PUNCH OUT'
+                      : '',
+                  height: 40,
+                  onTap: () async {
+                    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                    var androidDeviceInfo = await deviceInfo.androidInfo;
+                    var id = androidDeviceInfo.androidId;
+                    // String? deviceId = await _getId();
+                    Map<String, dynamic> data = {
+                      'lat':
+                      Provider.of<GlobalModal>(context, listen: false)
+                          .location!
+                          .Lat
+                          .toString(),
+                      'lang':
+                      Provider.of<GlobalModal>(context, listen: false)
+                          .location!
+                          .Lng
+                          .toString(),
+                      'location':
+                      Provider.of<GlobalModal>(context, listen: false)
+                          .location!
+                          .addressString,
+                      'device_id': id.toString()
+                    };
+                    print(data);
+                    Map<String, dynamic> files = {'image': n};
+                    print('files-----------55------$files');
+                    var res = await Webservices.postDataWithImageFunction(
+                        apiUrl: ApiUrls.faceattendanceStore,
+                        body: data,
+                        context: context,
+                        files: files);
+                    // setState(() {
+                    //   load=false;
+                    // });
+                    log("res --------------$res");
+                    if (res['success'].toString() == 'true') {
+                      // permissionModal.showLoading();
+                      var res1 = await Webservices.postData(
+                          apiUrl: ApiUrls.faceattendance,
+                          body: {},
+                          context: context);
+                      if (res1['success'].toString() == 'true') {
+                        faceAtt = res1;
+                        workingHours =
+                        '${faceAtt['data']['today_attendance']['workinHours']}';
+                        // Navigator.pop(context);
+                        Navigator.of(context, rootNavigator: true).pop();
+
+                        getDetails();
+                        // setState(() {
+                        //
+                        // });
+                      }
+                    }
+
+
+                  },
+                ),
+              ),
+            ],
+          ),
+          vSizedBox2,
+        ],
+      ));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          // push(context: context, screen: Face_Recognition_Processing_Page(image: n,));
           // showInSnackBar('Picture saved to ${file.path}');
         }
       }
@@ -1084,6 +1668,155 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
     _logError(e.code, e.description);
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
+  showPop(file) async {
+    // var btn=false;
+    await showCustomDialogBox(
+        context:context,
+        child: Column(
+          children: [
+            vSizedBox,
+            ParagraphText(
+              text: 'Are you sure?',
+              color: MyColors.black,
+              fontFamily: 'bold',
+            ),
+            vSizedBox,
+            CircleAvatarcustom(
+              isnetwork:true,
+              image:
+              '${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}',
+            ),
+            vSizedBox2,
+            Row(
+              children: [
+                Image.asset(
+                  MyImages.time,
+                  height: 20,
+                  width: 20,
+                ),
+                hSizedBox,
+                Expanded(
+                    child: ParagraphText(
+                      text: '${DateFormat.Hms().format(DateTime.parse(DateTime.now().toString()))}, ${DateFormat.yMMMd().format(DateTime.parse(DateTime.now().toString()))}',
+                      fontSize: 16,
+                      color: MyColors.labelcolor,
+                    ))
+              ],
+            ),
+            vSizedBox,
+            Row(
+              children: [
+                Image.asset(
+                  MyImages.map_green,
+                  height: 24,
+                  width: 24,
+                ),
+                hSizedBox,
+                Expanded(
+                    child: ParagraphText(
+                      text: '${Provider.of<GlobalModal>(context, listen: false).location!.addressString}',
+                      fontSize: 16,
+                      color: MyColors.labelcolor,
+                    ))
+              ],
+            ),
+            vSizedBox2,
+            Row(
+              children: [
+                Expanded(
+                  child: RoundEdgedButton(
+                    text: 'CANCEL',
+                    color: MyColors.disabledcolor,
+                    textColor: MyColors.black,
+                    height: 40,
+                    onTap: () {
+                      Navigator.pop(context);
+                      // is_popup=false;
+
+                    },
+                  ),
+                ),
+                hSizedBox,
+                Expanded(
+                  child: RoundEdgedButton(
+                    text: att_detail['data']['today_attendance']['inTime'] ==
+                        null &&
+                        att_detail['data']['today_attendance']['outTime'] ==
+                            null
+                        ? 'PUNCH IN'
+                        : att_detail['data']['today_attendance']['inTime'] !=
+                        null &&
+                        att_detail['data']['today_attendance']
+                        ['outTime'] ==
+                            null
+                        ? 'PUNCH OUT'
+                        : '',
+                    height: 40,
+                    onTap: () async {
+                      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                      var androidDeviceInfo = await deviceInfo.androidInfo;
+                      var id = androidDeviceInfo.androidId;
+                      // String? deviceId = await _getId();
+                      Map<String, dynamic> data = {
+                        'lat':
+                        Provider.of<GlobalModal>(context, listen: false)
+                            .location!
+                            .Lat
+                            .toString(),
+                        'lang':
+                        Provider.of<GlobalModal>(context, listen: false)
+                            .location!
+                            .Lng
+                            .toString(),
+                        'location':
+                        Provider.of<GlobalModal>(context, listen: false)
+                            .location!
+                            .addressString,
+                        'device_id': id.toString()
+                      };
+                      print(data);
+                      Map<String, dynamic> files = {'image': file};
+                      print('files-----------55------$files');
+                      var res = await Webservices.postDataWithImageFunction(
+                          apiUrl: ApiUrls.faceattendanceStore,
+                          body: data,
+                          context: context,
+                          files: files);
+                      // setState(() {
+                      //   load=false;
+                      // });
+                      log("res --------------$res");
+                      if (res['success'].toString() == 'true') {
+                        // permissionModal.showLoading();
+                        var res1 = await Webservices.postData(
+                            apiUrl: ApiUrls.faceattendance,
+                            body: {},
+                            context: context);
+                        if (res1['success'].toString() == 'true') {
+                          faceAtt = res1;
+                          workingHours =
+                          '${faceAtt['data']['today_attendance']['workinHours']}';
+                          Navigator.pop(context);
+                          getDetails();
+                          // setState(() {
+                          //
+                          // });
+                        }
+                      }
+
+
+                    },
+                  ),
+                ),
+              ],
+            ),
+            vSizedBox2,
+          ],
+        ));
+
+    print("hello'-------------");
+    // is_popup=false;
+  }
 }
 
 /// CameraApp is the Main Application.
@@ -1094,9 +1827,10 @@ class CameraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: CameraExampleHome(),
+      home: FaceCameraAttendance(),
     );
   }
+
 }
 
 // List<CameraDescription> _cameras = <CameraDescription>[];

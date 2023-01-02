@@ -28,6 +28,8 @@ import '../../widgets/customtextfield.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
 
+import '../tab_pages/bottom_tab.dart';
+
 
 class Holiday_Calender_Page extends StatefulWidget {
   const Holiday_Calender_Page({Key? key}) : super(key: key);
@@ -59,6 +61,48 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
     DateTime(2021, 6, 11) : ['Weekly Testing'],
     DateTime(2021, 6, 18) : ['Weekly Testing'],
   };
+  String message = '';
+  Future<void> _showMyDialog() async {
+    // await Future.delayed(Duration(seconds: 2));
+
+    return showDialog<void>(
+      context: context,
+      // barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text('Alert'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Image.asset(MyImages.cancel,width: 70,height: 70,),
+                Icon(
+                  Icons.dangerous,
+                  color: Colors.red,
+                  size: 80,
+                ),
+                vSizedBox2,
+                Text(
+                  '${message.toString()}',
+                  textAlign: TextAlign.center,
+                ),
+                vSizedBox,
+
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // pushReplacement(context: context, screen: TabsPage());
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
   getWeekOff(date)async{
     if( await Provider.of<GlobalModal>(context, listen: false).userData?.userId!=1){
       log("getWeekOff------------getWeekOff-----${date}");
@@ -68,6 +112,10 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
       // await Provider.of<GlobalModal>(context, listen: false).loadingHide();
 
       log("result1------------getWeekOff-----${result1}");
+      if(result1['success'].toString()=='false'){
+        message='${result1['message']}';
+        _showMyDialog();
+      }
       if(date==''){
         Selecteddate=DateTime.now();
       }
@@ -75,8 +123,11 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
         Selecteddate = date;
 
       }
-      await Provider.of<GlobalModal>(context, listen: false)
-          .getweekoffbydate(result1['data']['getAllweekoff']);
+      if(result1['success'].toString()=='true'){
+        await Provider.of<GlobalModal>(context, listen: false)
+            .getweekoffbydate(result1['data']['getAllweekoff']);
+      }
+
       // await Provider.of<GlobalModal>(context, listen: false)
       //     .getweekoffbydate(result1['data']['getAllweekoff']);
       // setState(() {

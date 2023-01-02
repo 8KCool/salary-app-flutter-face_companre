@@ -16,6 +16,7 @@ class ApiUrls{
   static const faceattendance = baseUrl + 'faceattendace';
   static const qrattendanceStore = baseUrl + 'qrattendanceStore';
   static const faceattendanceStore = baseUrl + 'faceattendaceStore';
+  static const facereconization = baseUrl + 'facereconization';
   static const getUser = baseUrl + 'getUser';
   static const listBranch = baseUrl + 'listBranch';
   static const deleteBranch = baseUrl + 'deleteBranch';
@@ -56,6 +57,7 @@ class ApiUrls{
   static const breakstore = baseUrl + 'breakstore';
   static const employeeattendance = baseUrl + 'employeeattendance';
   static const attendancedetail = baseUrl + 'attendancedetail';
+  static const otherAttendance = baseUrl + '';
 
 
 

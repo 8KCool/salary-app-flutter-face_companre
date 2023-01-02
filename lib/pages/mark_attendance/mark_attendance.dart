@@ -28,7 +28,9 @@ import '../../widgets/CustomLoader.dart';
 import '../../widgets/avatar.dart';
 import 'package:intl/intl.dart';
 
+import 'package:geolocator/geolocator.dart';
 
+import '../tabbarscreen.dart';
 
 class Mark_Attendance_Page extends StatefulWidget {
   const Mark_Attendance_Page({Key? key}) : super(key: key);
@@ -82,7 +84,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
       is_in = true;
       if(!breaks){
         if(att_detail['data']['today_attendance']['inTime'] == null || att_detail['data']['today_attendance']['outTime'] == null){
-          // is_scan = false;
+          is_scan = false;
           if(is_popup==false){
             is_popup=true;
               await showPop();
@@ -139,9 +141,13 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
     // });
   }
   Future<void> _showMyDialog() async {
+    Provider.of<GlobalModal>(context, listen: false).load=true;
+
+    await Future.delayed(Duration(seconds: 3));
+    Provider.of<GlobalModal>(context, listen: false).loadingHide();
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      // barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           // title: const Text('Alert'),
@@ -159,8 +165,19 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                 TextButton(
                   child: const Text('OK'),
                   onPressed: () {
+                    Navigator.pop(context);
+                    try{
+                      MyGlobalKeys.tabbarKey.currentState!.onItemTapped(0);
+
+                    }catch(e){
+                      print('Error in catch block 342 $e');
+                    }
                     // Navigator.of(context).pop();
-                    push(context: context, screen: TabsPage());
+                    // navigatorKeys[0].currentState.context;
+                    // Navigator.of(context).pop();
+                    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                    //                                         TabsPage()), (Route<dynamic> route) => false);
+                    // push(context: context, screen: TabsPage());
                   },
                 ),
               ],
@@ -172,13 +189,31 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
     );
   }
   TextEditingController name = TextEditingController();
+  checkPermission() async {
+    Provider.of<GlobalModal>(context, listen: false).load=true;
+    bool servicestatus = await Geolocator.isLocationServiceEnabled();
+    Provider.of<GlobalModal>(context, listen: false).loadingHide();
+    if(servicestatus){
+      print("GPS service is enabled");
+      location();
+
+
+
+    }else{
+      print("GPS service is disabled.");
+      message='Please turn on your location';
+
+      _showMyDialog();
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
+    checkPermission();
     super.initState();
     print('result   ------$result');
-    getDetails();
-    location();
+    // getDetails();
+
   }
 
   @override
@@ -190,51 +225,101 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
   }
 
   location() async {
-    print('drfs-----------');
-    Provider.of<GlobalModal>(context, listen: false).getLocation();
+    // Provider.of<GlobalModal>(context, listen: false).location=null;
+    try{
+      print('drfs-----------');
+      Provider.of<GlobalModal>(context, listen: false).getLocation();
+      print('Provider.of<GlobalModal>(context, listen: false).location!.Lat-------------${Provider.of<GlobalModal>(context, listen: false).location!.toString()}');
+      getDetails();
+    }
+  catch(err){
+    message='Please turn on your location';
 
+    _showMyDialog();
+  }
   }
 
   getDetails() async {
-    Map<String, dynamic> data = {};
-    Provider.of<GlobalModal>(context, listen: false).load=true;
-    var res = await Webservices.postData(
-        apiUrl: ApiUrls.qrattendance, body: data, context: context);
-    Provider.of<GlobalModal>(context, listen: false).loadingHide();
-    if (res['success'].toString() == 'true') {
-      att_detail = res;
-      print('res from api ${res}');
-      if (res['data']['today_attendance']['inTime'] != null) {
-        is_in = true;
-      }
-      if (res['data']['today_attendance']['inTime'] != null &&
-          res['data']['today_attendance']['outTime'] == null) {
-        is_out = true;
-      }
-      if (res['data']['today_attendance']['inTime'] != null &&
-          res['data']['today_attendance']['outTime'] != null) {
-        print('working hours-----------');
+    try{
+       var m = Provider.of<GlobalModal>(context, listen: false).location;
+       print('object-----222---${Provider.of<GlobalModal>(context, listen: false).location}');
+        // Provider.of<GlobalModal>(context, listen: false).location
+       if(m!=null){
+         Map<String, dynamic> data = {};
+         Provider.of<GlobalModal>(context, listen: false).load=true;
+         var res = await Webservices.postData(
+             apiUrl: ApiUrls.qrattendance, body: data, context: context);
+         log("res from qrattendance------------$res");
+         Provider.of<GlobalModal>(context, listen: false).loadingHide();
+         if (res['success'].toString() == 'true') {
+           att_detail = res;
+           print('res from api ${res}');
+           if (res['data']['today_attendance']['inTime'] != null) {
+             is_in = true;
+           }
+           if (res['data']['today_attendance']['inTime'] != null &&
+               res['data']['today_attendance']['outTime'] == null) {
+             is_out = true;
+           }
+           if (res['data']['today_attendance']['inTime'] != null &&
+               res['data']['today_attendance']['outTime'] != null) {
+             print('working hours-----------');
 
 
 
-        workingHours = '${res['data']['today_attendance']['workinHours']}';
-        workingHoursBreak = '${res['data']['today_break']['workinhours']}';
+             workingHours = '${res['data']['today_attendance']['workinHours']}';
+             workingHoursBreak = '${res['data']['today_break']['workinhours']}';
 
-      }
-    }
-    else{
-      // showSnackbar(context, res['message']);
-      message=res['message'];
+           }
+         }
+         else{
+           // showSnackbar(context, res['message']);
+           message=res['message'];
+           _showMyDialog();
+           // }
+         }
+       }
+       else{
+         message='Please turn on your location';
+
+         _showMyDialog();
+       }
+
+    }catch(err){
+      message='Please turn on location';
+
       _showMyDialog();
     }
+    // print('location---------------${Provider.of<GlobalModal>(context, listen: false).location}');
+
+
+
+
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar:
-          appBar(context: context, title: 'Attendance', implyLeading: false),
+      appBar: AppBar(
+        title:Text('Mark Attendance',style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w700),),
+        backgroundColor: MyColors.primaryColor,
+        leading: GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+              // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              //     TabsPage()), (Route<dynamic> route) => false);
+            },
+            child: Icon(Icons.arrow_back)),
+      ),
+    //       appBar(context: context, title: 'Mark Attendance', implyLeading: false,leading: GestureDetector(
+    //           onTap: (){
+    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+    // TabsPage()), (Route<dynamic> route) => false);
+    // },
+    //     child: Icon(Icons.arrow_back)),),
       body: Consumer<GlobalModal>(builder: (context, globalModal, child) {
         return globalModal.load
             ? CustomLoader()
@@ -242,45 +327,46 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      color: Color(0xFFEFEFEF),
-                      padding: EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  MyImages.map_green,
-                                  height: 35,
-                                  width: 35,
-                                ),
-                                hSizedBox,
-                                Expanded(
-                                    child: ParagraphText(
-                                  text: globalModal.location != null
-                                      ? globalModal.location!.addressString
-                                      : '',
-                                  fontSize: 12,
-                                ))
-                              ],
-                            ),
-                          ),
-                          hSizedBox2,
-                          RoundEdgedButton(
-                            text: 'Refresh',
-                            minWidth: 80,
-                            height: 30,
-                            verticalPadding: 0,
-                            horizontalPadding: 0,
-                            onTap: () {
-                              location();
-                            },
-                            textColor: MyColors.white,
-                          )
-                        ],
-                      ),
-                    ),
+                    /// refresh location code
+                    // Container(
+                    //   color: Color(0xFFEFEFEF),
+                    //   padding: EdgeInsets.all(16),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: Row(
+                    //           children: [
+                    //             Image.asset(
+                    //               MyImages.map_green,
+                    //               height: 35,
+                    //               width: 35,
+                    //             ),
+                    //             hSizedBox,
+                    //             Expanded(
+                    //                 child: ParagraphText(
+                    //               text: globalModal.location != null
+                    //                   ? globalModal.location!.addressString
+                    //                   : '',
+                    //               fontSize: 12,
+                    //             ))
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       hSizedBox2,
+                    //       RoundEdgedButton(
+                    //         text: 'Refresh',
+                    //         minWidth: 80,
+                    //         height: 30,
+                    //         verticalPadding: 0,
+                    //         horizontalPadding: 0,
+                    //         onTap: () {
+                    //           location();
+                    //         },
+                    //         textColor: MyColors.white,
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     vSizedBox2,
                     if (att_detail['data'] != null)
                       Container(
@@ -377,38 +463,38 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                                     text:
                                         '${DateFormat.EEEE().format(DateTime.parse(DateTime.now().toString()))}, ${DateFormat.yMMMd().format(DateTime.parse(DateTime.now().toString()))}',
                                   ),
-                                  vSizedBox2,
-
-                                  Container(
-                                    width: 180,
-                                    // height: 50,
-                                    child: Chip_Custom(
-                                      text: att_detail['data']
-                                                          ['today_attendance']
-                                                      ['inTime'] ==
-                                                  null &&
-                                              att_detail['data']
-                                                          ['today_attendance']
-                                                      ['outTime'] ==
-                                                  null
-                                          ? 'Not Punched'
-                                          : att_detail['data'][
-                                                              'today_attendance']
-                                                          ['inTime'] !=
-                                                      null &&
-                                                  att_detail['data'][
-                                                              'today_attendance']
-                                                          ['outTime'] ==
-                                                      null
-                                              ? 'punching'
-                                              : 'Punched',
-                                      fontsize: 14,
-
-                                      // fontfamily: 'medium',
-                                      background: Color(0xFFEFEFEF),
-                                      textcolor: MyColors.labelcolor,
-                                    ),
-                                  ),
+                                  // vSizedBox2,
+                                  //
+                                  // Container(
+                                  //   width: 180,
+                                  //   // height: 50,
+                                  //   child: Chip_Custom(
+                                  //     text: att_detail['data']
+                                  //                         ['today_attendance']
+                                  //                     ['inTime'] ==
+                                  //                 null &&
+                                  //             att_detail['data']
+                                  //                         ['today_attendance']
+                                  //                     ['outTime'] ==
+                                  //                 null
+                                  //         ? 'Not Punched'
+                                  //         : att_detail['data'][
+                                  //                             'today_attendance']
+                                  //                         ['inTime'] !=
+                                  //                     null &&
+                                  //                 att_detail['data'][
+                                  //                             'today_attendance']
+                                  //                         ['outTime'] ==
+                                  //                     null
+                                  //             ? 'punching'
+                                  //             : 'Punched',
+                                  //     fontsize: 14,
+                                  //
+                                  //     // fontfamily: 'medium',
+                                  //     background: Color(0xFFEFEFEF),
+                                  //     textcolor: MyColors.labelcolor,
+                                  //   ),
+                                  // ),
                                   vSizedBox4,
                                   GestureDetector(
                                     onTap: () async {
@@ -436,8 +522,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
 
                                     },
                                     child: Container(
-                                      height: 200,
-                                      width: 200,
+                                      height: 260,
+                                      width: 298,
                                       // child: _buildQrView(context),
                                       decoration: BoxDecoration(
                                           borderRadius:
@@ -448,7 +534,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                                           children: [
                                             if (is_scan)
                                               Expanded(
-                                                flex: 5,
+                                                // flex: 5,
                                                 child: QRView(
                                                   key: qrKey,
                                                   onQRViewCreated:
@@ -457,8 +543,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                                               ),
                                             if (!is_scan)
                                               Container(
-                                                height: 200,
-                                                width: 200,
+                                                height: 260,
+                                                width: 298,
                                                 // child: _buildQrView(context),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
@@ -473,35 +559,35 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                                     ),
                                   ),
                                   vSizedBox,
-                                  GestureDetector(
-                                    onTap: () async {
-
-                                      globalModal.loadingShow();
-                                      is_scan = true;
-                                      globalModal.loadingHide();
-                                      Future.delayed(
-                                          Duration(milliseconds: 100))
-                                          .then((value) {
-                                        controller?.resumeCamera();
-                                        // setState(() {
-                                        // });
-                                      });
-                                      try {
-                                        Future.delayed(Duration(seconds: 2))
-                                            .then((value) {
-                                          controller?.resumeCamera();
-                                          // setState(() {
-                                          // });
-                                        });
-                                      } catch (e) {
-                                        print('Error in catch block $e');
-                                      } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text('Click here to scan QR'),
-                                    ),
-                                  ),
+                                  // GestureDetector(
+                                  //   onTap: () async {
+                                  //
+                                  //     globalModal.loadingShow();
+                                  //     is_scan = true;
+                                  //     globalModal.loadingHide();
+                                  //     Future.delayed(
+                                  //         Duration(milliseconds: 100))
+                                  //         .then((value) {
+                                  //       controller?.resumeCamera();
+                                  //       // setState(() {
+                                  //       // });
+                                  //     });
+                                  //     try {
+                                  //       Future.delayed(Duration(seconds: 2))
+                                  //           .then((value) {
+                                  //         controller?.resumeCamera();
+                                  //         // setState(() {
+                                  //         // });
+                                  //       });
+                                  //     } catch (e) {
+                                  //       print('Error in catch block $e');
+                                  //     } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
+                                  //   },
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.all(4.0),
+                                  //     child: Text('Click here to scan QR'),
+                                  //   ),
+                                  // ),
                                   GestureDetector(
                                     onTap: () {
                                       globalModal.loadingShow();
@@ -530,107 +616,109 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                                       height: 24,
                                     ),
                                   ),
+                                  // vSizedBox4,
+
+                                  // Row(
+                                  //   children: [
+                                  //     if (att_detail['data']['today_attendance']
+                                  //                 ['inTime'] ==
+                                  //             null &&
+                                  //         att_detail['data']['today_attendance']
+                                  //                 ['outTime'] ==
+                                  //             null)
+                                  //       Expanded(
+                                  //         child: GestureDetector(
+                                  //
+                                  //           child: RoundEdgedButton(
+                                  //             text: 'PUNCH IN',
+                                  //             onTap: () {
+                                  //
+                                  //               if(result==''){
+                                  //                 showSnackbar(context, 'Scan Qr');
+                                  //               }
+                                  //
+                                  //          if(globalModal.location?.addressString==''){
+                                  //            showSnackbar(context, 'Please wait while we fatching your  location.');
+                                  //            return;
+                                  //          }
+                                  //          else{
+                                  //            globalModal.loadingShow();
+                                  //            is_scan = true;
+                                  //            globalModal.loadingHide();
+                                  //            Future.delayed(
+                                  //                Duration(milliseconds: 100))
+                                  //                .then((value) {
+                                  //              controller?.resumeCamera();
+                                  //              // setState(() {
+                                  //              // });
+                                  //            });
+                                  //            try {
+                                  //              Future.delayed(Duration(seconds: 2))
+                                  //                  .then((value) {
+                                  //                controller?.resumeCamera();
+                                  //                // setState(() {
+                                  //                // });
+                                  //              });
+                                  //            } catch (e) {
+                                  //              print('Error in catch block $e');
+                                  //            }
+                                  //          }
+                                  //
+                                  //             },
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     hSizedBox,
+                                  //     // if (att_detail['data']['today_attendance']
+                                  //     //             ['inTime'] !=
+                                  //     //         null &&
+                                  //     //     att_detail['data']['today_attendance']
+                                  //     //             ['outTime'] ==
+                                  //     //         null)
+                                  //       // Expanded(
+                                  //       //   child: RoundEdgedButton(
+                                  //       //     text: 'PUNCH OUT',
+                                  //       //     color: MyColors.disabledcolor,
+                                  //       //     textColor: MyColors.black,
+                                  //       //     onTap: () {
+                                  //       //       if(result==''){
+                                  //       //         showSnackbar(context, 'Scan Qr');
+                                  //       //       }
+                                  //       //
+                                  //       //       if(globalModal.location?.addressString==''){
+                                  //       //         showSnackbar(context, 'Please wait while we fatching your  location.');
+                                  //       //         return;
+                                  //       //       }
+                                  //       //       else{
+                                  //       //         globalModal.loadingShow();
+                                  //       //         is_scan = true;
+                                  //       //         globalModal.loadingHide();
+                                  //       //         Future.delayed(
+                                  //       //             Duration(milliseconds: 100))
+                                  //       //             .then((value) {
+                                  //       //           controller?.resumeCamera();
+                                  //       //           // setState(() {
+                                  //       //           // });
+                                  //       //         });
+                                  //       //         try {
+                                  //       //           Future.delayed(Duration(seconds: 2))
+                                  //       //               .then((value) {
+                                  //       //             controller?.resumeCamera();
+                                  //       //             // setState(() {
+                                  //       //             // });
+                                  //       //           });
+                                  //       //         } catch (e) {
+                                  //       //           print('Error in catch block $e');
+                                  //       //         }
+                                  //       //       }
+                                  //       //
+                                  //       //
+                                  //       //     },
+                                  //       //   ),
+                                  //       // ),
+                                  //   ],
+                                  // ),
                                   vSizedBox4,
-
-                                  Row(
-                                    children: [
-                                      if (att_detail['data']['today_attendance']
-                                                  ['inTime'] ==
-                                              null &&
-                                          att_detail['data']['today_attendance']
-                                                  ['outTime'] ==
-                                              null)
-                                        Expanded(
-                                          child: GestureDetector(
-
-                                            child: RoundEdgedButton(
-                                              text: 'PUNCH IN',
-                                              onTap: () {
-                                                if(result==''){
-                                                  showSnackbar(context, 'Scan Qr');
-                                                }
-
-                                           if(globalModal.location?.addressString==''){
-                                             showSnackbar(context, 'Please wait while we fatching your  location.');
-                                             return;
-                                           }
-                                           else{
-                                             globalModal.loadingShow();
-                                             is_scan = true;
-                                             globalModal.loadingHide();
-                                             Future.delayed(
-                                                 Duration(milliseconds: 100))
-                                                 .then((value) {
-                                               controller?.resumeCamera();
-                                               // setState(() {
-                                               // });
-                                             });
-                                             try {
-                                               Future.delayed(Duration(seconds: 2))
-                                                   .then((value) {
-                                                 controller?.resumeCamera();
-                                                 // setState(() {
-                                                 // });
-                                               });
-                                             } catch (e) {
-                                               print('Error in catch block $e');
-                                             }
-                                           }
-
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      hSizedBox,
-                                      if (att_detail['data']['today_attendance']
-                                                  ['inTime'] !=
-                                              null &&
-                                          att_detail['data']['today_attendance']
-                                                  ['outTime'] ==
-                                              null)
-                                        Expanded(
-                                          child: RoundEdgedButton(
-                                            text: 'PUNCH OUT',
-                                            color: MyColors.disabledcolor,
-                                            textColor: MyColors.black,
-                                            onTap: () {
-                                              if(result==''){
-                                                showSnackbar(context, 'Scan Qr');
-                                              }
-
-                                              if(globalModal.location?.addressString==''){
-                                                showSnackbar(context, 'Please wait while we fatching your  location.');
-                                                return;
-                                              }
-                                              else{
-                                                globalModal.loadingShow();
-                                                is_scan = true;
-                                                globalModal.loadingHide();
-                                                Future.delayed(
-                                                    Duration(milliseconds: 100))
-                                                    .then((value) {
-                                                  controller?.resumeCamera();
-                                                  // setState(() {
-                                                  // });
-                                                });
-                                                try {
-                                                  Future.delayed(Duration(seconds: 2))
-                                                      .then((value) {
-                                                    controller?.resumeCamera();
-                                                    // setState(() {
-                                                    // });
-                                                  });
-                                                } catch (e) {
-                                                  print('Error in catch block $e');
-                                                }
-                                              }
-
-
-                                            },
-                                          ),
-                                        ),
-                                    ],
-                                  ),
                                   vSizedBox4,
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -1155,7 +1243,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                     textColor: MyColors.black,
                     height: 40,
                     onTap: () {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      Navigator.of(context, rootNavigator: true).pop();
                       is_popup=false;
 
                     },
@@ -1178,47 +1267,72 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                             : '',
                     height: 40,
                     onTap: () async {
-                      if(btn==true){
-                        return;
+                      Provider.of<GlobalModal>(context, listen: false).load=true;
+                      bool servicestatus = await Geolocator.isLocationServiceEnabled();
+                      Provider.of<GlobalModal>(context, listen: false).loadingHide();
+                      if(servicestatus){
+                        print("GPS service is enabled");
+                        if(btn==true){
+                          return;
+                        }
+                        btn =true;
+                        print('agdlahdk');
+                        Map<String, dynamic> data = {
+                          'lat': Provider.of<GlobalModal>(context, listen: false).location!.Lat.toString(),
+                          'lang': Provider.of<GlobalModal>(context, listen: false).location!.Lng.toString(),
+                          'location': Provider.of<GlobalModal>(context, listen: false).location!.addressString,
+                          'branchId': att_detail['data']['prefence_data']
+                          ['branch_id']
+                              .toString(),
+                          'qrBranchcode': qrBranchcode,
+                          'qrEmployerid': qrEmployerid
+                        };
+
+                        print('data for api -------${data}');
+                        await Provider.of<GlobalModal>(context, listen: false)
+                            .loadingShow();
+                        var res = await Webservices.postData(
+                            apiUrl: ApiUrls.qrattendanceStore,
+                            body: data,
+                            context: context);
+                        await Provider.of<GlobalModal>(context, listen: false)
+                            .loadingHide();
+                        if (res['success'].toString() == 'true') {
+                          await getDetails();
+
+                          is_popup=false;
+                          showSnackbar(context, res['message'].toString());
+
+                          // Navigator.pop(context);
+                          Navigator.of(context, rootNavigator: true).pop();
+                          is_scan=false;
+
+
+                        } else {
+                          showSnackbar(context, res['message'].toString());
+                          // Navigator.pop(context);
+                          Navigator.of(context, rootNavigator: true).pop();
+                          await getDetails();
+
+                        }
+
+
+
+                      }else{
+                        Navigator.of(context, rootNavigator: true).pop();
+                        print("GPS service is disabled.");
+                        message='Please turn on your location';
+
+                        _showMyDialog();
                       }
-                      btn =true;
-                      print('agdlahdk');
-                      Map<String, dynamic> data = {
-                        'lat': Provider.of<GlobalModal>(context, listen: false).location!.Lat.toString(),
-                        'lang': Provider.of<GlobalModal>(context, listen: false).location!.Lng.toString(),
-                        'location': Provider.of<GlobalModal>(context, listen: false).location!.addressString,
-                        'branchId': att_detail['data']['prefence_data']
-                                ['branch_id']
-                            .toString(),
-                        'qrBranchcode': qrBranchcode,
-                        'qrEmployerid': qrEmployerid
-                      };
-
-                      print('data for api -------${data}');
-                      await Provider.of<GlobalModal>(context, listen: false)
-                          .loadingShow();
-                      var res = await Webservices.postData(
-                          apiUrl: ApiUrls.qrattendanceStore,
-                          body: data,
-                          context: context);
-                      await Provider.of<GlobalModal>(context, listen: false)
-                          .loadingHide();
-                      if (res['success'].toString() == 'true') {
-                        await getDetails();
-
-                        is_popup=false;
-                        showSnackbar(context, res['message'].toString());
-
-                        Navigator.pop(context);
-                        is_scan=false;
 
 
-                      } else {
-                        showSnackbar(context, res['message'].toString());
-                        Navigator.pop(context);
-                        await getDetails();
 
-                      }
+
+
+
+
+
                     },
                   ),
                 ),

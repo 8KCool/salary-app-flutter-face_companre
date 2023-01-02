@@ -124,11 +124,16 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                           r'^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10}\s*,?$';
                       RegExp pnumber = new RegExp(phonePattern);
                       if (mobilenumber.text == '') {
+                        globalModal.loadingHide();
+
                         showSnackbar(
+
                             context, 'Please Enter your phone Number.');
                       } else if (!pnumber.hasMatch(mobilenumber.text)) {
                         showSnackbar(context,
                             'Please Enter your valid phone Number.');
+                        globalModal.loadingHide();
+
                       }
                       else{
                         Map<String,dynamic>data={
@@ -142,7 +147,7 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                             body: data,
                             context: context,
                             showSuccessMessage: true);
-                        print('data for phone------------$data');
+                        print('data for phone------------$res');
                         // Provider.of<GlobalModal>(context, listen: false).loadingHide();
                         globalModal.loadingHide();
                         if(res['success'].toString()=='true'){

@@ -61,7 +61,7 @@ void main() {
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
-            dowHeight: 5,
+            // dowHeight: 5,
           ),
         ),
       );
@@ -109,7 +109,7 @@ void main() {
             dowBuilder: (context, day) {
               return Text('${day.weekday}');
             },
-            dowHeight: 5,
+            // dowHeight: 5,
           ),
         ),
       );
@@ -134,11 +134,11 @@ void main() {
           dowBuilder: (context, day) {
             return Text('${day.weekday}');
           },
-          dowHeight: 5,
-          weekNumberVisible: true,
-          weekNumberBuilder: (BuildContext context, DateTime day) {
-            return Text(day.weekday.toString());
-          },
+          // dowHeight: 5,
+          // weekNumberVisible: true,
+          // weekNumberBuilder: (BuildContext context, DateTime day) {
+          //   return Text(day.weekday.toString());
+          // },
         ),
       ));
 

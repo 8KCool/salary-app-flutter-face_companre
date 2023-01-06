@@ -14,6 +14,7 @@ import 'package:salaryredesign/widgets/customtextfield.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:salaryredesign/widgets/showSnackbar.dart';
 
+import '../../constants/globalFunction.dart';
 import '../../constants/globalkeys.dart';
 import '../../constants/image_urls.dart';
 import '../../services/local_services.dart';
@@ -433,7 +434,10 @@ class _Enter_Detail_PageState extends State<Enter_Detail_Page> {
                           if(res['success'].toString()=='true'){
                             // print('Emp id--------${res['userData']['client_emp']}');
                             Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
+                            usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                            print('call-------2---setWebWiewController');
 
+                            // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
                             // await MyLocalServices.updateSharedPreferences(res['userData'],context);
                             push(context: context, screen: Congratulations_Page(isEmp: false,));
                             user=res['userData'];

@@ -1175,7 +1175,7 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
           CircleAvatarcustom(
             isnetwork:true,
             image:
-            '${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}',
+            '${Provider.of<GlobalModal>(context, listen: false).userData!.profileImg}',
           ),
           vSizedBox2,
           Row(
@@ -1684,7 +1684,7 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
             CircleAvatarcustom(
               isnetwork:true,
               image:
-              '${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}',
+              '${Provider.of<GlobalModal>(context, listen: false).userData!.profileImg}',
             ),
             vSizedBox2,
             Row(

@@ -7,7 +7,7 @@ class UserModal {
   String country;
   String phone;
   String address;
-  String profile_img;
+  String profileImg;
   String token;
   String branchId;
   String? companyName;
@@ -22,11 +22,14 @@ class UserModal {
     required this.country,
     required this.phone,
     required this.address,
-    required this.profile_img,
+    required this.profileImg,
     required this.token,
     required this.branchId,
     this.companyName,
   });
+
+
+
 
   factory UserModal.fromJson(Map userData) {
     return UserModal(
@@ -38,7 +41,7 @@ class UserModal {
         country: userData['oc_country'] ?? '',
         phone: userData['phone_number'] ?? '',
         address: userData['postal_address'] ??'',
-        profile_img: userData['profileImage'] ?? 'https://salarydocument.fra1.digitaloceanspaces.com/employeeprofile/cogKO4E3ks7sImNupnLt21rPwsHFfWncaHhhtmru.png',
+        profileImg: userData['profileImage'] ?? 'https://salarydocument.fra1.digitaloceanspaces.com/employeeprofile/cogKO4E3ks7sImNupnLt21rPwsHFfWncaHhhtmru.png',
         token: userData['token'] ?? '',
         branchId: userData['branch_id'] ?? '',
         companyName: userData['oc_company_name']??''

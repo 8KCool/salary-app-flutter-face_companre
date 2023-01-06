@@ -80,7 +80,7 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
   void initState() {
     // TODO: implement initState
     getDetail();
-    print('img--------------${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}');
+    print('img--------------${Provider.of<GlobalModal>(context, listen: false).userData!.profileImg}');
     super.initState();
   }
   getDetail()async{
@@ -99,7 +99,7 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
     var jsonResponse = convert.jsonDecode(res.body);
     log('res from new api -----------$jsonResponse');
     // dashBoardData=jsonResponse['data'];
-    Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
+    // Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
 
     Provider.of<PermissionModal>(context, listen: false).load=false;
     // Provider.of<GlobalModal>(context, listen: false).loadingHide();
@@ -156,7 +156,7 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
                             vSizedBox2,
                             Stack(
                               children: [
-                                if(globalModal.userData!.profile_img!='')
+                                if(globalModal.userData!.profileImg!='')
                                   Container(
                                     child: CustomCircularImage(
                                       // borderradius: 100,
@@ -164,7 +164,7 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
                                       // image:'${dashBoardData['profileImage']??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg'}',
                                       // isnetwork: true,
                                       height: 100,
-                                      width: 100, imageUrl:globalModal.userData!.profile_img,
+                                      width: 100, imageUrl:globalModal.userData!.profileImg,
                                       fileType: CustomFileType.network,
                                     ),
                                     decoration: BoxDecoration(

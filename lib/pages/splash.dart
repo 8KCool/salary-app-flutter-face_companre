@@ -8,6 +8,8 @@ import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
 import 'package:salaryredesign/pages/tabbarscreen.dart';
+import 'package:salaryredesign/pages/temp/tab_page_man.dart';
+import 'package:salaryredesign/pages/webviewPages/Common_webView.dart';
 
 import 'package:salaryredesign/pages/welcome.dart';
 import 'package:salaryredesign/widgets/showSnackbar.dart';
@@ -16,14 +18,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/colors.dart';
 
+import '../constants/globalFunction.dart';
 import '../functions/navigation_functions.dart';
 import '../modals/userData.dart';
 import '../providers/clock.dart';
+import '../providers/newProvider.dart';
 import '../services/api_urls.dart';
 import '../services/auth.dart';
 import '../services/webservices.dart';
 import 'Login_process/enter_phone_number.dart';
 
+import 'dart:convert' as convert;
 
 class SplashScreen extends StatefulWidget {
   static const id = 'splash_screen';
@@ -56,6 +61,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   }
+  getDashboard()async{
+    var res = await Webservices.getData(ApiUrls.getNewProfile,context);
+    log('res from new api ------1-----$res');
+
+
+    var jsonResponse = convert.jsonDecode(res.body);
+    if(jsonResponse['status'].toString()!='0'){
+      log('res from new api -------2----${jsonResponse['data']}');
+      Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
+      // Provider.of<PermissionModal>(context, listen: false).load=false;
+    }
+    else{
+
+      Provider.of<PermissionModal>(context, listen: false).load=false;
+      // showSnackbar(context, 'Check your internet connection');
+    }
+
+    // Provider.of<GlobalModal>(context, listen: false).loadingHide();
+
+  }
   test()async{
     // await logout();
     // print("provider---------------"+Provider.of<GlobalModal>(context, listen: false).userData.toString());
@@ -71,41 +96,79 @@ class _SplashScreenState extends State<SplashScreen> {
         }
         SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-        print(sharedPreferences.getString('userData'));
+        log('token from session ----${sharedPreferences.getString('userData')}');
+
         if (sharedPreferences.getString('userData') != null) {
           Map userMap = jsonDecode(sharedPreferences.getString('userData')!);
           // showSnackbar(context, 'userMap ${userMap}');
+          log('token from session -----${userMap}');
 
 
           Map<String,dynamic>data={};
-          UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+          Provider.of<GlobalModal>(context, listen: false).userData = UserModal.fromJson(userMap);
 
           // if(user!=null){
           var res = await Webservices.postData(apiUrl: ApiUrls.getUser, body: data, context: context);
           // showSnackbar(context, 'res from postdata api${res}');
-          if(res['status'].toString()==true);
-          await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
+          print('I am the response ---manish  ${res}');
+          // if(res['status'].toString()=='true'){
+            await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
+            await getDashboard();
 
-          log('dkljslfkj--------${userMap['client_emp'].toString()}');
-          if(userMap['client_emp'].toString()=='null'){
-            // showSnackbar(context, 'userMap  client_emp ${userMap['client_emp'].toString()}');
+            log('dkljslfkj--------${userMap['client_emp'].toString()}');
+            // if(userMap['client_emp'].toString()=='null'){
+
+
+
+
+
+
+
+
+              // showSnackbar(context, 'userMap  client_emp ${userMap['client_emp'].toString()}');
+              //
+              // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              //     TabsPage()), (Route<dynamic> route) => false);
+              usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+              print('call-------1---setWebWiewController ${usertoken}');
+          // globalCommonController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
+          // globalSettingController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard',);
+          // globalmyAccountController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
+              // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+
+
+
+          ///
+          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          //         HomePage()), (Route<dynamic> route) => false);
+          ///
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              ManishHomePage()), (Route<dynamic> route) => false);
+          ///
+          // await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
+          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+          ///
+            // }
+            // else{
+            //   // showSnackbar(context, 'login as a company owner');
+            //   usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+            //   print('call-------2---setWebWiewController');
             //
-            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //     TabsPage()), (Route<dynamic> route) => false);
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-          }
-          else{
-            // showSnackbar(context, 'login as a company owner');
-
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-          }
+            //   await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
+            //   await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
+            //
+            //
+            //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //       Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+            // }
           // }
-
           // else{
+          //   print('There is some error in logging in');
+          //   sharedPreferences.clear();
           //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          //       Welcome_Page()), (Route<dynamic> route) => false);
+          //       Enter_Phone_Number()), (Route<dynamic> route) => false);
           // }
 
 

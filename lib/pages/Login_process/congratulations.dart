@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
@@ -12,7 +13,13 @@ import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:salaryredesign/widgets/lists.dart';
 
+import '../../constants/globalFunction.dart';
+import '../../constants/globalkeys.dart';
+import '../../providers/clock.dart';
+import '../../services/api_urls.dart';
 import '../tab_pages/bottom_tab.dart';
+import '../tabbarscreen.dart';
+import '../temp/tab_page_man.dart';
 // import '../tab_pages/new_tab.dart';
 
 
@@ -253,7 +260,7 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                 children: [
                   RoundEdgedButton(
                     text: 'Personalize', textColor: Colors.white,
-                    onTap: (){
+                    onTap: () async {
                       // showDialog<void>(context: context, builder: (context) => dialog1);
                       if(widget.isEmp){
                         // push(context: context, screen: newTabsPage());
@@ -262,9 +269,17 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                         // push(context: context, screen: MyPorfile_Page());
                       }
                       else{
-
+                        // usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                        // setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+                        ///
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+                        ///
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            TabsPage()), (Route<dynamic> route) => false);
+                            ManishHomePage()), (Route<dynamic> route) => false);
+                        ///
 
                       }
 
@@ -276,20 +291,32 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                     textColor: MyColors.paragraphcolor,
                     fontfamily: 'regular',
                     color: Colors.transparent,
-                    onTap: (){
+                    onTap: ()async{
 
-                      if(widget.isEmp){
+                      // if(widget.isEmp){
 
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        //     TabsPage()), (Route<dynamic> route) => false);
+                        usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                        // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
+                        // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
+                        ///
+                      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+                      ///
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            TabsPage()), (Route<dynamic> route) => false);
-
-                      }
-                      else{
-
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            TabsPage()), (Route<dynamic> route) => false);
-
-                      }
+                            ManishHomePage()), (Route<dynamic> route) => false);
+                      ///
+                      // }
+                      // else{
+                      //
+                      //   // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      //   //     TabsPage()), (Route<dynamic> route) => false);
+                      //   usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                      //
+                      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+                      // }
 
                     },
                   ),

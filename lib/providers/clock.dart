@@ -66,6 +66,7 @@ class GlobalModal extends ChangeNotifier {
   Timer? timer;
   // List<UserModel> userdata = [];
   startTimer() {
+
     int min = 01;
     int sec = 59;
     timer = Timer.periodic(new Duration(seconds: 1), (timer) {

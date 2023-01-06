@@ -4,6 +4,7 @@ class ApiUrls{
 
   // static const baseUrl = 'https://etaskers.com/api/';
   static const baseUrl = 'https://app.swipebox.in/api/';
+  static const siteBaseUrl = 'https://app.swipebox.in/';
   // static const String getpaymentMethodFromSecretKey = 'https://api.stripe.com/v1/setup_intents/';
   static const  questions_list = baseUrl +  'questions-list';
   static const signup = baseUrl + 'signup';

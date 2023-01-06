@@ -30,7 +30,7 @@ class Webservices {
 
     http.Response response =
     http.Response('{"message":"failure","status":0}', 404);
-    log('called $url------------');
+    log('called $url----------${'Bearer ${user!.token}'}--');
     try {
       response = await http.get(
         Uri.parse(url),
@@ -103,6 +103,7 @@ class Webservices {
         }
         return jsonResponse;
       }
+
     } catch (e) {
       log('Error in $apiUrl : ------ $e');
     }

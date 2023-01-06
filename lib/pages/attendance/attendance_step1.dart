@@ -44,8 +44,8 @@ class _CheckAttStatusPageState extends State<CheckAttStatusPage> {
               children: <Widget>[
                 // Image.asset(MyImages.cancel,width: 70,height: 70,),
                 Icon(
-                  Icons.dangerous,
-                  color: Colors.red,
+                  Icons.warning_amber_outlined,
+                  color: Colors.yellow,
                   size: 80,
                 ),
                 vSizedBox2,
@@ -76,7 +76,7 @@ class _CheckAttStatusPageState extends State<CheckAttStatusPage> {
         '${ApiUrls.baseUrl}checkAttendancetype', context);
     var jsonResponse = convert.jsonDecode(res.body);
     checkType = jsonResponse;
-    setState(() {});
+    // setState(() {});
     log('checkAttendancetype------------------$jsonResponse');
   }
 getData()async{

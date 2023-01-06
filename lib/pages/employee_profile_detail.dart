@@ -193,7 +193,7 @@ print('data----------year -----------month -----------$data');
                       hSizedBox,
                       CircleAvatarcustom(
                         borderradius: 100,
-                        image: '${globalModal.userData!.profile_img}',
+                        image: '${globalModal.userData!.profileImg}',
                         isnetwork: true,
                         height: 120,
                         width: 120,

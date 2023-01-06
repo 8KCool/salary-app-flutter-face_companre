@@ -10,12 +10,14 @@ import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/Login_process/congratulations.dart';
 import 'package:salaryredesign/pages/Login_process/enter_details.dart';
+import 'package:salaryredesign/pages/tabbarscreen.dart';
 
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:salaryredesign/widgets/customtextfield.dart';
 
 import 'package:salaryredesign/widgets/showSnackbar.dart';
 
+import '../../constants/globalFunction.dart';
 import '../../constants/globalkeys.dart';
 import '../../constants/image_urls.dart';
 import '../../providers/clock.dart';
@@ -26,6 +28,7 @@ import '../../widgets/CustomLoader.dart';
 import '../../widgets/CustomTexts.dart';
 import '../employee/employee_dshboard.dart';
 import '../tab_pages/bottom_tab.dart';
+import '../temp/tab_page_man.dart';
 
 
 class Enter_OTP_Page extends StatefulWidget {
@@ -399,6 +402,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                 print('res--------${res}');
 
                                 if (res['success'].toString() == 'true') {
+                                  log('data for session -------------${res['userData']}');
 
                                   print('otp------------${res['type']}');
                                   if(res['type'].toString()=='1'){
@@ -409,7 +413,8 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                   else if(res['userData']['client_emp']==null){
                                     await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
                                     // await MyLocalServices.updateSharedPreferences(res['userData']);
-
+                                    usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                                    // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
                                     push(context: context, screen: Congratulations_Page(isEmp: false,));
 
                                     user=res['userData'];
@@ -418,8 +423,18 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                   else if(res['userData']['client_emp']!=null){
                                     await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
                                     // push(context: context, screen: newTabsPage());
+                                    usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                                    // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
+                                    // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
+                                    ///
+                                    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+                                    ///
                                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                        TabsPage()), (Route<dynamic> route) => false);
+                                        ManishHomePage()), (Route<dynamic> route) => false);
+                                    ///
+                                    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    //     TabsPage()), (Route<dynamic> route) => false);
                                     // await MyLocalServices.updateSharedPreferences(res['userData']);
 
                                     user=res['userData'];

@@ -17,6 +17,7 @@ import 'package:salaryredesign/widgets/dropdown.dart';
 import 'package:salaryredesign/widgets/showSnackbar.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 
+import '../../constants/globalFunction.dart';
 import '../../constants/globalkeys.dart';
 import '../../constants/image_urls.dart';
 import '../../constants/sized_box.dart';
@@ -166,8 +167,12 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                   child: const Text('OK'),
                   onPressed: () {
                     Navigator.pop(context);
+                    // Navigator.pop(context);
+
+
                     try{
-                      MyGlobalKeys.tabbarKey.currentState!.onItemTapped(0);
+
+                      // MyGlobalKeys.tabbarKey.currentState!.onItemTapped(0);
 
                     }catch(e){
                       print('Error in catch block 342 $e');
@@ -195,8 +200,14 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
     Provider.of<GlobalModal>(context, listen: false).loadingHide();
     if(servicestatus){
       print("GPS service is enabled");
-      location();
+      await checkInternet(context);
+      print('isConnected--------------$isConnected');
+      if(isConnected) {
+        location();
+      }
+      else{
 
+      }
 
 
     }else{
@@ -309,6 +320,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
         leading: GestureDetector(
             onTap: (){
               Navigator.pop(context);
+
               // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
               //     TabsPage()), (Route<dynamic> route) => false);
             },
@@ -1197,7 +1209,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
             CircleAvatarcustom(
               isnetwork:true,
               image:
-                  '${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}',
+                  '${Provider.of<GlobalModal>(context, listen: false).userData!.profileImg}',
             ),
             vSizedBox2,
             Row(
@@ -1361,7 +1373,7 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
             CircleAvatarcustom(
               isnetwork:true,
               image:
-              '${Provider.of<GlobalModal>(context, listen: false).userData!.profile_img}',
+              '${Provider.of<GlobalModal>(context, listen: false).userData!.profileImg}',
             ),
             vSizedBox2,
             Row(

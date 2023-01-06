@@ -7,12 +7,16 @@ class PermissionModal extends ChangeNotifier {
     print('true-----------$load');
     dashboardMenuPermission=data;
     load=false;
-    print('false-----------$load');
+    print('dashboardMenuPermission-----------$dashboardMenuPermission');
 
     notifyListeners();
   }
    showLoading(){
     load=true;
+    notifyListeners();
+   }
+  hideLoading(){
+    load=false;
     notifyListeners();
    }
 }

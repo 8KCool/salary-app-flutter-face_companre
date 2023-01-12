@@ -264,7 +264,7 @@ class _SuccessFullySalaryProcessState extends State<SuccessFullySalaryProcess> {
                     fontfamily: 'regular',
                     color: Colors.transparent,
                     onTap: (){
-                      push(context: context, screen: Dashboard_Page());
+                      // push(context: context, screen: Dashboard_Page());
                     },
                   ),
                 ],

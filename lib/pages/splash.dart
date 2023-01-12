@@ -8,8 +8,10 @@ import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
 import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
 import 'package:salaryredesign/pages/tabbarscreen.dart';
+import 'package:salaryredesign/pages/temp/single_page_controller.dart';
 import 'package:salaryredesign/pages/temp/tab_page_man.dart';
 import 'package:salaryredesign/pages/webviewPages/Common_webView.dart';
+import 'package:salaryredesign/pages/webviewPages/new_web_view_tab.dart';
 
 import 'package:salaryredesign/pages/welcome.dart';
 import 'package:salaryredesign/widgets/showSnackbar.dart';
@@ -61,24 +63,30 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   }
-  getDashboard()async{
-    var res = await Webservices.getData(ApiUrls.getNewProfile,context);
-    log('res from new api ------1-----$res');
+  Future<bool> getDashboard()async{
 
 
-    var jsonResponse = convert.jsonDecode(res.body);
-    if(jsonResponse['status'].toString()!='0'){
-      log('res from new api -------2----${jsonResponse['data']}');
-      Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
-      // Provider.of<PermissionModal>(context, listen: false).load=false;
-    }
-    else{
+   try{
+     var res = await Webservices.getData(ApiUrls.getNewProfile,context);
+     log('res from new api ------1-----${res.body}');
 
-      Provider.of<PermissionModal>(context, listen: false).load=false;
-      // showSnackbar(context, 'Check your internet connection');
-    }
 
-    // Provider.of<GlobalModal>(context, listen: false).loadingHide();
+     var jsonResponse = convert.jsonDecode(res.body);
+     if(jsonResponse['status'].toString()!='0'){
+       log('res from new api -------2----${jsonResponse['data']}');
+       Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
+       return true;
+       // Provider.of<PermissionModal>(context, listen: false).load=false;
+     }
+     else{
+
+       Provider.of<PermissionModal>(context, listen: false).load=false;
+       // showSnackbar(context, 'Check your internet connection');
+     }
+   }catch(e){
+     print('Error in catch block 4354 $e');
+   }
+   return false;
 
   }
   test()async{
@@ -107,14 +115,18 @@ class _SplashScreenState extends State<SplashScreen> {
           Map<String,dynamic>data={};
           Provider.of<GlobalModal>(context, listen: false).userData = UserModal.fromJson(userMap);
 
+          // globalCount++;
           // if(user!=null){
           var res = await Webservices.postData(apiUrl: ApiUrls.getUser, body: data, context: context);
           // showSnackbar(context, 'res from postdata api${res}');
           print('I am the response ---manish  ${res}');
-          // if(res['status'].toString()=='true'){
-            await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
-            await getDashboard();
+          globalHeaders={'Authorization': 'Bearer ${await Provider.of<GlobalModal>(context, listen: false).userData!.token}',};
+          log('global header assign by ankita in splash screen-------------------$globalHeaders');
 
+          // if(res['status'].toString()=='true'){
+          await Provider.of<GlobalModal>(context, listen: false).addUserDetail(userMap,context);
+          bool dashResult = await getDashboard();
+          if(dashResult){
             log('dkljslfkj--------${userMap['client_emp'].toString()}');
             // if(userMap['client_emp'].toString()=='null'){
 
@@ -125,31 +137,33 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
-              // showSnackbar(context, 'userMap  client_emp ${userMap['client_emp'].toString()}');
-              //
-              // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              //     TabsPage()), (Route<dynamic> route) => false);
-              usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
-              print('call-------1---setWebWiewController ${usertoken}');
-          // globalCommonController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
-          // globalSettingController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard',);
-          // globalmyAccountController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
-              // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+            // showSnackbar(context, 'userMap  client_emp ${userMap['client_emp'].toString()}');
+            //
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     TabsPage()), (Route<dynamic> route) => false);
+            usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+            print('call-------1---setWebWiewController ${usertoken}');
+            // globalCommonController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
+            // globalSettingController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard',);
+            // globalmyAccountController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
 
 
 
-          ///
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          //         HomePage()), (Route<dynamic> route) => false);
-          ///
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              ManishHomePage()), (Route<dynamic> route) => false);
-          ///
-          // await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-          ///
+            ///
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //         HomePage()), (Route<dynamic> route) => false);
+            ///
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     ManishHomePage()), (Route<dynamic> route) => false);
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                NewTabScreen()), (Route<dynamic> route) => false);
+            ///
+            // await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+            ///
             // }
             // else{
             //   // showSnackbar(context, 'login as a company owner');
@@ -163,19 +177,23 @@ class _SplashScreenState extends State<SplashScreen> {
             //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
             //       Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
             // }
-          // }
-          // else{
-          //   print('There is some error in logging in');
-          //   sharedPreferences.clear();
-          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          //       Enter_Phone_Number()), (Route<dynamic> route) => false);
-          // }
+            // }
+            // else{
+            //   print('There is some error in logging in');
+            //   sharedPreferences.clear();
+            //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //       Enter_Phone_Number()), (Route<dynamic> route) => false);
+            // }
 
 
+          }else{
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                Enter_Phone_Number()), (Route<dynamic> route) => false);
+          }
         }
         else{
           // showSnackbar(context, 'new user');
-            // push(context: context, screen: Enter_Phone_Number());
+          // push(context: context, screen: Enter_Phone_Number());
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
               Enter_Phone_Number()), (Route<dynamic> route) => false);
           // String? isVisit =( await SharedPreferences.getInstance()).getString('is_visit');
@@ -217,8 +235,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Container(
           padding: EdgeInsets.all(30),
           decoration: BoxDecoration(
-            color: MyColors.white,
-            borderRadius: BorderRadius.circular(100),
+              color: MyColors.white,
+              borderRadius: BorderRadius.circular(100),
               boxShadow: [
                 BoxShadow(
                   color: Colors.white,

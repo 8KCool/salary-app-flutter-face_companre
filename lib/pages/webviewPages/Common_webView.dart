@@ -13,6 +13,7 @@ import '../../constants/sized_box.dart';
 import '../../functions/navigation_functions.dart';
 import '../../providers/clock.dart';
 import '../../providers/newProvider.dart';
+import '../../services/api_urls.dart';
 import '../../services/auth.dart';
 import '../../services/local_services.dart';
 import '../../widgets/appbar.dart';
@@ -36,11 +37,11 @@ class _HomePageState extends State<HomePage> {
     2: GlobalKey(),
   };
   List BottomTab=[
-    {'id':'1','icon':'${MyImages.home_icon}','Text':'Dashboard','isSelected':true,'url':'https://app.swipebox.in/staff/dashboard'},
+    {'id':'1','icon':'${MyImages.home_icon}','Text':'Dashboard','isSelected':true,'url':'${ApiUrls.baseUrl}staff/dashboard'},
 
-    {'id':'2','icon':'${MyImages.fingerprint_icon}','Text':'Mark Attendance','isSelected':false,'url':'https://app.swipebox.in/staff/salaryprocess'},
-    {'id':'3','icon':'${MyImages.profile_icon}','Text':'My Account','isSelected':false,'url':'https://app.swipebox.in/staff/my_account'},
-    {'id':'4','icon':'${MyImages.setting_icon}','Text':'Settings','isSelected':false,'url':'https://app.swipebox.in/staff/setting'},
+    {'id':'2','icon':'${MyImages.fingerprint_icon}','Text':'Mark Attendance','isSelected':false,'url':'${ApiUrls.baseUrl}staff/salaryprocess'},
+    {'id':'3','icon':'${MyImages.profile_icon}','Text':'My Account','isSelected':false,'url':'${ApiUrls.baseUrl}staff/my_account'},
+    {'id':'4','icon':'${MyImages.setting_icon}','Text':'Settings','isSelected':false,'url':'${ApiUrls.baseUrl}staff/setting'},
   ];
   int selectIndex=0;
   WebViewCookieManager cookieManager = WebViewCookieManager();
@@ -111,7 +112,7 @@ class _HomePageState extends State<HomePage> {
             print('requested url is ${request.url}');
             // if(request.url.contains(other))
 
-            if(request.url.startsWith('https://app.swipebox.in/staff/login')){
+            if(request.url.startsWith('${ApiUrls.baseUrl}staff/login')){
               Navigator.popUntil(MyGlobalKeys.navigatorKey.currentContext!, (route) => route.isFirst);
               sharedPreference.clear();
               showSnackbar(MyGlobalKeys.navigatorKey.currentContext!, 'Session Expired');
@@ -137,8 +138,8 @@ class _HomePageState extends State<HomePage> {
         },
       )
 
-      // ..loadRequest(Uri.parse('https://app.swipebox.in/staff/openweb?redirect_url=https://app.swipebox.in/staff/dashboard'));//https://app.swipebox.in/staff/openweb?redirect_url=
-      ..loadRequest(Uri.parse('https://app.swipebox.in/staff/dashboard'));
+    // ..loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/openweb?redirect_url=${ApiUrls.baseUrl}staff/dashboard'));//${ApiUrls.baseUrl}staff/openweb?redirect_url=
+      ..loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/dashboard'));
 
 
     // #docregion platform_features
@@ -168,63 +169,63 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: Color(0xFFF3F4F6),
-      appBar: appBar(
+        key: scaffoldKey,
+        backgroundColor: Color(0xFFF3F4F6),
+        appBar: appBar(
 
-          context: context,
-          title: '${Provider.of<PermissionModal>(context, listen: true).dashboardMenuPermission['company_name']??'${Provider.of<GlobalModal>(context, listen: false).userData!.companyName}'}',
-          titleColor:Colors.black,
-          implyLeading: false,
-          titlecenter: false,
-          leading: GestureDetector(
-            onTap: ()async{
-              scaffoldKey.currentState?.openDrawer();
-            },
-            child: Icon(
-              Icons.menu,
-              color: Colors.black,
-            ),
-          ),
-          appBarColor: MyColors.white,
-          // titleColor: Colors.white,
-          actions: [
-            GestureDetector(
-                onTap: () => push(context: context, screen: NotificationPage1()),
-                child: Icon(Icons.notifications_outlined)
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+            context: context,
+            title: '${Provider.of<PermissionModal>(context, listen: true).dashboardMenuPermission['company_name']??'${Provider.of<GlobalModal>(context, listen: false).userData!.companyName}'}',
+            titleColor:Colors.black,
+            implyLeading: false,
+            titlecenter: false,
+            leading: GestureDetector(
+              onTap: ()async{
+                scaffoldKey.currentState?.openDrawer();
+              },
               child: Icon(
-                Icons.help_outline_outlined,
+                Icons.menu,
+                color: Colors.black,
               ),
             ),
+            appBarColor: MyColors.white,
+            // titleColor: Colors.white,
+            actions: [
+              GestureDetector(
+                  onTap: () => push(context: context, screen: NotificationPage1()),
+                  child: Icon(Icons.notifications_outlined)
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(
+                  Icons.help_outline_outlined,
+                ),
+              ),
 
-          ]),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+            ]),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
 
-        children: [
-          // if(load)
-          if(selectIndex!=0)
-          Expanded(child: WebViewWidget(controller:myController)),
-          if(selectIndex==0)
-          Expanded(child: Dashboard_Page()),
-          if(selectIndex==1)
-          Expanded(child: CheckAttStatusPage(navigatorKey: navigatorKeys[1]!,)),
-          Container(
-            padding: EdgeInsets.all(16),
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // for(int i=0;i<BottomTab.length;i++)
+          children: [
+            // if(load)
+            if(selectIndex!=0)
+              Expanded(child: WebViewWidget(controller:myController)),
+            if(selectIndex==0)
+              // Expanded(child: Dashboard_Page()),
+            if(selectIndex==1)
+              Expanded(child: CheckAttStatusPage(navigatorKey: navigatorKeys[1]!,)),
+            Container(
+              padding: EdgeInsets.all(16),
+              height: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // for(int i=0;i<BottomTab.length;i++)
 
-                GestureDetector(
+                  GestureDetector(
                     behavior:HitTestBehavior.opaque,
                     onTap:(){
                       selectIndex=0;
-                      myController.loadRequest(Uri.parse('https://app.swipebox.in/staff/dashboard'));
+                      myController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/dashboard'));
                       setState(() {
 
                       });
@@ -238,82 +239,82 @@ class _HomePageState extends State<HomePage> {
                         Text('Dashboard',style: TextStyle( color:selectIndex==0?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
                       ],
                     ),
-                ),
-                // if( Provider.of<GlobalModal>(context,listen: false).userData!.userId!=1)
-                GestureDetector(
-                  behavior:HitTestBehavior.opaque,
-                  onTap:(){
-                    selectIndex=1;
-                    myController.loadRequest(Uri.parse('https://app.swipebox.in/staff/dashboard'));
-                    setState(() {
-
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      Image.asset(MyImages.fingerprint_icon,
-                        color:selectIndex==1?MyColors.primaryColor: MyColors.bottommenucolor,
-                        height: 24,
-                      ),
-                      Text('Mark Attendance',style: TextStyle( color:selectIndex==1?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
-                    ],
                   ),
-                ),
-                GestureDetector(
-                  behavior:HitTestBehavior.opaque,
-                  onTap:(){
-                    selectIndex=2;
-                    myController.loadRequest(Uri.parse('https://app.swipebox.in/staff/my_account'));
-                    setState(() {
+                  // if( Provider.of<GlobalModal>(context,listen: false).userData!.userId!=1)
+                  GestureDetector(
+                    behavior:HitTestBehavior.opaque,
+                    onTap:(){
+                      selectIndex=1;
+                      myController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/dashboard'));
+                      setState(() {
 
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      Image.asset(MyImages.profile_icon,
-                        color:selectIndex==2?MyColors.primaryColor: MyColors.bottommenucolor,
-                        height: 24,
-                      ),
-                      Text('My Account',style: TextStyle( color:selectIndex==2?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
-                    ],
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(MyImages.fingerprint_icon,
+                          color:selectIndex==1?MyColors.primaryColor: MyColors.bottommenucolor,
+                          height: 24,
+                        ),
+                        Text('Mark Attendance',style: TextStyle( color:selectIndex==1?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
+                      ],
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  behavior:HitTestBehavior.opaque,
-                  onTap:(){
-                    selectIndex=3;
-                    myController.loadRequest(Uri.parse('https://app.swipebox.in/staff/setting'));
-                    setState(() {
+                  GestureDetector(
+                    behavior:HitTestBehavior.opaque,
+                    onTap:(){
+                      selectIndex=2;
+                      myController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/my_account'));
+                      setState(() {
 
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      Image.asset(MyImages.setting_icon,
-                        color:selectIndex==3?MyColors.primaryColor: MyColors.bottommenucolor,
-                        height: 24,
-                      ),
-                      Text('Setting',style: TextStyle( color:selectIndex==3?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
-                    ],
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(MyImages.profile_icon,
+                          color:selectIndex==2?MyColors.primaryColor: MyColors.bottommenucolor,
+                          height: 24,
+                        ),
+                        Text('My Account',style: TextStyle( color:selectIndex==2?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
+                      ],
+                    ),
                   ),
-                ),
-                // GestureDetector(
-                //     behavior:HitTestBehavior.opaque,
-                //     onTap:(){
-                //       myController.loadRequest(Uri.parse('https://app.swipebox.in/staff/attendance-detail'));
-                //     },
-                //     child: Icon(Icons.margin)),
-                // GestureDetector(
-                //     behavior:HitTestBehavior.opaque,
-                //     onTap:(){
-                //       myController.loadRequest(Uri.parse('https://app.swipebox.in/staff/salaryprocess'));
-                //     },
-                //     child: Icon(Icons.heart_broken_rounded)),
-              ],
-            ),
-          )
-        ],
-      ),
+                  GestureDetector(
+                    behavior:HitTestBehavior.opaque,
+                    onTap:(){
+                      selectIndex=3;
+                      myController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/setting'));
+                      setState(() {
+
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(MyImages.setting_icon,
+                          color:selectIndex==3?MyColors.primaryColor: MyColors.bottommenucolor,
+                          height: 24,
+                        ),
+                        Text('Setting',style: TextStyle( color:selectIndex==3?MyColors.primaryColor: MyColors.bottommenucolor,fontSize: 12),)
+                      ],
+                    ),
+                  ),
+                  // GestureDetector(
+                  //     behavior:HitTestBehavior.opaque,
+                  //     onTap:(){
+                  //       myController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/attendance-detail'));
+                  //     },
+                  //     child: Icon(Icons.margin)),
+                  // GestureDetector(
+                  //     behavior:HitTestBehavior.opaque,
+                  //     onTap:(){
+                  //       myController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/salaryprocess'));
+                  //     },
+                  //     child: Icon(Icons.heart_broken_rounded)),
+                ],
+              ),
+            )
+          ],
+        ),
         drawer: Drawer(
             width: MediaQuery.of(context).size.width-100,
 

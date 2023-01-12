@@ -205,7 +205,7 @@ checkInternet();
             IndexedStack(
               index: _pageIndex,
               children: <Widget>[
-                Dashboard_Page(),
+                // Dashboard_Page(),
                 // Employee_dashboard_Page(),
                 if( Provider.of<GlobalModal>(context,listen: false).userData!.userId!=1)
                 CheckAttStatusPage(navigatorKey: navigatorKeys[1]!,),

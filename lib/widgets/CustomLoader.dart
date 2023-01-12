@@ -8,11 +8,11 @@ class CustomLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Center(
-    //   child: CircularProgressIndicator(
-    //     color:color?? MyColors.primaryColor,
-    //   ),
-    // );
+    return Center(
+      child: CircularProgressIndicator(
+        color:color?? MyColors.primaryColor,
+      ),
+    );
     return Center(
         child: cupertino.CupertinoActivityIndicator(
           color:color?? MyColors.primaryColor,

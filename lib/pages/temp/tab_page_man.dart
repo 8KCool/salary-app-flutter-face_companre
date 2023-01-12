@@ -14,6 +14,7 @@ import '../../functions/navigation_functions.dart';
 import '../../providers/attendanceCalendar.dart';
 import '../../providers/clock.dart';
 import '../../providers/newProvider.dart';
+import '../../services/api_urls.dart';
 import '../../widgets/CustomLoader.dart';
 import '../../widgets/appbar.dart';
 import '../notificationPage.dart';
@@ -98,19 +99,19 @@ class ManishHomePageState extends State<ManishHomePage> {
 
       await cookieManager.clearCookies();
 
-      await cookieManager.setCookie(
-        WebViewCookie(
-          name: 'web_app',
-          value: '${manishToken??''}',
-          domain: 'app.swipebox.in',
-          path: '/',
-          // path: '/staff/openweb',
-          ///eyJpdiI6Ik1iNFZCRjZxeUdDMEUzRm9jUFdJNnc9PSIsInZhbHVlIjoibTZOVFMvZWZBMzdvbnBVM0k0YVFiMDNlNnN4U3lta0JXZG42RHlScy9tRkErOUY0bDdMbWNzNWpJMzdhclIvaWRDOHhhaGJndTVKZ1B0a0NxQjVZWnFyemlydm1BcG1iMk5EMjQxbTRUU3h0SC9WNU1pYlBKaGk1Kzh5QlRIa1oiLCJtYWMiOiIwZWQ3ZmJmZjk2NjZhNjI1MDgzOTA0ZjAyMWUxZDc2M2ZiOTAzZWNhYmU4MjliZTFkNjQwZWM5ZjgyMTBjNWIzIiwidGFnIjoiIn0%3D
-        ),
-      );
-    dashboardController = await setManishController('https://app.swipebox.in/staff/dashboard');
-    myAccountController = await setManishController('https://app.swipebox.in/staff/my_account');
-    settingController = await setManishController('https://app.swipebox.in/staff/setting');
+    // await cookieManager.setCookie(
+    //   WebViewCookie(
+    //     name: 'web_app',
+    //     value: '${manishToken??''}',
+    //     domain: 'app.swipebox.in',
+    //     path: '/',
+    //     // path: '/staff/openweb',
+    //     ///eyJpdiI6Ik1iNFZCRjZxeUdDMEUzRm9jUFdJNnc9PSIsInZhbHVlIjoibTZOVFMvZWZBMzdvbnBVM0k0YVFiMDNlNnN4U3lta0JXZG42RHlScy9tRkErOUY0bDdMbWNzNWpJMzdhclIvaWRDOHhhaGJndTVKZ1B0a0NxQjVZWnFyemlydm1BcG1iMk5EMjQxbTRUU3h0SC9WNU1pYlBKaGk1Kzh5QlRIa1oiLCJtYWMiOiIwZWQ3ZmJmZjk2NjZhNjI1MDgzOTA0ZjAyMWUxZDc2M2ZiOTAzZWNhYmU4MjliZTFkNjQwZWM5ZjgyMTBjNWIzIiwidGFnIjoiIn0%3D
+    //   ),
+    // );
+    dashboardController = await setManishController('${ApiUrls.siteBaseUrl}');
+    myAccountController = await setManishController('${ApiUrls.webBaseUrl}my_account');
+    settingController = await setManishController('${ApiUrls.webBaseUrl}setting');
     setState((){
       load = false;
     });
@@ -223,7 +224,7 @@ class ManishHomePageState extends State<ManishHomePage> {
               child:  IndexedStack(
                 index: index,
                 children: <Widget>[
-                  Dashboard_Page(),
+                  // Dashboard_Page(),
                   MyAccountPage(controller: myAccountController),
                   SettingsPage(controller: settingController),
 
@@ -236,55 +237,55 @@ class ManishHomePageState extends State<ManishHomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                      behavior:HitTestBehavior.opaque,
-                      onTap:(){
-                        index = 0;
-                        print('going to the dashboard');
-                        setState(() {
-                          selectedTab = TabType.dashboard;
-                        });
-                        print('going to the dashboard ${selectedTab}');
-                        // myAccountController.loadRequest(Uri.parse('https://app.swipebox.in/staff/setting'));
-                      },
-                      child: ImageIcon(
-                        AssetImage(MyImages.home_icon),
-                        color: MyColors.bottommenucolor,
-                        size: 24,
-                      ),),
+                    behavior:HitTestBehavior.opaque,
+                    onTap:(){
+                      index = 0;
+                      print('going to the dashboard');
+                      setState(() {
+                        selectedTab = TabType.dashboard;
+                      });
+                      print('going to the dashboard ${selectedTab}');
+                      // myAccountController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/setting'));
+                    },
+                    child: ImageIcon(
+                      AssetImage(MyImages.home_icon),
+                      color: MyColors.bottommenucolor,
+                      size: 24,
+                    ),),
                   GestureDetector(
-                      behavior:HitTestBehavior.opaque,
-                      onTap:()async{
-                        index = 1;
-                        print('going to the my account from ${selectedTab}');
+                    behavior:HitTestBehavior.opaque,
+                    onTap:()async{
+                      index = 1;
+                      print('going to the my account from ${selectedTab}');
 
-                        setState(() {
-                          selectedTab = TabType.myaccount;
+                      setState(() {
+                        selectedTab = TabType.myaccount;
 
-                        });
-                        print('In to the dashboard ${selectedTab}');
-                        // myAccountController.loadRequest(Uri.parse('https://app.swipebox.in/staff/attendance-detail'));
-                      },
-                      child: ImageIcon(
-                        AssetImage(MyImages.profile_icon),
-                        color: MyColors.bottommenucolor,
-                        size: 24,
-                      ),),
+                      });
+                      print('In to the dashboard ${selectedTab}');
+                      // myAccountController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/attendance-detail'));
+                    },
+                    child: ImageIcon(
+                      AssetImage(MyImages.profile_icon),
+                      color: MyColors.bottommenucolor,
+                      size: 24,
+                    ),),
                   GestureDetector(
-                      behavior:HitTestBehavior.opaque,
-                      onTap:()async{
-                        index = 2;
-                        print('going to the settings from ${selectedTab}');
-                        setState(() {
-                          selectedTab = TabType.settings;
-                        });
-                        print('infowider settings from ${selectedTab}');
-                        // myAccountController.loadRequest(Uri.parse('https://app.swipebox.in/staff/salaryprocess'));
-                      },
-                      child: ImageIcon(
-                        AssetImage(MyImages.setting_icon),
-                        color: MyColors.bottommenucolor,
-                        size: 24,
-                      ),
+                    behavior:HitTestBehavior.opaque,
+                    onTap:()async{
+                      index = 2;
+                      print('going to the settings from ${selectedTab}');
+                      setState(() {
+                        selectedTab = TabType.settings;
+                      });
+                      print('infowider settings from ${selectedTab}');
+                      // myAccountController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/salaryprocess'));
+                    },
+                    child: ImageIcon(
+                      AssetImage(MyImages.setting_icon),
+                      color: MyColors.bottommenucolor,
+                      size: 24,
+                    ),
                   ),
                 ],
               ),
@@ -378,7 +379,7 @@ class ManishHomePageState extends State<ManishHomePage> {
 //       },
 //     )
 //
-//     ..loadRequest(Uri.parse('https://app.swipebox.in/staff/openweb?redirect_url=https://app.swipebox.in/staff/dashboard'));//https://app.swipebox.in/staff/openweb?redirect_url=
+//     ..loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/openweb?redirect_url=ApiUrls.baseUrlstaff/dashboard'));//${ApiUrls.baseUrl}staff/openweb?redirect_url=
 //
 //
 //   // #docregion platform_features

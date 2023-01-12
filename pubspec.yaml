@@ -62,6 +62,7 @@ dev_dependencies:
   device_info_plus: ^3.2.3
   webview_flutter: ^4.0.1
   badges: ^2.0.3
+  flutter_inappwebview: ^5.7.2+3
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

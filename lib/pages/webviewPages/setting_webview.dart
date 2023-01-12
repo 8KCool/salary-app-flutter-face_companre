@@ -119,7 +119,7 @@ class _SettingWebViewPageState extends State<SettingWebViewPage> {
         },
       )
 
-      ..loadRequest(Uri.parse("${ApiUrls.siteBaseUrl}staff/setting"));//https://app.swipebox.in/staff/openweb?redirect_url=
+      ..loadRequest(Uri.parse("${ApiUrls.siteBaseUrl}staff/setting"));//${ApiUrls.baseUrl}staff/openweb?redirect_url=
 
 
     // #docregion platform_features

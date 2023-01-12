@@ -120,7 +120,7 @@ class _MyAccountWebViewPageState extends State<MyAccountWebViewPage> {
         },
       )
 
-      ..loadRequest(Uri.parse("${ApiUrls.siteBaseUrl}staff/my_account"));//https://app.swipebox.in/staff/openweb?redirect_url=
+      ..loadRequest(Uri.parse("${ApiUrls.siteBaseUrl}staff/my_account"));//${ApiUrls.baseUrl}staff/openweb?redirect_url=
 
 
     // #docregion platform_features

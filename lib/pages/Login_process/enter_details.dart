@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -434,6 +436,11 @@ class _Enter_Detail_PageState extends State<Enter_Detail_Page> {
                           if(res['success'].toString()=='true'){
                             // print('Emp id--------${res['userData']['client_emp']}');
                             Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
+                            globalHeaders={'Authorization': 'Bearer ${await Provider.of<GlobalModal>(context, listen: false).userData!.token}',};
+                            log('global header assign by ankita in splash screen-------------------$globalHeaders');
+
+
+
                             usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
                             print('call-------2---setWebWiewController');
 

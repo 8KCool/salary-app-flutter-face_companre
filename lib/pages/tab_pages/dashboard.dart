@@ -33,10 +33,14 @@ import '../../widgets/CustomLoader.dart';
 import '../Login_process/enter_phone_number.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
+import '../webviewPages/option_view_page.dart';
 import '../webviewPages/webview.dart';
 import 'package:badges/badges.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 class Dashboard_Page extends StatefulWidget {
-  const Dashboard_Page({Key? key}) : super(key: key);
+  final WebViewController controller;
+  final Function(String url) onTap;
+  const Dashboard_Page({Key? key,required this.controller,required this.onTap}) : super(key: key);
 
   @override
   State<Dashboard_Page> createState() => _Dashboard_PageState();
@@ -68,15 +72,26 @@ List Name = [
   'Peter John',
   'Ron visely',
 ];
-
+bool isWebView=false;
 class _Dashboard_PageState extends State<Dashboard_Page> {
   String message='';
   showwebView(String url)async{
     await checkInternet(context);
     print('isConnected--------------$isConnected');
     if(isConnected){
-      print('${await Provider.of<GlobalModal>(context, listen: false).userData!.token}');
-      print('url link-----525---- ${ApiUrls.siteBaseUrl}staff/openweb?redirect_url=${Uri.encodeComponent(url)}');
+      widget.onTap(url);
+
+
+      //  push(context: context, screen: MyOptionWebView(controller: widget.controller,));
+     // await widget.controller.loadRequest(Uri.parse(url));
+
+      // isWebView=true;
+      // setState(() {
+      //
+      // });
+      // widget.controller = await setManishController('${url}');
+      // print('${await Provider.of<GlobalModal>(context, listen: false).userData!.token}');
+      // print('url link-----525---- ${ApiUrls.siteBaseUrl}staff/openweb?redirect_url=${Uri.encodeComponent(url)}');
       ///api hit
       // push(context: context, screen: WebViewPage(url:'${ApiUrls.siteBaseUrl}staff/openweb?redirect_url=${Uri.encodeComponent(url)}', token: '${await Provider.of<GlobalModal>(context, listen: false).userData!.token}',));
       // push(context: context, screen: WebViewPage(url:'${url}', token: '${await Provider.of<GlobalModal>(context, listen: false).userData!.token}',));
@@ -147,7 +162,7 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
   getDashboard()async{
     Provider.of<PermissionModal>(context, listen: false).load=true;
     var res = await Webservices.getData(ApiUrls.getNewProfile,context);
-    log('res from new api ------1-----$res');
+    log('res from new api ------1-----${res.body}');
     Provider.of<PermissionModal>(context, listen: false).hideLoading();
 
     var jsonResponse = convert.jsonDecode(res.body);
@@ -232,12 +247,15 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                                 text: '${ DateFormat('dd MMM yyyy').format(DateTime.now())} | ${ DateFormat('E').format(DateTime.now())}',
                               ),
                               GestureDetector(
-                                onTap: () async {
+                                onTap:(){
                                   showwebView('${permission.dashboardMenuPermission['attendanceurl']}');
+
+                                },
+                                  // showwebView('${permission.dashboardMenuPermission['attendanceurl']}');
                                   // await checkInternet(context);
                                   // if(isConnected)
                                   // push(context: context, screen: WebViewPage(url:'${permission.dashboardMenuPermission['attendanceurl']}',));
-                                },
+                                // },
                                   child: MainHeadingText(
                                 text: 'View All',
                                 fontSize: 16,

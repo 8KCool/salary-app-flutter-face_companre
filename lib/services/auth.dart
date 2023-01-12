@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants/globalkeys.dart';
+
 void updateUserDetails(details) async{
   SharedPreferences shared_User = await SharedPreferences.getInstance();
   String user = jsonEncode(details);
@@ -75,6 +77,7 @@ Future isUserLoggedIn() async{
 Future logout() async{
 
   print("logout()");
+  globalCount = 0;
   SharedPreferences shared_User = await SharedPreferences.getInstance();
   await shared_User.clear();
   return true;

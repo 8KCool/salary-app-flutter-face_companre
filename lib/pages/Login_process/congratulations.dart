@@ -19,7 +19,9 @@ import '../../providers/clock.dart';
 import '../../services/api_urls.dart';
 import '../tab_pages/bottom_tab.dart';
 import '../tabbarscreen.dart';
+import '../temp/single_page_controller.dart';
 import '../temp/tab_page_man.dart';
+import '../webviewPages/new_web_view_tab.dart';
 // import '../tab_pages/new_tab.dart';
 
 
@@ -277,8 +279,14 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
                         // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                         // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
                         ///
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        //     ManishHomePage()), (Route<dynamic> route) => false);
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        //     NewTabScreen()), (Route<dynamic> route) => false);
+                        ///
+                        ///
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            ManishHomePage()), (Route<dynamic> route) => false);
+                            NewTabScreen()), (Route<dynamic> route) => false);
                         ///
 
                       }
@@ -295,17 +303,19 @@ class _Congratulations_PageState extends State<Congratulations_Page> {
 
                       // if(widget.isEmp){
 
-                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                        //     TabsPage()), (Route<dynamic> route) => false);
-                        usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
-                        // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
-                        // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
-                        ///
+                      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      //     TabsPage()), (Route<dynamic> route) => false);
+                      usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                      // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
+                      // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
+                      ///
                       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                       // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
                       ///
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            ManishHomePage()), (Route<dynamic> route) => false);
+                      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      //     ManishHomePage()), (Route<dynamic> route) => false);
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                          NewTabScreen()), (Route<dynamic> route) => false);
                       ///
                       // }
                       // else{

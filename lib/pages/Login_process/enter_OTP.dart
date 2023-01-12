@@ -28,7 +28,9 @@ import '../../widgets/CustomLoader.dart';
 import '../../widgets/CustomTexts.dart';
 import '../employee/employee_dshboard.dart';
 import '../tab_pages/bottom_tab.dart';
+import '../temp/single_page_controller.dart';
 import '../temp/tab_page_man.dart';
+import '../webviewPages/new_web_view_tab.dart';
 
 
 class Enter_OTP_Page extends StatefulWidget {
@@ -55,7 +57,7 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
   FocusNode otp5focus=FocusNode();
   FocusNode otp6focus=FocusNode();
   BuildContext? c ;
-  Timer? timer=null;
+  Timer? timer;
   bool loader=false;
   String newotp='';
   // List controller=[
@@ -412,8 +414,8 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                   }
                                   else if(res['userData']['client_emp']==null){
                                     await Provider.of<GlobalModal>(context, listen: false).addUserDetail(res['userData'],context);
-                                    // await MyLocalServices.updateSharedPreferences(res['userData']);
-                                    usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+                                    globalHeaders={'Authorization': 'Bearer ${Provider.of<GlobalModal>(context, listen: false).userData!.token}',};
+                                    log('global header assign by ankita --------------------$globalHeaders');
                                     // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
                                     push(context: context, screen: Congratulations_Page(isEmp: false,));
 
@@ -430,8 +432,11 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                     // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                                     // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
                                     ///
+                                    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                    //     ManishHomePage()), (Route<dynamic> route) => false);
+
                                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                        ManishHomePage()), (Route<dynamic> route) => false);
+                                        NewTabScreen()), (Route<dynamic> route) => false);
                                     ///
                                     // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                                     //     TabsPage()), (Route<dynamic> route) => false);

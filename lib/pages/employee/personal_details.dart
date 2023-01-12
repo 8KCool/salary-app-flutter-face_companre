@@ -172,7 +172,7 @@ class _Personal_details_PageState extends State<Personal_details_Page> {
                                   color: Colors.white, width: 2.5)),
                           child:
                           CustomCircularImage(
-                            imageUrl: image1??'https://etaskers.com/public/assets/company_logo/No_Image_Available.jpg',
+                            imageUrl: image1??'${ApiUrls.baseUrl}public/assets/company_logo/No_Image_Available.jpg',
                             image: image,
                             height: 95,
                             fileType: image == null

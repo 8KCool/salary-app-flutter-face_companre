@@ -1,40 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import '../../providers/newProvider.dart';
-
+import 'package:salaryredesign/widgets/showSnackbar.dart';
 import '../../widgets/CustomLoader.dart';
 import '../tab_pages/dashboard.dart';
-class DashboardPageNew extends StatefulWidget {
-  final WebViewController controller;
-  // final WebViewController newController;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:salaryredesign/constants/globalkeys.dart';
 
-  const DashboardPageNew({required Key key, required this.controller}) : super(key: key);
+import '../../constants/global_data.dart';
+import '../../services/api_urls.dart';
+
+class DashboardPageNew extends StatefulWidget {
+  Function(InAppWebViewController,Uri?) loadStop;
+
+  DashboardPageNew({required Key key, required this.loadStop}) : super(key: key);
 
   @override
   State<DashboardPageNew> createState() => DashboardPageNewState();
 }
 
 class DashboardPageNewState extends State<DashboardPageNew> with AutomaticKeepAliveClientMixin {
-  bool isWebView=false;
+  // bool isWebView=false;
+  int m=0;
   ValueNotifier<bool> isWeb=ValueNotifier(false);
   ValueNotifier<bool> isLoad=ValueNotifier(false);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        if(isWebView){
-          if(await widget.controller.canGoBack()){
-            widget.controller.goBack();
-          }else{
-            isWeb.value = false;
+
+            // print("m-------");
+          if(dashBoardViewController!=null){
+            // print("m-------1");
+            if(await dashBoardViewController!.canGoBack()){
+              // dashBoardViewController.get
+              // print("m-------2");
+              dashBoardViewController!.goBack();
+
+            }else{
+              isWeb.value = false;
+            }
           }
 
-
-
-          return false;
-
-        }
         if(isLoad.value==true){
           isLoad.value=false;
         }
@@ -43,7 +48,38 @@ class DashboardPageNewState extends State<DashboardPageNew> with AutomaticKeepAl
       child: Stack(
         children: [
           // if(isWebView)
-            WebViewWidget(controller:widget.controller),
+          InAppWebView(
+            initialUrlRequest: URLRequest(url:Uri.parse('${ApiUrls.siteBaseUrl}'),headers: globalHeaders),
+            onWebViewCreated: (controller) async{
+              dashBoardViewController = controller;
+              // dashBoardViewController!.injectCSSCode(source: ".webviewhide{display:none !important}");
+              // showSnackbar(context, "webviewcreated");
+              print(await controller.getUrl());
+            },
+              onLoadStart:(controller,uri){
+                print('dashboard loadstart---');
+                if(uri!=null){
+                  if(uri.path=="/staff/dashboard"){
+                    isWeb.value=false;
+                  }
+
+                }
+
+               },
+            onLoadStop: (a,b){
+              isLoad.value=false;
+
+              if(b!=null){
+                if(b.path=="/staff/dashboard"){
+                  print('dashboard loadstop---'+b.path);
+                  isWeb.value=false;
+                }
+
+              }
+              dashBoardViewController!.injectCSSCode(source: ".webviewhide{display:none !important}");
+              widget.loadStop(a,b);
+            }
+          ),
           // if(!isWebView)
           ValueListenableBuilder(
             valueListenable:isWeb ,
@@ -52,14 +88,15 @@ class DashboardPageNewState extends State<DashboardPageNew> with AutomaticKeepAl
               if(value==false)
               return Positioned(
                 left: 0,right: 0,top: 0, bottom: 0,
-                child: Dashboard_Page(controller: widget.controller,onTap: (url)async{
+                child: Dashboard_Page(onTap: (url)async{
                  isLoad.value=true;
-                  // await widget.controller.loadRequest(Uri.parse(url));
-                 await widget.controller.runJavaScript("window.open('$url')");
-                  widget.controller.setNavigationDelegate(NavigationDelegate(onPageFinished:(str){
-                    isWeb.value=true;
-                    isLoad.value=false;
-                  isWebView=true;}));
+                 isWeb.value=true;
+                 if(dashBoardViewController!=null){
+                   await dashBoardViewController!.loadUrl(urlRequest: URLRequest(url: Uri.parse(url), headers: globalHeaders));
+
+                   // await dashBoardViewController!.loadUrl(urlRequest: URLRequest(url: Uri.parse(url)));
+                 }
+
 
                   print('value from ()-----------${isWeb.value}');
 

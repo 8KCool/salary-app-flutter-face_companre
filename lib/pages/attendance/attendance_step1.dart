@@ -18,8 +18,8 @@ import '../tab_pages/bottom_tab.dart';
 import 'newfacedetect.dart';
 
 class CheckAttStatusPage extends StatefulWidget {
-  final GlobalKey navigatorKey;
-  const CheckAttStatusPage({Key? key, required this.navigatorKey}) : super(key: key);
+  // final GlobalKey navigatorKey;
+  const CheckAttStatusPage({Key? key}) : super(key: key);
 
   @override
   State<CheckAttStatusPage> createState() => _CheckAttStatusPageState();
@@ -100,7 +100,7 @@ getData()async{
   Widget build(BuildContext context) {
     print('hello worlllllll');
     return Navigator(
-      key: widget.navigatorKey,
+      // key: widget.navigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,

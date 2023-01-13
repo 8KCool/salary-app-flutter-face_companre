@@ -1,8 +1,8 @@
 class ApiUrls{
   static const google_map = 'AIzaSyABk-0Al27H9Ap_Rtti2t0ePxOLvl5QFzk';
 
-static const baseUrl = 'https://app.swipebox.in/';
-  // static const baseUrl = 'https://etaskers.com/';
+// static const baseUrl = 'https://app.swipebox.in/';
+  static const baseUrl = 'https://etaskers.com/';
   static const baseApiUrl = '${baseUrl}api/';
   static const webBaseUrl = '${baseUrl}staff/';
   static const siteBaseUrl = '${webBaseUrl}openweb';

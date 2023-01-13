@@ -60,10 +60,10 @@ dev_dependencies:
   camera: ^0.10.0+5
   video_player: ^2.4.9
   device_info_plus: ^3.2.3
-  webview_flutter: ^4.0.1
   badges: ^2.0.3
   flutter_inappwebview: ^5.7.2+3
-
+  permission_handler: ^10.2.0
+  location: ^4.4.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

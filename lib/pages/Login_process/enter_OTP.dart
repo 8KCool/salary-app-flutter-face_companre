@@ -10,7 +10,6 @@ import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/pages/Login_process/congratulations.dart';
 import 'package:salaryredesign/pages/Login_process/enter_details.dart';
-import 'package:salaryredesign/pages/tabbarscreen.dart';
 
 import 'package:salaryredesign/widgets/buttons.dart';
 import 'package:salaryredesign/widgets/customtextfield.dart';
@@ -28,8 +27,7 @@ import '../../widgets/CustomLoader.dart';
 import '../../widgets/CustomTexts.dart';
 import '../employee/employee_dshboard.dart';
 import '../tab_pages/bottom_tab.dart';
-import '../temp/single_page_controller.dart';
-import '../temp/tab_page_man.dart';
+
 import '../webviewPages/new_web_view_tab.dart';
 
 

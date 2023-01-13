@@ -6,11 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/globalkeys.dart';
-import 'package:salaryredesign/pages/tab_pages/bottom_tab.dart';
-import 'package:salaryredesign/pages/tabbarscreen.dart';
-import 'package:salaryredesign/pages/temp/single_page_controller.dart';
-import 'package:salaryredesign/pages/temp/tab_page_man.dart';
-import 'package:salaryredesign/pages/webviewPages/Common_webView.dart';
 import 'package:salaryredesign/pages/webviewPages/new_web_view_tab.dart';
 
 import 'package:salaryredesign/pages/welcome.dart';

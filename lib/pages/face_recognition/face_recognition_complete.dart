@@ -24,7 +24,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:device_info_plus/device_info_plus.dart';
 
 import '../../widgets/CustomLoader.dart';
-import '../tabbarscreen.dart';
+
 
 class Face_Recognition_Complete_Page extends StatefulWidget {
   final File image;

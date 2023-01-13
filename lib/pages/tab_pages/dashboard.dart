@@ -7,14 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
-import 'package:salaryredesign/functions/navigation_functions.dart';
-import 'package:salaryredesign/pages/all_employee.dart';
-import 'package:salaryredesign/pages/announcement/announcement_page.dart';
-import 'package:salaryredesign/pages/approvals/leave_request.dart';
-import 'package:salaryredesign/pages/approvals/manage_approvals.dart';
-import 'package:salaryredesign/pages/attandance_page.dart';
-import 'package:salaryredesign/pages/notificationPage.dart';
-import 'package:salaryredesign/pages/reports/reports_page.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:intl/intl.dart';
@@ -31,16 +23,15 @@ import 'dart:convert' as convert;
 
 import '../../widgets/CustomLoader.dart';
 import '../Login_process/enter_phone_number.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
 
-import '../webviewPages/option_view_page.dart';
-import '../webviewPages/webview.dart';
+
+
 import 'package:badges/badges.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
 class Dashboard_Page extends StatefulWidget {
-  final WebViewController controller;
+
   final Function(String url) onTap;
-  const Dashboard_Page({Key? key,required this.controller,required this.onTap}) : super(key: key);
+  const Dashboard_Page({Key? key,required this.onTap}) : super(key: key);
 
   @override
   State<Dashboard_Page> createState() => _Dashboard_PageState();

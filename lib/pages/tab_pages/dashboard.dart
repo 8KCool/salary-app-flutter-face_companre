@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -37,6 +38,8 @@ class Dashboard_Page extends StatefulWidget {
   State<Dashboard_Page> createState() => _Dashboard_PageState();
 }
 
+
+double globalIconSize = 56.0;
 List images = [
   MyImages.avatrtwo,
   MyImages.avatr3,
@@ -70,6 +73,7 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
     await checkInternet(context);
     print('isConnected--------------$isConnected');
     if(isConnected){
+      print('about to navigate to $url');
       widget.onTap(url);
 
 
@@ -146,13 +150,13 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
       print('not connected');
       message='Check your internet connection';
       // showSnackbar(context, 'Check your internet connection');
-      _showMyDialog();
+      // _showMyDialog();
 
     }
   }
   getDashboard()async{
     Provider.of<PermissionModal>(context, listen: false).load=true;
-    var res = await Webservices.getData(ApiUrls.getNewProfile,context);
+    var res = await Webservices.getData(ApiUrls.getNewProfile,);
     log('res from new api ------1-----${res.body}');
     Provider.of<PermissionModal>(context, listen: false).hideLoading();
 
@@ -171,14 +175,43 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
     // Provider.of<GlobalModal>(context, listen: false).loadingHide();
 
   }
+
+
+  Timer? updateDashboardTimer;
+  updateDashboard()async{
+    await Future.delayed(Duration(seconds: 3));
+    updateDashboardTimer = Timer.periodic(Duration(seconds: 5), (timer) async{
+      var res = await Webservices.getData(ApiUrls.getNewProfile);
+      log('res from new api ------1-----${res.body}');
+
+      var jsonResponse = convert.jsonDecode(res.body);
+      if(jsonResponse['status'].toString()!='0'){
+        log('res from new api -------2----${jsonResponse['data']}');
+        try{
+          Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
+        }catch(e){
+          print('Error in catch block $e');
+        }
+
+        // Provider.of<PermissionModal>(context, listen: false).load=false;
+      }
+    });
+  }
   @override
   void initState() {
     // getDashboard();
     checkInternet1();
+    updateDashboard();
     // TODO: implement initState
     super.initState();
   }
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    updateDashboardTimer?.cancel();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -604,8 +637,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                            },
                            child: Column(
                              children: [
-                               Image.asset('assets/images/Group 18609 (2).png',height: 60,
-                                      width: 60,),
+                               Image.asset('assets/images/Group 18609 (2).png',height: globalIconSize,
+                                      width: globalIconSize,),
                                vSizedBox,
                                Text('Attendance',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                              ],
@@ -620,8 +653,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                            children: [
-                               Image.asset('assets/images/Group 18609 (2).png',height: 60,
-                                 width: 60,),
+                               Image.asset('assets/images/Group 18609 (2).png',height: globalIconSize,
+                                 width: globalIconSize,),
                                vSizedBox,
                                Text('My Attendance',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                            ],
@@ -639,8 +672,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                              Badge(
 
                                badgeContent: Text('${permission.dashboardMenuPermission['total_employee']}',style: TextStyle(color: Colors.white),),
-                               child:Image.asset('assets/images/Group 18610 (1).png',height: 60,
-                                 width: 60,),
+                               child:Image.asset('assets/images/Group 18610 (1).png',height: globalIconSize,
+                                 width: globalIconSize,),
                                badgeColor: Color(0xffFF4B55),
                                position: BadgePosition.topEnd(top:-2,end:-2),
                                showBadge:int.parse(permission.dashboardMenuPermission['total_employee'].toString())>0?true:false ,
@@ -660,8 +693,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                               children: [
-                                Image.asset('assets/images/Group 18611 (1).png',height: 60,
-                                  width: 60,),
+                                Image.asset('assets/images/Group 18611 (1).png',height: globalIconSize,
+                                  width: globalIconSize,),
                                 vSizedBox,
                                 Text('My Profile',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                               ],
@@ -676,8 +709,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                               children: [
-                                Image.asset('assets/images/Group 18612 (2).png',height: 60,
-                                  width: 60,),
+                                Image.asset('assets/images/Group 18612 (2).png',height: globalIconSize,
+                                  width: globalIconSize,),
                                 vSizedBox,
                                 Text('Request',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                               ],
@@ -692,8 +725,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                               children: [
-                                Image.asset('assets/images/Group 18613 (1).png',height: 60,
-                                  width: 60,),
+                                Image.asset('assets/images/Group 18613 (1).png',height: globalIconSize,
+                                  width: globalIconSize,),
                                 vSizedBox,
                                 Text('Approvals',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                               ],
@@ -706,8 +739,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                                 children: [
-                                  Image.asset('assets/images/Group 18614 (2).png',height: 60,
-                                    width: 60,),
+                                  Image.asset('assets/images/Group 18614 (2).png',height: globalIconSize,
+                                    width: globalIconSize,),
                                   vSizedBox,
                                   Text('Salary Process',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                                 ],
@@ -743,8 +776,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                               children: [
-                                Image.asset('assets/images/Group 18615 (1).png',height: 60,
-                                  width: 60,),
+                                Image.asset('assets/images/Group 18615 (1).png',height: globalIconSize,
+                                  width: globalIconSize,),
                                 vSizedBox,
                                 Text('Reports',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                               ],
@@ -758,8 +791,8 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                             child: Column(
                               children: [
-                                Image.asset('assets/images/Group 18616 (1).png',height: 60,
-                                  width: 60,),
+                                Image.asset('assets/images/Group 18616 (1).png',height: globalIconSize,
+                                  width: globalIconSize,),
                                 vSizedBox,
                                 Text('Announcement',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                               ],

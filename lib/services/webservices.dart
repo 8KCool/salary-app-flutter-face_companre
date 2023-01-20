@@ -25,8 +25,8 @@ class Webservices {
 
 
 
-  static Future<http.Response> getData(String url, BuildContext context,) async {
-    UserModal? user = await Provider.of<GlobalModal>(context, listen: false).userData;
+  static Future<http.Response> getData(String url,) async {
+    UserModal? user = await Provider.of<GlobalModal>(MyGlobalKeys.navigatorKey.currentContext!, listen: false).userData;
 
     http.Response response =
     http.Response('{"message":"failure","status":0}', 404);
@@ -181,7 +181,7 @@ class Webservices {
   }
 
   static Future<List> getList(String url,{required BuildContext context}) async {
-    var response = await getData(url,context);
+    var response = await getData(url,);
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
       if (jsonResponse['status'] == 1) {

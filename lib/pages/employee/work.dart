@@ -80,7 +80,7 @@ class _Employee_Work_DetailsState extends State<Employee_Work_Details> {
     setState(() {
       load=true;
     });
-    var res = await Webservices.getData(ApiUrls.getworkdetail,context);
+    var res = await Webservices.getData(ApiUrls.getworkdetail,);
     log('res from new api -----------$res');
     var jsonResponse = convert.jsonDecode(res.body);
     log('res from new api -----------$jsonResponse');

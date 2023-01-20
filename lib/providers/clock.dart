@@ -331,7 +331,7 @@ getAttendance(data)async{
   getCalendar(context,DateTime date)async{
     load = true;
 
-    var res = await Webservices.getData('${ApiUrls.calender}?year=${date.year}&month=${date.month}', context);
+    var res = await Webservices.getData('${ApiUrls.calender}?year=${date.year}&month=${date.month}', );
     load = false;
     log('res from api listBranch ---------------${res.body}');
     var result = res.body;

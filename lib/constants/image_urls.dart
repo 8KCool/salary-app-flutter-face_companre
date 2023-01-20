@@ -4,6 +4,8 @@ class MyImages{
   static const String baseIconsUrl = 'assets/icons/';
 
 
+  static const termsIcon = baseImageUrl + 'termsIcon.png';
+  static const aboutIcon = baseImageUrl + 'aboutIcon.png';
   static const logo = baseImageUrl + 'logo.png';
   static const logo2 = baseImageUrl + 'app_name_logo.png';
   static const sliderone = baseImageUrl + 'slider1.png';

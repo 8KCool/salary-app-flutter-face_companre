@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'package:provider/provider.dart';
+import 'package:salaryredesign/providers/newProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/globalkeys.dart';
@@ -79,6 +81,9 @@ Future logout() async{
   print("logout()");
   globalCount = 0;
   SharedPreferences shared_User = await SharedPreferences.getInstance();
+  Provider.of<PermissionModal>(MyGlobalKeys.navigatorKey.currentContext!,listen: false).dashboardMenuPermission = {
+
+  };
   await shared_User.clear();
   return true;
 }

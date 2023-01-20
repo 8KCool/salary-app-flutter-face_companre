@@ -31,7 +31,7 @@ class _BottomSheetPageState extends State<BottomSheetPage> {
     print("selectedDay-------------${widget.selectedDay}");
     Provider.of<GlobalModal>(context, listen: false).loadingShow();
     // globalModal.loadingShow();
-    var res=await Webservices.getData('${ApiUrls.attendancedetail}?date=${widget.selectedDay}', context);
+    var res=await Webservices.getData('${ApiUrls.attendancedetail}?date=${widget.selectedDay}', );
 
     var jsonResponse = convert.jsonDecode(res.body);
     Provider.of<GlobalModal>(context, listen: false).loadingHide();

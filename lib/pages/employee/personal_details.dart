@@ -74,7 +74,7 @@ class _Personal_details_PageState extends State<Personal_details_Page> {
     });
     // log("user detail -------------${Provider.of<GlobalModal>(context, listen: false).userData!.companyName}");
     // Provider.of<GlobalModal>(context, listen: false).loadingShow();
-    var res = await Webservices.getData(ApiUrls.getNewProfileData, context);
+    var res = await Webservices.getData(ApiUrls.getNewProfileData,);
     log('res from new api -----------$res');
     var jsonResponse = convert.jsonDecode(res.body);
     log('res from new api -----------$jsonResponse');

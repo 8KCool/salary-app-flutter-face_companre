@@ -93,7 +93,7 @@ class _Employee_dashboard_PageState extends State<Employee_dashboard_Page> {
     // Provider.of<GlobalModal>(context, listen: false).loadingShow();
 
 
-    var res = await Webservices.getData(ApiUrls.getNewProfile,context);
+    var res = await Webservices.getData(ApiUrls.getNewProfile,);
 
     log('res from new api -----------$res');
     var jsonResponse = convert.jsonDecode(res.body);

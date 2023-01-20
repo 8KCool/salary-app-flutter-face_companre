@@ -56,8 +56,18 @@ class DashboardPageNewState extends State<DashboardPageNew> with AutomaticKeepAl
               // showSnackbar(context, "webviewcreated");
               print(await controller.getUrl());
             },
+              androidOnPermissionRequest: (a,b, c)async{
+                print('hello world ${a}  .........${b} .......${c}');
+              },
+              initialOptions: InAppWebViewGroupOptions(
+                android: AndroidInAppWebViewOptions(
+
+                )
+              ),
+
+
               onLoadStart:(controller,uri){
-                print('dashboard loadstart---');
+                print('dashboard loadstart---${uri?.path}');
                 if(uri!=null){
                   if(uri.path=="/staff/dashboard"){
                     isWeb.value=false;

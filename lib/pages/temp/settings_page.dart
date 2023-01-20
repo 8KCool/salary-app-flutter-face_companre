@@ -28,6 +28,7 @@ class _SettingsPageState extends State<SettingsPage> with AutomaticKeepAliveClie
     return InAppWebView(
       // initialData: InAppWebViewInitialData(),
       initialUrlRequest: URLRequest(url:Uri.parse('${ApiUrls.webBaseUrl}setting'),headers: globalHeaders),
+      // initialUrlRequest: URLRequest(url:Uri.parse('https://www.google.com'),headers: globalHeaders),
         onLoadStop: (c,a){
           if(settingViewController!=null)
           settingViewController!.injectCSSCode(source: ".webviewhide{display:none !important}");

@@ -26,7 +26,7 @@ checkInternet(BuildContext context)async{
     message='Check your internet connection';
     // showSnackbar(context, 'Check your internet connection');
 
-    _showMyDialog(context);
+    // _showMyDialog(context);
 
   }
 }

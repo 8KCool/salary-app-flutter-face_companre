@@ -42,7 +42,7 @@ class _Bank_UPI_PageState extends State<Bank_UPI_Page> {
       load=true;
     });
     // Provider.of<GlobalModal>(context, listen: false).loadingShow();
-    var res = await Webservices.getData(ApiUrls.getbankdetail,context);
+    var res = await Webservices.getData(ApiUrls.getbankdetail,);
     log('res from new api -----------$res');
     var jsonResponse = convert.jsonDecode(res.body);
     log('res from new api -------525----$jsonResponse');

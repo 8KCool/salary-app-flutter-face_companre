@@ -95,7 +95,13 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
           // controller.pauseCamera();
         }
         else{
-          showSnackbar(context, 'Your already punched');
+          if(is_popup==false){
+            is_popup=true;
+            await showSnackbar(context, 'Your already punched');
+            // await push(context: context, screen: newTabsPage());
+            is_popup=false;
+
+          }
         }
       }
       else{
@@ -199,23 +205,60 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
     Provider.of<GlobalModal>(context, listen: false).loadingHide();
     if(servicestatus){
       print("GPS service is enabled");
-      await checkInternet(context);
-      print('isConnected--------------$isConnected');
-      if(isConnected) {
-        location();
-      }
-      else{
-
-      }
+      // await checkInternet(context);
+      location();
+      // print('isConnected--------------$isConnected');
+      // if(isConnected) {
+      //   location();
+      // }
+      // else{
+      //
+      // }
 
 
     }else{
       print("GPS service is disabled.");
       message='Please turn on your location';
 
-      _showMyDialog();
+      // _showMyDialog();
+      showLocationOffPopup();
     }
   }
+
+
+  showLocationOffPopup()async{
+    return showPopupDialog(MyGlobalKeys.navigatorKey.currentContext!,
+      headingText: 'No Location Access',
+      text: 'The Device Location is turned off,\nTo mark attendance, Please turn on your location. ',
+      buttons: [
+        TextButton(
+          onPressed: () async{
+            Navigator.pop(MyGlobalKeys.navigatorKey.currentContext!);
+            print('manishhhhhhhh ------------${await Navigator.canPop(context)}');
+            if(await Navigator.canPop(context))
+            Navigator.maybePop(context);
+          },
+          child: SubHeadingText(
+            text: 'BACK',
+            color: Colors.grey,
+          ),
+        ),
+        TextButton(
+          onPressed: () async{
+            // isConnectedToInternet.value = true;
+            Navigator.pop(MyGlobalKeys.navigatorKey.currentContext!);
+            checkPermission();
+
+          },
+          child: SubHeadingText(
+            text: 'TRY AGAIN',
+            color: MyColors.primaryColor,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -245,7 +288,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
   catch(err){
     message='Please turn on your location';
 
-    _showMyDialog();
+    // _showMyDialog();
+    showLocationOffPopup();
   }
   }
 
@@ -291,14 +335,14 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
        }
        else{
          message='Please turn on your location';
-
-         _showMyDialog();
+         showLocationOffPopup();
+         // _showMyDialog();
        }
 
     }catch(err){
       message='Please turn on location';
-
-      _showMyDialog();
+      showLocationOffPopup();
+      // _showMyDialog();
     }
     // print('location---------------${Provider.of<GlobalModal>(context, listen: false).location}');
 
@@ -449,6 +493,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       DigitalClock(
+                                        is24HourTimeFormat: false,
+
                                         areaDecoration: BoxDecoration(
                                           color: Colors.transparent,
                                         ),
@@ -1333,8 +1379,8 @@ class _Mark_Attendance_PageState extends State<Mark_Attendance_Page> {
                         Navigator.of(context, rootNavigator: true).pop();
                         print("GPS service is disabled.");
                         message='Please turn on your location';
-
-                        _showMyDialog();
+                        showLocationOffPopup();
+                        // _showMyDialog();
                       }
 
 

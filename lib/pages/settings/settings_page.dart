@@ -92,6 +92,30 @@ class _Settings_PageState extends State<Settings_Page> {
               padding: horizontal_pad + EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
+                  // clickable_list(
+                  //   text: 'About Us',
+                  //   img: MyImages.emp3,
+                  //   colorborderleft: Color(0xFF33CBCB),
+                  //   onTap: (){
+                  //
+                  //   },
+                  // ),
+                  // clickable_list(
+                  //   text: 'Privacy Policy',
+                  //   img: MyImages.emp3,
+                  //   colorborderleft: Color(0xFF33CBCB),
+                  //   onTap: (){
+                  //
+                  //   },
+                  // ),
+                  // clickable_list(
+                  //   text: 'Terms and Conditions',
+                  //   img: MyImages.emp3,
+                  //   colorborderleft: Color(0xFF33CBCB),
+                  //   onTap: (){
+                  //
+                  //   },
+                  // ),
                   clickable_list(
                     text: 'Logout',
                     img: MyImages.emp3,
@@ -122,6 +146,7 @@ class _Settings_PageState extends State<Settings_Page> {
                       // push(context: context, screen: Welcome_Page());
                     },
                   ),
+
                   // clickable_list(
                   //   text: 'Calendar',
                   //   img: MyImages.emp3,

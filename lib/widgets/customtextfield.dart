@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../constants/colors.dart';
 import '../constants/constans.dart';
@@ -206,6 +207,10 @@ class CustomTextFieldOtp extends StatelessWidget {
   final Function(String)? onchange;
   final bool isflag;
   final bool enabled;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator;
+  final  void Function()? onEditingComplete;
+  final  void Function(String?)? onFieldSubmitted;
 
 
   CustomTextFieldOtp({
@@ -243,6 +248,10 @@ class CustomTextFieldOtp extends StatelessWidget {
     this.focusnode,
     this.isflag=false,
     this.enabled=true,
+    this.inputFormatters,
+    this.validator,
+    this.onEditingComplete,
+    this.onFieldSubmitted
   }) : super(key: key);
 
   @override
@@ -273,22 +282,28 @@ class CustomTextFieldOtp extends StatelessWidget {
           ),
           padding: EdgeInsets.only(left: prefixIcon != null ? 0 : left),
           child: Center(
-            child: TextField(
+            child: TextFormField(
               style: TextStyle(
                   color: Colors.black,
                   fontSize: fontsize,
                   fontFamily: 'regular'),
               maxLines: maxLines ?? 1,
               controller: controller,
+              validator: validator,
+              inputFormatters: inputFormatters,
               obscureText: obscureText,
               textAlign: textAlign,
               focusNode: focusnode,
               maxLength: maxlength,
               enabled: enabled,
-
+              onEditingComplete: onEditingComplete,
+              onFieldSubmitted: onFieldSubmitted,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
+textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 hintText: hintText,
                 counterText: "",
+
 
                 hintStyle: TextStyle(
                     fontSize: fontsize,
@@ -722,6 +737,8 @@ class CustomTextFieldwithFlag extends StatelessWidget {
   final FocusNode? focusnode;
   final TextInputType? keyboardtype;
   final Function(String)? onchange;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator;
   final bool isflag;
   final bool enabled;
 
@@ -756,6 +773,8 @@ class CustomTextFieldwithFlag extends StatelessWidget {
     this.boxshadow = false,
     this.showlabel = false,
     this.onchange,
+    this.inputFormatters,
+    this.validator,
     this.maxlength = null,
     this.keyboardtype = TextInputType.text,
     this.focusnode,
@@ -791,7 +810,9 @@ class CustomTextFieldwithFlag extends StatelessWidget {
           ),
           padding: EdgeInsets.only(left: prefixIcon != null ? 0 : left),
           child: Center(
-            child: TextField(
+            child: TextFormField(
+              validator: validator,
+              inputFormatters: inputFormatters,
               style: TextStyle(
                   color: Colors.black,
                   fontSize: fontsize,
@@ -803,7 +824,6 @@ class CustomTextFieldwithFlag extends StatelessWidget {
               focusNode: focusnode,
               maxLength: maxlength,
               enabled: enabled,
-
               decoration: InputDecoration(
                 hintText: hintText,
                 counterText: "",

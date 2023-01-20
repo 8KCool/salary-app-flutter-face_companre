@@ -69,7 +69,7 @@ class _MyPermission_Request_PageState extends State<MyPermission_Request_Page> {
   List history=[];
   getHistory()async{
     Provider.of<GlobalModal>(context, listen: false).load=true;
-    var res = await Webservices.getData(ApiUrls.permissionhistoryview,context);
+    var res = await Webservices.getData(ApiUrls.permissionhistoryview);
     Provider.of<GlobalModal>(context, listen: false).loadingHide();
     log("res------permissionhistoryview-------$res");
     var jsonResponse = convert.jsonDecode(res.body);

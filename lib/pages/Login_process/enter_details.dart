@@ -21,6 +21,7 @@ import '../../constants/globalkeys.dart';
 import '../../constants/image_urls.dart';
 import '../../services/local_services.dart';
 import '../../widgets/CustomTexts.dart';
+import '../webviewPages/new_web_view_tab.dart';
 
 
 enum SingingCharacter { one, two, three, four }
@@ -446,7 +447,9 @@ class _Enter_Detail_PageState extends State<Enter_Detail_Page> {
 
                             // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
                             // await MyLocalServices.updateSharedPreferences(res['userData'],context);
-                            push(context: context, screen: Congratulations_Page(isEmp: false,));
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                NewTabScreen()), (Route<dynamic> route) => false);
+                            // push(context: context, screen: Congratulations_Page(isEmp: false,));
                             user=res['userData'];
                           }
                           else{

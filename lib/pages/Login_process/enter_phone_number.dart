@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
@@ -16,6 +17,7 @@ import '../../services/webservices.dart';
 import '../../widgets/CustomTexts.dart';
 import '../../widgets/customLoader.dart';
 import '../../widgets/showSnackbar.dart';
+import 'otp_screen.dart';
 
 class Enter_Phone_Number extends StatefulWidget {
   const Enter_Phone_Number({Key? key}) : super(key: key);
@@ -107,9 +109,36 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
                     controller: mobilenumber,
                     hintText: '',
                     fontsize: 16,
+                    maxlength: 10,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+
+                      FilteringTextInputFormatter.deny(RegExp(r'^1111111111+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^2222222222+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^3333333333+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^4444444444+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^5555555555+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^6666666666+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^7777777777+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^8888888888+')),
+                      FilteringTextInputFormatter.deny(RegExp(r'^9999999999+')),
+                      FilteringTextInputFormatter.deny(
+                        RegExp(
+                            r'^0+'), //users can't type 0 at 1st position
+                      ),
+                    ],
                     label: 'Mobile Number',
                     showlabel: true,
                     isflag: true,
+                    validator: (value){
+                      // print('the vlu is ${val?.codeUnits}');
+                      // return val!;
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+
                     keyboardtype: TextInputType.number,
 
                   ),
@@ -128,12 +157,36 @@ class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
 
                         showSnackbar(
 
-                            context, 'Please Enter your phone Number.');
+                            context, 'Please Enter your mobile number.');
                       } else if (!pnumber.hasMatch(mobilenumber.text)) {
                         showSnackbar(context,
-                            'Please Enter your valid phone Number.');
+                            'Please Enter your valid mobile number.');
                         globalModal.loadingHide();
 
+                      }else if(mobilenumber.text.length>10){
+                        showSnackbar(context,
+                            'Mobile number should not be more than 10 digits');
+                        globalModal.loadingHide();
+                      }else if(mobilenumber.text.length<10){
+                        showSnackbar(context,
+                            'Mobile number should not be less than 10 digits');
+                        globalModal.loadingHide();
+                      }else if(mobilenumber.text.startsWith('0')){
+                        showSnackbar(context,
+                            'Mobile number should not start with 0');
+                        globalModal.loadingHide();
+                      }else if(mobilenumber.text=='0000000000'){
+                        showSnackbar(context,
+                            'Please Enter your valid mobile number.');
+                        globalModal.loadingHide();
+                      }else if(mobilenumber.text.contains(' ')){
+                        showSnackbar(context,
+                            'Mobile number cannot contain empty spaces');
+                        globalModal.loadingHide();
+                      }else if(mobilenumber.text.contains('-')){
+                        showSnackbar(context,
+                            'Please Enter your valid mobile number.');
+                        globalModal.loadingHide();
                       }
                       else{
                         Map<String,dynamic>data={

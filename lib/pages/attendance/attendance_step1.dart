@@ -73,7 +73,7 @@ class _CheckAttStatusPageState extends State<CheckAttStatusPage> {
   Map checkType = {};
   getAttendanceData() async {
     var res = await Webservices.getData(
-        '${ApiUrls.baseApiUrl}checkAttendancetype', context);
+        '${ApiUrls.baseApiUrl}checkAttendancetype');
     var jsonResponse = convert.jsonDecode(res.body);
     checkType = jsonResponse;
     // setState(() {});

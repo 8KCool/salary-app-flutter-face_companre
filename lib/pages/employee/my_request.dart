@@ -57,7 +57,7 @@ class _MyRequest_PageState extends State<MyRequest_Page> {
                   colorborderleft: MyColors.yellow,
                   onTap:globalModal.load?(){}: ()async{
                     globalModal.loadingShow();
-                    var res =await Webservices.getData(ApiUrls.permissionadd, context);
+                    var res =await Webservices.getData(ApiUrls.permissionadd, );
                     log("Res -----${res.statusCode}");
                     if(res.statusCode==422){
                       push(context: context, screen: AccessDenied(title: 'Permission Request',));

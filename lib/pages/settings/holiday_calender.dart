@@ -107,7 +107,7 @@ class _Holiday_Calender_PageState extends State<Holiday_Calender_Page> {
     if( await Provider.of<GlobalModal>(context, listen: false).userData?.userId!=1){
       log("getWeekOff------------getWeekOff-----${date}");
       // await Provider.of<GlobalModal>(context, listen: false).loadingShow();
-      var res = await Webservices.getData("${ApiUrls.weekoffdatebyday}?cal_date=${date}", context);
+      var res = await Webservices.getData("${ApiUrls.weekoffdatebyday}?cal_date=${date}", );
       var result1 = convert.jsonDecode(res.body);
       // await Provider.of<GlobalModal>(context, listen: false).loadingHide();
 

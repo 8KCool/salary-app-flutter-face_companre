@@ -126,17 +126,86 @@ class NewTabScreenState extends State<NewTabScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   backFunction() async {
-    if (await dashBoardViewController!.canGoBack()) {
-      await dashBoardViewController!.goBack();
-      backFunction();
-    } else if (await accountViewController!.canGoBack()) {
-      await accountViewController!.goBack();
-      backFunction();
-    } else if (await settingViewController!.canGoBack()) {
-      await settingViewController!.goBack();
-      backFunction();
-    } else {
-      print('successfully removed state');
+   try{
+     if (dashBoardViewController==null?false:await dashBoardViewController!.canGoBack()) {
+       await dashBoardViewController!.goBack();
+       backFunction();
+     } else if (accountViewController==null?false:await accountViewController!.canGoBack()) {
+       await accountViewController!.goBack();
+       backFunction();
+     } else if (settingViewController==null?false:await settingViewController!.canGoBack()) {
+       await settingViewController!.goBack();
+       backFunction();
+     } else {
+       print('successfully removed state');
+     }
+   }catch(err){
+     print('err in can go back------------$err');
+   }
+  }
+  getIndex(selectType){
+    switch(selectType) {
+      case TabType.dashboard: {
+        print("Excellent");
+        if(Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['dashboard_permission'].toString()=='1')
+        index=0;
+        print('index------------$index');
+      }
+      break;
+
+      case TabType.defaultType: {
+        print("Good");
+        if(Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['dashboard_permission'].toString()=='1' && Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['mark_attendance'].toString()=='1'){
+          index=1;
+        }
+        else{
+          index=0;
+        }
+
+      }
+      break;
+
+      case TabType.myaccount: {
+        print("Poor");
+
+    if(Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['dashboard_permission'].toString()=='1'){
+      if(Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['mark_attendance'].toString()=='1') {
+        index=2;
+      }
+      else{
+        selectedTab = TabType.dashboard;
+        index=1;
+      }
+      }
+
+      }
+      break;
+
+      case TabType.settings: {
+        print("setting....");
+        index=-1;
+     List indexList=[
+       {'status':Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['dashboard_permission'].toString()},
+       {'status':Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['mark_attendance'].toString()},
+       {'status':Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['company_profile'].toString()},
+       {'status':Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['setting'].toString()}];
+      print('indexList-----------${indexList}');
+       for(int i=0; i<indexList.length;i++){
+         if(indexList[i]['status']=='1'){
+
+           index=index+1;
+           print('ii----$index');
+         }
+       }
+      }
+      break;
+
+      default:
+        {
+          print("Invalid choice");
+          index = 0;
+        }
+      break;
     }
   }
 
@@ -144,7 +213,7 @@ class NewTabScreenState extends State<NewTabScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (index == 0) {
+        if (index==0) {
           // print("can go back2222");
           // if(dashBoardViewController!=null){
           //    if(await dashBoardViewController!.canGoBack()){
@@ -332,23 +401,29 @@ class NewTabScreenState extends State<NewTabScreen> {
                   Expanded(
                     // child: getTab(selectedTab),
                     child: IndexedStack(
-                      index: index,
+                      index: index==-1?0:index,
                       children: <Widget>[
-                        DashboardPageNew(
+                        if(Provider.of<PermissionModal>(context, listen: true).dashboardMenuPermission['dashboard_permission'].toString()=='1')
+
+                          DashboardPageNew(
                             key: MyGlobalKeys.dashboardPageNewState,
                             loadStop: (a, b) {
                               print("load stop-----");
                               print(b);
                               dashBoardloadStopped = true;
-                              setState(() {});
+
                             }),
-                        if (Provider.of<GlobalModal>(context, listen: false)
-                                .userData!
-                                .userId !=
-                            1)
+                        // if (Provider.of<GlobalModal>(context, listen: false)
+                        //         .userData!
+                        //         .userId !=
+                        //     1)
+                        if(Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['mark_attendance'].toString()=='1')
+
                           CheckAttStatusPage(),
-                        if (dashBoardloadStopped == true) MyAccountPage(),
-                        if (dashBoardloadStopped == true) SettingsPage(),
+                        if (dashBoardloadStopped == true && Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['company_profile'].toString()=='1')
+                         MyAccountPage(),
+                        if (dashBoardloadStopped == true && Provider.of<PermissionModal>(context, listen: false).dashboardMenuPermission['setting'].toString()=='1')
+                          SettingsPage(),
                       ],
                     ),
                   ),
@@ -362,12 +437,14 @@ class NewTabScreenState extends State<NewTabScreen> {
                           behavior: HitTestBehavior.opaque,
                           onTap: () async {
                             selectIndex = 0;
-                            index = 0;
+                            // index = 0;
+
                             MyGlobalKeys.dashboardPageNewState.currentState!.isWeb.value = false;
                             await backFunction();
                             print('going to the dashboard');
                             setState(() {
                               selectedTab = TabType.dashboard;
+                              getIndex(selectedTab);
                             });
                             print('going to the dashboard ${selectedTab}');
                             // myAccountController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/setting'));
@@ -392,25 +469,27 @@ class NewTabScreenState extends State<NewTabScreen> {
                             ],
                           ),
                         ),
-                        if (Provider.of<GlobalModal>(context, listen: false)
-                                .userData!
-                                .userId !=
-                            1)
+                        // if (Provider.of<GlobalModal>(context, listen: false)
+                        //         .userData!
+                        //         .userId !=
+                        //     1)
+                          if(Provider.of<PermissionModal>(context, listen: true).dashboardMenuPermission['mark_attendance'].toString()=='1')
                           GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () async {
                               selectIndex = 1;
                               await backFunction();
-                              index = Provider.of<GlobalModal>(context,
-                                              listen: false)
-                                          .userData!
-                                          .userId !=
-                                      1
-                                  ? 1
-                                  : 0;
+                              // index = Provider.of<GlobalModal>(context,
+                              //                 listen: false)
+                              //             .userData!
+                              //             .userId !=
+                              //         1
+                              //     ? 1
+                              //     : 0;
                               print('going to the dashboard');
                               setState(() {
-                                selectedTab = TabType.dashboard;
+                                selectedTab = TabType.defaultType;
+                                getIndex(selectedTab);
                               });
                               print('going to the dashboard ${selectedTab}');
                               // myAccountController.loadRequest(Uri.parse('${ApiUrls.baseUrl}staff/setting'));
@@ -435,23 +514,25 @@ class NewTabScreenState extends State<NewTabScreen> {
                               ],
                             ),
                           ),
+                        if(Provider.of<PermissionModal>(context, listen: true).dashboardMenuPermission['company_profile'].toString()=='1')
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           onTap: () async {
                             await backFunction();
-                            index =
-                                Provider.of<GlobalModal>(context, listen: false)
-                                            .userData!
-                                            .userId !=
-                                        1
-                                    ? 2
-                                    : 1;
+                            // index =
+                            //     Provider.of<GlobalModal>(context, listen: false)
+                            //                 .userData!
+                            //                 .userId !=
+                            //             1
+                            //         ? 2
+                            //         : 1;
                             selectIndex = 2;
                             print(
                                 'going to the my account from ${selectedTab}');
 
                             setState(() {
                               selectedTab = TabType.myaccount;
+                              getIndex(selectedTab);
                             });
 
                             // if(account_open==0){
@@ -467,14 +548,17 @@ class NewTabScreenState extends State<NewTabScreen> {
                           child: Column(
                             children: [
                               ImageIcon(
-                                AssetImage(MyImages.profile_icon),
+                                AssetImage(MyImages.companyProfile),
                                 color: selectIndex == 2
                                     ? MyColors.primaryColor
                                     : MyColors.bottommenucolor,
                                 size: 23,
                               ),
+                              SizedBox(
+                                height: 2,
+                              ),
                               Text(
-                                'My Account',
+                                'Company Profile',
                                 style: TextStyle(
                                     color: selectIndex == 2
                                         ? MyColors.primaryColor
@@ -484,20 +568,22 @@ class NewTabScreenState extends State<NewTabScreen> {
                             ],
                           ),
                         ),
-                        GestureDetector(
+                        if(Provider.of<PermissionModal>(context, listen: true).dashboardMenuPermission['setting'].toString()=='1')
+                          GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           onTap: () async {
-                            index =
-                                Provider.of<GlobalModal>(context, listen: false)
-                                            .userData!
-                                            .userId !=
-                                        1
-                                    ? 3
-                                    : 2;
+                            // index =
+                            //     Provider.of<GlobalModal>(context, listen: false)
+                            //                 .userData!
+                            //                 .userId !=
+                            //             1
+                            //         ? 3
+                            //         : 2;
                             selectIndex = 3;
                             print('going to the settings from ${selectedTab}');
                             setState(() {
                               selectedTab = TabType.settings;
+                              getIndex(selectedTab);
                             });
                             //                   if(setting_open==0){
                             // if(accountViewController!=null)

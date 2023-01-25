@@ -684,22 +684,22 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                            ],
                          ),
                             ),
-                          if(permission.dashboardMenuPermission['profileemenu'].toString()=='1')
-
-                            GestureDetector(
-                                  onTap: ()async{
-                                    await showwebView('${permission.dashboardMenuPermission['profileeurl']}');
-
-                              },
-                              child: Column(
-                              children: [
-                                Image.asset('assets/images/Group 18611 (1).png',height: globalIconSize,
-                                  width: globalIconSize,),
-                                vSizedBox,
-                                Text('My Profile',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
-                              ],
-                          ),
-                            ),
+                          // if(permission.dashboardMenuPermission['profileemenu'].toString()=='1')
+                          //
+                          //   GestureDetector(
+                          //         onTap: ()async{
+                          //           await showwebView('${permission.dashboardMenuPermission['profileeurl']}');
+                          //
+                          //     },
+                          //     child: Column(
+                          //     children: [
+                          //       Image.asset('assets/images/Group 18611 (1).png',height: globalIconSize,
+                          //         width: globalIconSize,),
+                          //       vSizedBox,
+                          //       Text('My Profile',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
+                          //     ],
+                          // ),
+                          //   ),
                           if(permission.dashboardMenuPermission['myrequestemenu'].toString()=='1')
 
                             GestureDetector(
@@ -712,7 +712,7 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                                 Image.asset('assets/images/Group 18612 (2).png',height: globalIconSize,
                                   width: globalIconSize,),
                                 vSizedBox,
-                                Text('Request',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
+                                Text('My Request',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
                               ],
                           ),
                             ),
@@ -798,520 +798,39 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               ],
                             ),
                           ),
+
+                          if(permission.dashboardMenuPermission['profileemenu'].toString()=='1')
+                            GestureDetector(
+                              onTap: ()async{
+                                await showwebView('${permission.dashboardMenuPermission['profileeurl']}');
+                              },
+                              child: Column(
+                                children: [
+                                  Image.asset('assets/images/mydetail.png',height: globalIconSize,
+                                    width: globalIconSize,),
+                                  vSizedBox,
+                                  Text('My Detail',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
+                                ],
+                              ),
+                            ),
+
+                          if(permission.dashboardMenuPermission['holiday_list_permission'].toString()=='1')
+                            GestureDetector(
+                              onTap: ()async{
+                                await showwebView('${permission.dashboardMenuPermission['holiday_list']}');
+                              },
+                              child: Column(
+                                children: [
+                                  Image.asset('assets/images/holiday.png',height: globalIconSize,
+                                    width: globalIconSize,),
+                                  vSizedBox,
+                                  Text('Holiday List',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
+                                ],
+                              ),
+                            ),
                         ],
                       ),
-                      // child:
-                      // Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   children: [
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //       children: [
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Attandance_daily_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.attendance,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     // Positioned(
-                      //                     //     top: 0, right: 5,
-                      //                     //     child: Container(
-                      //                     //       height: 12,
-                      //                     //       width: 12,
-                      //                     //       decoration: BoxDecoration(
-                      //                     //           color: MyColors.red,
-                      //                     //           borderRadius: BorderRadius.circular(10),
-                      //                     //           border: Border.all(
-                      //                     //               color: Colors.white,
-                      //                     //               width: 2
-                      //                     //           )
-                      //                     //       ),
-                      //                     //     ))
-                      //                   ],
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Attendance',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 14,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hSizedBox4,
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Manage_Approvals_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.approvals,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     Positioned(
-                      //                         top: -10,
-                      //                         right: 0,
-                      //                         child: Container(
-                      //                           height: 24,
-                      //                           width: 24,
-                      //                           decoration: BoxDecoration(
-                      //                               color: MyColors.red,
-                      //                               borderRadius:
-                      //                                   BorderRadius.circular(15),
-                      //                               border: Border.all(
-                      //                                   color: Colors.white, width: 2)),
-                      //                           child: Center(
-                      //                             child: ParagraphText(
-                      //                               text: '1',
-                      //                               color: Colors.white,
-                      //                               fontSize: 12,
-                      //                             ),
-                      //                           ),
-                      //                         ))
-                      //                   ],
-                      //                   clipBehavior: Clip.none,
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Approvals',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 14,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hSizedBox4,
-                      //         Expanded(
-                      //           child: Column(
-                      //             crossAxisAlignment: CrossAxisAlignment.center,
-                      //             children: [
-                      //               Stack(
-                      //                 children: [
-                      //                   ClipRRect(
-                      //                     child: Image.asset(
-                      //                       MyImages.salaryprocess,
-                      //                       height: 60,
-                      //                       width: 60,
-                      //                       fit: BoxFit.cover,
-                      //                     ),
-                      //                     borderRadius: BorderRadius.circular(50),
-                      //                   ),
-                      //                   // Positioned(
-                      //                   //     top: 0, right: 5,
-                      //                   //     child: Container(
-                      //                   //       height: 12,
-                      //                   //       width: 12,
-                      //                   //       decoration: BoxDecoration(
-                      //                   //           color: MyColors.red,
-                      //                   //           borderRadius: BorderRadius.circular(10),
-                      //                   //           border: Border.all(
-                      //                   //               color: Colors.white,
-                      //                   //               width: 2
-                      //                   //           )
-                      //                   //       ),
-                      //                   //     ))
-                      //                 ],
-                      //               ),
-                      //               SizedBox(
-                      //                 height: 5,
-                      //               ),
-                      //               ParagraphText(
-                      //                 text: 'Salary Process',
-                      //                 textAlign: TextAlign.center,
-                      //                 fontSize: 13,
-                      //                 color: MyColors.primaryColor,
-                      //               )
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //     vSizedBox2,
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //       children: [
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Announcement_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.announcement,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     // Positioned(
-                      //                     //     top: 0, right: 5,
-                      //                     //     child: Container(
-                      //                     //       height: 12,
-                      //                     //       width: 12,
-                      //                     //       decoration: BoxDecoration(
-                      //                     //           color: MyColors.red,
-                      //                     //           borderRadius: BorderRadius.circular(10),
-                      //                     //           border: Border.all(
-                      //                     //               color: Colors.white,
-                      //                     //               width: 2
-                      //                     //           )
-                      //                     //       ),
-                      //                     //     ))
-                      //                   ],
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Announcement',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 13.7,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hSizedBox4,
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Reports_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.reports,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     // Positioned(
-                      //                     //     top: 0, right: 5,
-                      //                     //     child: Container(
-                      //                     //       height: 12,
-                      //                     //       width: 12,
-                      //                     //       decoration: BoxDecoration(
-                      //                     //           color: MyColors.red,
-                      //                     //           borderRadius: BorderRadius.circular(10),
-                      //                     //           border: Border.all(
-                      //                     //               color: Colors.white,
-                      //                     //               width: 2
-                      //                     //           )
-                      //                     //       ),
-                      //                     //     )
-                      //                     // )
-                      //                   ],
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Reports',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 14,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hSizedBox4,
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Reports_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.reports,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     // Positioned(
-                      //                     //     top: 0, right: 5,
-                      //                     //     child: Container(
-                      //                     //       height: 12,
-                      //                     //       width: 12,
-                      //                     //       decoration: BoxDecoration(
-                      //                     //           color: MyColors.red,
-                      //                     //           borderRadius: BorderRadius.circular(10),
-                      //                     //           border: Border.all(
-                      //                     //               color: Colors.white,
-                      //                     //               width: 2
-                      //                     //           )
-                      //                     //       ),
-                      //                     //     )
-                      //                     // )
-                      //                   ],
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Reports',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 14,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         // Expanded(
-                      //         //   child: Opacity(
-                      //         //     opacity: 0,
-                      //         //     child: Column(
-                      //         //       crossAxisAlignment: CrossAxisAlignment.center,
-                      //         //       children: [
-                      //         //         Stack(
-                      //         //           children: [
-                      //         //             ClipRRect(
-                      //         //               child: Image.asset(
-                      //         //                 MyImages.salaryprocess,
-                      //         //                 height: 55,
-                      //         //                 width: 55,
-                      //         //                 fit: BoxFit.cover,
-                      //         //               ),
-                      //         //               borderRadius: BorderRadius.circular(50),
-                      //         //             ),
-                      //         //             Positioned(
-                      //         //                 top: 0,
-                      //         //                 right: 5,
-                      //         //                 child: Container(
-                      //         //                   height: 12,
-                      //         //                   width: 12,
-                      //         //                   decoration: BoxDecoration(
-                      //         //                       color: MyColors.red,
-                      //         //                       borderRadius:
-                      //         //                           BorderRadius.circular(10),
-                      //         //                       border: Border.all(
-                      //         //                           color: Colors.white, width: 2)),
-                      //         //                 ))
-                      //         //           ],
-                      //         //         ),
-                      //         //         SizedBox(
-                      //         //           height: 5,
-                      //         //         ),
-                      //         //         ParagraphText(
-                      //         //           text: 'Salary Process',
-                      //         //           textAlign: TextAlign.center,
-                      //         //           fontSize: 13,
-                      //         //           color: MyColors.primaryColor,
-                      //         //         )
-                      //         //       ],
-                      //         //     ),
-                      //         //   ),
-                      //         // ),
-                      //       ],
-                      //     ),
-                      //     vSizedBox2,
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //       children: [
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Attandance_daily_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.attendance,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     // Positioned(
-                      //                     //     top: 0, right: 5,
-                      //                     //     child: Container(
-                      //                     //       height: 12,
-                      //                     //       width: 12,
-                      //                     //       decoration: BoxDecoration(
-                      //                     //           color: MyColors.red,
-                      //                     //           borderRadius: BorderRadius.circular(10),
-                      //                     //           border: Border.all(
-                      //                     //               color: Colors.white,
-                      //                     //               width: 2
-                      //                     //           )
-                      //                     //       ),
-                      //                     //     ))
-                      //                   ],
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Attendance',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 14,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hSizedBox4,
-                      //         Expanded(
-                      //           child: GestureDetector(
-                      //             onTap: (){
-                      //               push(context: context, screen: Manage_Approvals_Page());
-                      //             },
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.center,
-                      //               children: [
-                      //                 Stack(
-                      //                   children: [
-                      //                     ClipRRect(
-                      //                       child: Image.asset(
-                      //                         MyImages.approvals,
-                      //                         height: 60,
-                      //                         width: 60,
-                      //                         fit: BoxFit.cover,
-                      //                       ),
-                      //                       borderRadius: BorderRadius.circular(50),
-                      //                     ),
-                      //                     Positioned(
-                      //                         top: -10,
-                      //                         right: 0,
-                      //                         child: Container(
-                      //                           height: 24,
-                      //                           width: 24,
-                      //                           decoration: BoxDecoration(
-                      //                               color: MyColors.red,
-                      //                               borderRadius:
-                      //                               BorderRadius.circular(15),
-                      //                               border: Border.all(
-                      //                                   color: Colors.white, width: 2)),
-                      //                           child: Center(
-                      //                             child: ParagraphText(
-                      //                               text: '1',
-                      //                               color: Colors.white,
-                      //                               fontSize: 12,
-                      //                             ),
-                      //                           ),
-                      //                         ))
-                      //                   ],
-                      //                   clipBehavior: Clip.none,
-                      //                 ),
-                      //                 SizedBox(
-                      //                   height: 5,
-                      //                 ),
-                      //                 ParagraphText(
-                      //                   text: 'Approvals',
-                      //                   textAlign: TextAlign.center,
-                      //                   fontSize: 14,
-                      //                   color: MyColors.primaryColor,
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         hSizedBox4,
-                      //         Expanded(
-                      //           child: Column(
-                      //             crossAxisAlignment: CrossAxisAlignment.center,
-                      //             children: [
-                      //               Stack(
-                      //                 children: [
-                      //                   ClipRRect(
-                      //                     child: Image.asset(
-                      //                       MyImages.salaryprocess,
-                      //                       height: 60,
-                      //                       width: 60,
-                      //                       fit: BoxFit.cover,
-                      //                     ),
-                      //                     borderRadius: BorderRadius.circular(50),
-                      //                   ),
-                      //                   // Positioned(
-                      //                   //     top: 0, right: 5,
-                      //                   //     child: Container(
-                      //                   //       height: 12,
-                      //                   //       width: 12,
-                      //                   //       decoration: BoxDecoration(
-                      //                   //           color: MyColors.red,
-                      //                   //           borderRadius: BorderRadius.circular(10),
-                      //                   //           border: Border.all(
-                      //                   //               color: Colors.white,
-                      //                   //               width: 2
-                      //                   //           )
-                      //                   //       ),
-                      //                   //     ))
-                      //                 ],
-                      //               ),
-                      //               SizedBox(
-                      //                 height: 5,
-                      //               ),
-                      //               ParagraphText(
-                      //                 text: 'Salary Process',
-                      //                 textAlign: TextAlign.center,
-                      //                 fontSize: 13,
-                      //                 color: MyColors.primaryColor,
-                      //               )
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ],
-                      // ),
+
                     ),
 
 

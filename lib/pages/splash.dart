@@ -215,58 +215,14 @@ int testCount = 0;
           bool dashResult = await getDashboard();
           if (dashResult) {
             log('dkljslfkj--------${userMap['client_emp'].toString()}');
-            // if(userMap['client_emp'].toString()=='null'){
-
-            // showSnackbar(context, 'userMap  client_emp ${userMap['client_emp'].toString()}');
-            //
-            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //     TabsPage()), (Route<dynamic> route) => false);
             usertoken =
                 '${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
-            // print('call-------1---setWebWiewController ${usertoken}');
-            // globalCommonController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
-            // globalSettingController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard',);
-            // globalmyAccountController = await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
-            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-
-            ///
-            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //         HomePage()), (Route<dynamic> route) => false);
-            ///
-            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //     ManishHomePage()), (Route<dynamic> route) => false);
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => NewTabScreen()),
                 (Route<dynamic> route) => false);
 
-            ///
-            // await setWebWiewController('${ApiUrls.siteBaseUrl}staff/dashboard');
-            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //     Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-            ///
-            // }
-            // else{
-            //   // showSnackbar(context, 'login as a company owner');
-            //   usertoken='${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
-            //   print('call-------2---setWebWiewController');
-            //
-            //   await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
-            //   await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
-            //
-            //
-            //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //       Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-            // }
-            // }
-            // else{
-            //   print('There is some error in logging in');
-            //   sharedPreferences.clear();
-            //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            //       Enter_Phone_Number()), (Route<dynamic> route) => false);
-            // }
-
-          } else {
+          }
+          else {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => Enter_Phone_Number()),
                 (Route<dynamic> route) => false);

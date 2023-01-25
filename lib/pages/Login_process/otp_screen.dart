@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'dart:convert' as convert;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +21,7 @@ import '../../constants/globalFunction.dart';
 import '../../constants/globalkeys.dart';
 import '../../constants/image_urls.dart';
 import '../../providers/clock.dart';
+import '../../providers/newProvider.dart';
 import '../../services/api_urls.dart';
 import '../../services/local_services.dart';
 import '../../services/webservices.dart';
@@ -31,6 +32,7 @@ import '../employee/employee_dshboard.dart';
 import '../tab_pages/bottom_tab.dart';
 
 import '../webviewPages/new_web_view_tab.dart';
+import 'enter_phone_number.dart';
 
 class Enter_OTP_Page extends StatefulWidget {
   final String phone;
@@ -44,12 +46,43 @@ class Enter_OTP_Page extends StatefulWidget {
 }
 
 class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
-
   _Enter_OTP_PageState(this.newotp);
   Timer? timer;
   String newotp;
   ValueNotifier<bool> isOtpVerified = ValueNotifier(false);
   ValueNotifier<bool> verifyLoading = ValueNotifier(false);
+  ValueNotifier<bool> showOtpWidget = ValueNotifier(true);
+  showHideOtp()async{
+    showOtpWidget.value = false;
+    await Future.delayed(Duration(milliseconds: 50));
+    showOtpWidget.value = true;
+  }
+  Future<bool> getDashboard() async {
+    try {
+      print('getDashboard------0-----');
+      var res = await Webservices.getData(
+        ApiUrls.getNewProfile,
+      );
+      print('res from new api ------1-----${res.body}');
+
+      var jsonResponse = convert.jsonDecode(res.body);
+      if (jsonResponse['status'].toString() != '0') {
+        print('res from new api -------2----${jsonResponse['data']}');
+        Provider.of<PermissionModal>(context, listen: false)
+            .getPermission(jsonResponse['data']);
+        return true;
+        // Provider.of<PermissionModal>(context, listen: false).load=false;
+      } else {
+        Provider.of<PermissionModal>(context, listen: false).load = false;
+        // showSnackbar(context, 'Check your internet connection');
+      }
+    } catch (e) {
+      print('Error in catch block 4354 -------------------$e');
+      // var res = await Webservices.getData(ApiUrls.getNewProfile, );
+    }
+    return false;
+  }
+
   verifyOtp(bool isVerified) async {
     if (isVerified) {
       verifyLoading.value = true;
@@ -70,63 +103,79 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
         log('data for session -------------${res['userData']}');
         // verifyLoading.value = false;
         print('otp------------${res['type']}');
-        if (res['type'].toString() == '1') {
-          Provider.of<GlobalModal>(context, listen: false).cancelTimer();
-
-          push(
-              context: context,
-              screen: Enter_Detail_Page(
-                phone: widget.phone,
-              ));
-        } else if (res['userData']['client_emp'] == null) {
-          await Provider.of<GlobalModal>(context, listen: false)
-              .addUserDetail(res['userData'], context);
-          globalHeaders = {
-            'Authorization':
-                'Bearer ${Provider.of<GlobalModal>(context, listen: false).userData!.token}',
-          };
-          log('global header assign by ankita --------------------$globalHeaders');
-          // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
-          // push(context: context, screen: Congratulations_Page(isEmp: false,));
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => NewTabScreen()),
-              (Route<dynamic> route) => false);
-          user = res['userData'];
-          // log("token ----------------${res['userData']}");
-        } else if (res['userData']['client_emp'] != null) {
-          await Provider.of<GlobalModal>(context, listen: false)
-              .addUserDetail(res['userData'], context);
-          // push(context: context, screen: newTabsPage());
+        await Provider.of<GlobalModal>(context, listen: false)
+            .addUserDetail(res['userData'], context);
+        bool dashResult = await getDashboard();
+        if (dashResult) {
           usertoken =
               '${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
-          // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
-          // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
-          ///
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
-          ///
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          //     ManishHomePage()), (Route<dynamic> route) => false);
+          // Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(builder: (context) => NewTabScreen()),
+          //         (Route<dynamic> route) => false);
+          if (res['type'].toString() == '1') {
+            Provider.of<GlobalModal>(context, listen: false).cancelTimer();
 
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => NewTabScreen()),
-              (Route<dynamic> route) => false);
+            push(
+                context: context,
+                screen: Enter_Detail_Page(
+                  phone: widget.phone,
+                ));
+          } else if (res['userData']['client_emp'] == null) {
+            await Provider.of<GlobalModal>(context, listen: false)
+                .addUserDetail(res['userData'], context);
+            globalHeaders = {
+              'Authorization':
+                  'Bearer ${Provider.of<GlobalModal>(context, listen: false).userData!.token}',
+            };
+            log('global header assign by ankita --------------------$globalHeaders');
+            // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard');
+            // push(context: context, screen: Congratulations_Page(isEmp: false,));
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => NewTabScreen()),
+                (Route<dynamic> route) => false);
+            user = res['userData'];
+            // log("token ----------------${res['userData']}");
+          } else if (res['userData']['client_emp'] != null) {
+            await Provider.of<GlobalModal>(context, listen: false)
+                .addUserDetail(res['userData'], context);
+            // push(context: context, screen: newTabsPage());
+            usertoken =
+                '${await Provider.of<GlobalModal>(context, listen: false).userData!.token}';
+            // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalSettingController);
+            // await setWebWiewController(context,'${ApiUrls.siteBaseUrl}staff/dashboard',globalmyAccountController);
+            ///
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            // Tabbarscreen(key:MyGlobalKeys.tabbarKey,)), (Route<dynamic> route) => false);
+            ///
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     ManishHomePage()), (Route<dynamic> route) => false);
 
-          ///
-          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          //     TabsPage()), (Route<dynamic> route) => false);
-          // await MyLocalServices.updateSharedPreferences(res['userData']);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => NewTabScreen()),
+                (Route<dynamic> route) => false);
 
-          user = res['userData'];
+            ///
+            // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            //     TabsPage()), (Route<dynamic> route) => false);
+            // await MyLocalServices.updateSharedPreferences(res['userData']);
+
+            user = res['userData'];
+          }
+        } else {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          await Future.delayed(Duration(milliseconds: 200));
+
+          showSnackbar(
+              MyGlobalKeys.navigatorKey.currentContext!, '${res['message']}');
         }
       } else {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        await Future.delayed(Duration(milliseconds: 200));
-        showSnackbar(
-            MyGlobalKeys.navigatorKey.currentContext!, '${res['message']}');
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Enter_Phone_Number()),
+            (Route<dynamic> route) => false);
       }
     }
   }
+  // }
 
   @override
   void initState() {
@@ -218,20 +267,28 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                             vSizedBox2,
 
                             // CustomOtpWidget(otpLength: 6),
-                            OtpVerification(
-                              bgColor: Colors.white,
-                              borderColor:
-                                  MyColors.bordercolor.withOpacity(0.05),
-                              textColor: Colors.black,
-                              navigationFrom: 'navigationFrom',
-                              correctOtp: newotp,
-                              load: () {
-                                isOtpVerified.value = true;
-                                print('the otp is true');
-                              },
-                              wrongOtp: () {
-                                isOtpVerified.value = false;
-                              },
+                            ValueListenableBuilder<bool>(
+                              valueListenable: showOtpWidget,
+                              builder: (context, val, child) {
+                                if(val)
+                                return OtpVerification(
+                                  bgColor: Colors.white,
+                                  borderColor:
+                                      MyColors.bordercolor.withOpacity(0.05),
+                                  textColor: Colors.black,
+                                  navigationFrom: 'navigationFrom',
+                                  correctOtp: newotp,
+                                  load: () {
+                                    isOtpVerified.value = true;
+                                    print('the otp is true');
+                                  },
+                                  wrongOtp: () {
+                                    isOtpVerified.value = false;
+                                    showHideOtp();
+                                  },
+                                );
+                                return Container(height: 85,);
+                              }
                             ),
                             vSizedBox2,
                             globalModal.isShow
@@ -245,7 +302,6 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                                       width: 200,
                                       fontSize: 16,
                                       onTap: () async {
-
                                         print('phone-------${widget.phone}');
                                         Map<String, dynamic> data = {
                                           'phone': widget.phone.toString()
@@ -296,23 +352,22 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
                             vSizedBox4,
                             vSizedBox2,
                             ValueListenableBuilder<bool>(
-                              valueListenable: isOtpVerified,
-                              builder: (context, value, child) {
-                                return ValueListenableBuilder<bool>(
-                                    valueListenable: verifyLoading,
-                                    builder: (context, verifyLoadingValue, child) {
-                                    return RoundEdgedButton(
-                                      text: 'Verify',
-                                      textColor: Colors.white,
-                                      is_Loading: verifyLoadingValue,
-                                      onTap: () async {
-                                        verifyOtp(value);
-                                      },
-                                    );
-                                  }
-                                );
-                              }
-                            ),
+                                valueListenable: isOtpVerified,
+                                builder: (context, value, child) {
+                                  return ValueListenableBuilder<bool>(
+                                      valueListenable: verifyLoading,
+                                      builder:
+                                          (context, verifyLoadingValue, child) {
+                                        return RoundEdgedButton(
+                                          text: 'Verify',
+                                          textColor: Colors.white,
+                                          is_Loading: verifyLoadingValue,
+                                          onTap: () async {
+                                            verifyOtp(value);
+                                          },
+                                        );
+                                      });
+                                }),
                             vSizedBox4,
                           ],
                         ),
@@ -324,6 +379,4 @@ class _Enter_OTP_PageState extends State<Enter_OTP_Page> {
       }),
     );
   }
-
-
 }

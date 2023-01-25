@@ -34,6 +34,7 @@ class MyImages{
   static const avatr10 = baseImageUrl + '16.png';
   static const avatr11 = baseImageUrl + '17.png';
   static const avatr12 = baseImageUrl + '20.png';
+  static const companyProfile = baseImageUrl + 'Vector (5).png';
 
 
   static const add = baseImageUrl + 'add.png';
@@ -135,6 +136,8 @@ class MyImages{
 
   static const google_map = baseImageUrl + 'google_map.png';
   static const face_detect = baseImageUrl + 'face_detect.png';
+  static const my_detail = baseImageUrl + 'mydetail.png';
+  static const holiday_list = baseImageUrl + 'holiday.png';
 
 
 }

@@ -39,13 +39,13 @@ class Webservices {
       );
       log('Bearer ${user!.token}');
       print('The response status for url $url is ${response.statusCode}');
-      // if(response.statusCode!=200){
-      //   print('The response status for url $url is ${response.statusCode}');
-      // }
+      if(response.statusCode!=200){
+        print('The response status for url $url is ${response.statusCode}');
+      }
       log(response.body);
     } catch (e) {
       // showSnackbar(context, text)
-      log('Error in $url : ------ $e');
+      log('Error in 454 $url : ------ $e');
     }
 
     // try {

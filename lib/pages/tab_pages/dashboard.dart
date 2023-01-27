@@ -27,7 +27,7 @@ import '../Login_process/enter_phone_number.dart';
 
 
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 
 class Dashboard_Page extends StatefulWidget {
 
@@ -669,13 +669,13 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                               },
                               child: Column(
                            children: [
-                             Badge(
+                             badge.Badge(
 
                                badgeContent: Text('${permission.dashboardMenuPermission['total_employee']}',style: TextStyle(color: Colors.white),),
                                child:Image.asset('assets/images/Group 18610 (1).png',height: globalIconSize,
                                  width: globalIconSize,),
                                badgeColor: Color(0xffFF4B55),
-                               position: BadgePosition.topEnd(top:-2,end:-2),
+                               position: badge.BadgePosition.topEnd(top:-2,end:-2),
                                showBadge:int.parse(permission.dashboardMenuPermission['total_employee'].toString())>0?true:false ,
                              ),
 

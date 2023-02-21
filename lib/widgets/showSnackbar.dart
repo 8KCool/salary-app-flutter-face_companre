@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 
+import '../constants/globalkeys.dart';
+import '../pages/webviewPages/new_web_view_tab.dart';
+
 Future<bool?> showSnackbar(BuildContext context, String text, {int seconds = 4})async{
   // ScaffoldMessenger.of(context).showSnackBar(
   //   SnackBar(content: Text(text),
@@ -16,7 +19,7 @@ Future<bool?> showSnackbar(BuildContext context, String text, {int seconds = 4})
 }
 
 
-showPopupDialog(BuildContext context,  {String headingText = '', required String text,List<Widget> buttons=const []}){
+showPopupDialog(BuildContext context,  {String headingText = '', required String text,List<Widget> buttons=const [] ,} ){
   return showDialog(context: context, builder: (context){
     return WillPopScope(
       onWillPop: ()async=>false,
@@ -38,6 +41,15 @@ showPopupDialog(BuildContext context,  {String headingText = '', required String
                 children:buttons.length==0?[
                   TextButton(onPressed: (){
                     Navigator.pop(context);
+                    try{
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => NewTabScreen()),
+                              (Route<dynamic> route) => false);
+
+                    }catch(e){
+                      print('Error in catch block 342 $e');
+                    }
                   }, child: SubHeadingText(text: 'Ok',))
                 ]: buttons,
               )

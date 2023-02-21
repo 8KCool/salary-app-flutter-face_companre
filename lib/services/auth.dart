@@ -2,12 +2,13 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:salaryredesign/providers/newProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/globalkeys.dart';
-
+import 'package:path_provider/path_provider.dart';
 void updateUserDetails(details) async{
   SharedPreferences shared_User = await SharedPreferences.getInstance();
   String user = jsonEncode(details);
@@ -79,6 +80,9 @@ Future isUserLoggedIn() async{
 Future logout() async{
 
   print("logout()");
+  final newpath = await getExternalStorageDirectory();
+  var filePathAndName = newpath!.path + '/'+'liveness.png';
+  deleteFile(File(filePathAndName));
   globalCount = 0;
   SharedPreferences shared_User = await SharedPreferences.getInstance();
   Provider.of<PermissionModal>(MyGlobalKeys.navigatorKey.currentContext!,listen: false).dashboardMenuPermission = {
@@ -86,4 +90,21 @@ Future logout() async{
   };
   await shared_User.clear();
   return true;
+}
+Future<void> deleteFile(File file) async {
+  print("file-----------------$file");
+  try {
+    print("await file.exists()-----------------${await file.exists()}");
+
+    if (await file.exists()) {
+      // print("hgfkgkjgk----------$e");
+
+      await file.delete();
+      print("after delete file.exists()-----------------${await file.exists()}");
+
+    }
+  } catch (e) {
+    print("hgfkgkjgk----------$e");
+    // Error in getting access to the file.
+  }
 }

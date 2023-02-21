@@ -11,7 +11,7 @@ Map<String, String> globalHeaders = {
 int globalCount = 0;
 
 class MyGlobalKeys{
- // static GlobalKey<TabbarscreenState> tabbarKey = GlobalKey<TabbarscreenState>();
+ // static GlobalKey<TabsPageState> tabbarKey = GlobalKey<TabbarscreenState>();
  // static GlobalKey<ManishHomePageState> manishHomePageKey = GlobalKey<ManishHomePageState>();
  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
  static final GlobalKey<SearchLocationState> searchLocationKey = new GlobalKey<SearchLocationState>();
@@ -21,3 +21,4 @@ class MyGlobalKeys{
 Map user={};
 String usertoken='';
 Map faceAtt={};
+Map checkType = {};

@@ -4,12 +4,17 @@ import 'package:salaryredesign/constants/constans.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
+import 'package:salaryredesign/pages/face_recognition/capture_face_image.dart';
 import 'package:salaryredesign/pages/face_recognition/face_recognition_processing.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/buttons.dart';
 
+
+import '../../packages/table_calendar-3.0.7/example/lib/main.dart';
 import '../employee/face_attendance.dart';
 import 'package:camera/camera.dart';
+
+import 'compare.dart';
 class Face_Recognition_Start_Page extends StatefulWidget {
   const Face_Recognition_Start_Page({Key? key}) : super(key: key);
 
@@ -65,8 +70,8 @@ class _Face_Recognition_Start_PageState extends State<Face_Recognition_Start_Pag
                           borderRadius: 5,
                           fontfamily: 'bold',
                           onTap: () async {
-
-                            push(context: context, screen: CameraExampleHome());
+                              push(context: context, screen: ComparePage());
+                            // push(context: context, screen: CameraExampleHome());
                             // push(context: context, screen: Face_Recognition_Processing_Page());
                           },
                         )

@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../constants/colors.dart';
+import '../../constants/globalFunction.dart';
 import '../../constants/globalkeys.dart';
 import '../../constants/image_urls.dart';
 import '../../constants/sized_box.dart';
@@ -18,18 +20,29 @@ import '../../main.dart';
 import '../../providers/clock.dart';
 import '../../services/api_urls.dart';
 import '../../services/webservices.dart';
+import '../../widgets/CustomLoader.dart';
 import '../../widgets/CustomTexts.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/showSnackbar.dart';
 import '../face_recognition/face_recognition_processing.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:intl/intl.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io' as io;
+import 'dart:typed_data';
+import 'dart:async';
+import 'package:flutter_face_api_beta/face_api.dart' as Regula;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+
 
 /// Camera example home widget.
 class FaceCameraAttendance extends StatefulWidget {
+  final String phone;
   /// Default Constructor
-  const FaceCameraAttendance({Key? key}) : super(key: key);
+  const FaceCameraAttendance({Key? key,required this.phone}) : super(key: key);
 
   @override
   State<FaceCameraAttendance> createState() {
@@ -83,21 +96,33 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
   String workingHours = '';
   bool load=false;
   Map att_detail={};
+  var image1 = new Regula.MatchFacesImage();
+  var image2 = new Regula.MatchFacesImage();
+  var img1 = Image.asset('assets/images/face_recog.png');
+  var img2 = Image.asset('assets/images/face_recog.png');
+  String _similarity = "nil";
+  String _liveness = "nil";
+
   getDetails() async {
     try{
       var m = Provider.of<GlobalModal>(context, listen: false).location;
       print('object-----222---${Provider.of<GlobalModal>(context, listen: false).location}');
       // Provider.of<GlobalModal>(context, listen: false).location
       if(m!=null){
-        Map<String, dynamic> data = {};
+        Map<String, dynamic> data = {"mobile_number":widget.phone};
         Provider.of<GlobalModal>(context, listen: false).load=true;
         var res = await Webservices.postData(
-            apiUrl: ApiUrls.qrattendance, body: data, context: context);
+            apiUrl: ApiUrls.faceattendance, body: data, context: context);
         log("res from qrattendance------------$res");
-        Provider.of<GlobalModal>(context, listen: false).loadingHide();
+        Provider.of<GlobalModal>(context, listen: false).load=false;
         if (res['success'].toString() == 'true') {
           att_detail = res;
-          print('res from api ${res}');
+          setState((){});
+
+          log("res from qrattendance------------$att_detail");
+          print("${widget.phone} ----- ${att_detail['data']['userData']['face_image']}");
+
+          print('res from api ${res['data']['today_attendance']['inTime']}');
           if (res['data']['today_attendance']['inTime'] != null) {
             // is_in = true;
           }
@@ -111,14 +136,14 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
 
 
 
-            workingHours = '${res['data']['today_attendance']['workinHours']}';
+            workingHours = '${att_detail['data']['today_attendance']['workinHours']}';
             // workingHoursBreak = '${res['data']['today_break']['workinhours']}';
 
           }
         }
         else{
-          // showSnackbar(context, res['message']);
-          // message=res['message'];
+          showSnackbar(context, res['message']);
+          message=res['message'];
           // _showMyDialog();
           // }
         }
@@ -142,70 +167,387 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
 
 
   }
+  addtoStorage()async{
+    final path = await getExternalStorageDirectory();
+    var filePathAndName = path!.path + '/'+'liveness.png';
+
+    final imgBase64Str = await networkImageToBase64(Uri.parse(att_detail['data']['userData']['face_image']));
+    print("image--------------");
+    print(imgBase64Str);
+    // await filePathAndName.writeAsBytes(imgBase64Str.bodyBytes);
+    var  file = await File(filePathAndName).writeAsBytes((imgBase64Str!));
+    print("  sefdreg ty tyj ${await file.exists()}");
+  }
   @override
   void initState() {
     super.initState();
+
+    print("mobile number--------------${widget.phone}");
+    Provider.of<GlobalModal>(context, listen: false).getLocation();
+    // getLocation();
     getDetails();
     if(faceAtt['data']!=null){
-      workingHours = '${faceAtt['data']['today_attendance']['workinHours']}';
+      // workingHours = '${faceAtt['data']['today_attendance']['workinHours']}';
 
     }
     // print('dgfgsrfhdgfh--------------${faceAtt['data']['today_attendance']['workinHours']}');
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
+    //
+    // _flashModeControlRowAnimationController = AnimationController(
+    //   duration: const Duration(milliseconds: 300),
+    //   vsync: this,
+    // );
+    // _flashModeControlRowAnimation = CurvedAnimation(
+    //   parent: _flashModeControlRowAnimationController,
+    //   curve: Curves.easeInCubic,
+    // );
+    // _exposureModeControlRowAnimationController = AnimationController(
+    //   duration: const Duration(milliseconds: 300),
+    //   vsync: this,
+    // );
+    // _exposureModeControlRowAnimation = CurvedAnimation(
+    //   parent: _exposureModeControlRowAnimationController,
+    //   curve: Curves.easeInCubic,
+    // );
+    // _focusModeControlRowAnimationController = AnimationController(
+    //   duration: const Duration(milliseconds: 300),
+    //   vsync: this,
+    // );
+    // _focusModeControlRowAnimation = CurvedAnimation(
+    //   parent: _focusModeControlRowAnimationController,
+    //   curve: Curves.easeInCubic,
+    // );
+    // // cameras=[CameraDescription(1, CameraLensDirection.front, 270)];
+    // if(frontCamera!=null)
+    //   onNewCameraSelected(frontCamera!);
+    // //
+    // //
+    // // Future.delayed(Duration(seconds: 3)).then((value) async {
+    // //
+    // //   final CameraController? cameraController = controller;
+    // //   if( cameraController != null &&
+    // //       cameraController.value.isInitialized &&
+    // //       !cameraController.value.isRecordingVideo
+    // //   ){
+    // //     onTakePictureButtonPressed();
+    // //
+    // //   }
+    // //   else{
+    //
+    //   // }
+    // // });
 
-    _flashModeControlRowAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _flashModeControlRowAnimation = CurvedAnimation(
-      parent: _flashModeControlRowAnimationController,
-      curve: Curves.easeInCubic,
-    );
-    _exposureModeControlRowAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _exposureModeControlRowAnimation = CurvedAnimation(
-      parent: _exposureModeControlRowAnimationController,
-      curve: Curves.easeInCubic,
-    );
-    _focusModeControlRowAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _focusModeControlRowAnimation = CurvedAnimation(
-      parent: _focusModeControlRowAnimationController,
-      curve: Curves.easeInCubic,
-    );
-    // cameras=[CameraDescription(1, CameraLensDirection.front, 270)];
-    if(frontCamera!=null)
-      onNewCameraSelected(frontCamera!);
+  }
+  Widget createImage(image, VoidCallback onPress) => Material(
+      child: InkWell(
+        onTap: onPress,
+        child: Container(
+          // color: Colors.red,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image(image: image,fit: BoxFit.cover,),
+          ),
+        ),
+      ));
+  setImage(bool first, Uint8List? imageFile, int type) {
+print("imageFileimageFile-----------${imageFile}");
+    if (imageFile == null) return;
+    setState(() => _similarity = "nil");
+    if (first) {
+      image1.bitmap = base64Encode(imageFile);
+      image1.imageType = type;
+      print("image1---------------${image1}");
+      setState(() {
+        img1 = Image.memory(imageFile);
+        _liveness = "nil";
+
+      });
+      print("  ankiya-1--------image1----------------");
+    } else {
+      image2.bitmap = base64Encode(imageFile);
+      image2.imageType = type;
+      setState(() => img2 = Image.memory(imageFile));
+      print("image2---------------${image2}");
+      print("  ankiya-1------------image2------------");
+    }
+  }
+  matchFaces(currentFile) async{
+    await  Provider.of<GlobalModal>(context, listen: false).loadingShow();
+
+    print("matchFaced---called-----------");
+    final path = await getExternalStorageDirectory();
+    var filePathAndName = path!.path + '/'+'liveness.png';
+    print("filePathAndName---------check file exit or not-----${filePathAndName}");
+    if(widget.phone==''){
+      try{
+        setImage(
+            false,
+            io.File(filePathAndName).readAsBytesSync(),
+            Regula.ImageType.PRINTED);
+        print("image for match-1-----------${image1.bitmap}-------------");
+        print("image for match-2----------${image2.bitmap}----------");
+        // if (image1.bitmap == null ||
+        //     image1.bitmap == "" ||
+        //     image2.bitmap == null ||
+        //     image2.bitmap == "") return;
+        if(filePathAndName!=null || filePathAndName!=''){
+          print(" file exist in storage-----------------------");
+
+          setState(() => _similarity = "Processing...");
+          var request = new Regula.MatchFacesRequest();
+          print("  ankiya-2--------------if----------");
+
+          request.images = [image1, image2];
+          Regula.FaceSDK.matchFaces(jsonEncode(request)).then((value) {
+            print("value---------------${value}");
+            var response = Regula.MatchFacesResponse.fromJson(json.decode(value));
+            print("response-----if----------${response}");
+
+            Regula.FaceSDK.matchFacesSimilarityThresholdSplit(
+                jsonEncode(response!.results), 0.75)
+                .then((str) {
+              print("str----if-----------${str}");
+
+              var split = Regula.MatchFacesSimilarityThresholdSplit.fromJson(
+                  json.decode(str));
+              setState(() => _similarity = split!.matchedFaces.length > 0
+                  ? ((split.matchedFaces[0]!.similarity! * 100).toStringAsFixed(2) +
+                  "%")
+                  : "error");
+              print("_similarity------1--------${_similarity.split('%')[0]}");
+
+              if(_similarity!='error'){
+                if(double.parse(_similarity.split('%')[0])>90){
+
+                   Provider.of<GlobalModal>(context, listen: false).loadingShow();
 
 
-    Future.delayed(Duration(seconds: 3)).then((value) async {
+                  showPop('');
+                }
+              }
 
-      final CameraController? cameraController = controller;
-      if( cameraController != null &&
-          cameraController.value.isInitialized &&
-          !cameraController.value.isRecordingVideo
-      ){
-        onTakePictureButtonPressed();
+              else{
+                showSnackbar(context, "Face is not match with your registered face.Please try again or contact to your admin!!");
+              }
 
+            });
+          });
+        }
+        else{
+          print("file not exist in storage-------------");
+          final imgBase64Str = await networkImageToBase64(Uri.parse(att_detail['data']['userData']['face_image']));
+          print("image--------else------");
+          print(imgBase64Str);
+          // File file = File(att_detail['data']['userData']['face_image']);
+          // Uint8List uint8list = await file.readAsBytesSync();
+
+          setImage(false, imgBase64Str,
+              Regula.ImageType.LIVE);
+
+          setState(() => _similarity = "Processing...");
+          var request = new Regula.MatchFacesRequest();
+          print("  ankiya-2----------else--------------");
+          request.images = [image1, image2];
+          Regula.FaceSDK.matchFaces(jsonEncode(request)).then((value) {
+            print("value---------------${value}");
+            var response = Regula.MatchFacesResponse.fromJson(json.decode(value));
+            print("response----else-----------${response}");
+
+            Regula.FaceSDK.matchFacesSimilarityThresholdSplit(
+                jsonEncode(response!.results), 0.75)
+                .then((str) {
+              print("str--------else-------${str}");
+
+              var split = Regula.MatchFacesSimilarityThresholdSplit.fromJson(
+                  json.decode(str));
+              setState(() => _similarity = split!.matchedFaces.length > 0
+                  ? ((split.matchedFaces[0]!.similarity! * 100).toStringAsFixed(2) +
+                  "%")
+                  : "error");
+              print("_similarity--------2------${_similarity.split('%')[0]}");
+
+              if(_similarity!='error'){
+                if(double.parse(_similarity.split('%')[0])>90){
+
+                  Provider.of<GlobalModal>(context, listen: false).loadingShow();
+
+
+                  showPop('');
+                  /// now image store at storage
+                  addtoStorage();
+                }
+              }
+
+              else{
+                showSnackbar(context, "Face is not match with your registered face.Please try again or contact to your admin!!");
+
+              }
+
+            });
+          });
+        // }
+        }
+      }catch(err){print("errr-------------${err}");
+      final newpath = await getExternalStorageDirectory();
+      var filePathAndName = newpath!.path + '/'+'liveness.png';
+      var  file = await File(filePathAndName).writeAsBytes(currentFile);
+      print("file------------${file}  ${file.runtimeType}");
+      final imgBase64Str = await networkImageToBase64(Uri.parse(att_detail['data']['userData']['face_image']));
+      print("image--------------");
+      print(imgBase64Str);
+      setImage(false, imgBase64Str,
+          Regula.ImageType.LIVE);
+      print("image for match-1----obj-------${image1.bitmap}-------------");
+      print("image for match-2-----obj-----${image2.bitmap}----------");
+      setState(() => _similarity = "Processing...");
+      var request = new Regula.MatchFacesRequest();
+
+      request.images = [image1, image2];
+
+      Regula.FaceSDK.matchFaces(jsonEncode(request)).then((value) {
+        print("value---------------${value}");
+        var response = Regula.MatchFacesResponse.fromJson(json.decode(value));
+        print("response---------------${response}");
+
+        Regula.FaceSDK.matchFacesSimilarityThresholdSplit(
+            jsonEncode(response!.results), 0.75)
+            .then((str) {
+          print("str---------------${str}");
+
+          var split = Regula.MatchFacesSimilarityThresholdSplit.fromJson(
+              json.decode(str));
+          setState(() => _similarity = split!.matchedFaces.length > 0
+              ? ((split.matchedFaces[0]!.similarity! * 100).toStringAsFixed(2) +
+              "%")
+              : "error");
+          print("_similarity-------3-------${_similarity.split('%')[0]}");
+          if(_similarity!='error'){
+            if(double.parse(_similarity.split('%')[0])>90){
+
+               Provider.of<GlobalModal>(context, listen: false).loadingShow();
+
+
+              showPop('');
+              addtoStorage();
+            }
+          }
+
+          else{
+            showSnackbar(context, "Face is not match with your registered face.Please try again or contact to your admin!!");
+
+          }
+
+        });
+      });
+      // showPop(file);
       }
-      else{
 
+    }
+
+    else{
+      print("face attendance by other people-------------");
+      print("${widget.phone} ----- ${att_detail['data']['userData']['face_image']}");
+      final imgBase64Str = await networkImageToBase64(Uri.parse(att_detail['data']['userData']['face_image']));
+      print("image--------------");
+      print(imgBase64Str);
+      // File file = File(att_detail['data']['userData']['face_image']);
+      // Uint8List uint8list = await file.readAsBytesSync();
+
+      setImage(false, imgBase64Str,
+          Regula.ImageType.LIVE);
+
+      setState(() => _similarity = "Processing...");
+      var request = new Regula.MatchFacesRequest();
+      print("  ankiya-2------------------------");
+      request.images = [image1, image2];
+      Regula.FaceSDK.matchFaces(jsonEncode(request)).then((value) {
+        print("value---------------${value}");
+        var response = Regula.MatchFacesResponse.fromJson(json.decode(value));
+        print("response---------------${response}");
+
+        Regula.FaceSDK.matchFacesSimilarityThresholdSplit(
+            jsonEncode(response!.results), 0.75)
+            .then((str) {
+          print("str---------------${str}");
+
+          var split = Regula.MatchFacesSimilarityThresholdSplit.fromJson(
+              json.decode(str));
+          setState(() => _similarity = split!.matchedFaces.length > 0
+              ? ((split.matchedFaces[0]!.similarity! * 100).toStringAsFixed(2) +
+              "%")
+              : "error");
+          print("_similarity--------2------${_similarity.split('%')[0]}");
+
+          if(_similarity!='error'){
+            if(double.parse(_similarity.split('%')[0])>90){
+
+               Provider.of<GlobalModal>(context, listen: false).loadingShow();
+
+
+              showPop('');
+            }
+          }
+
+          else{
+            showSnackbar(context, "Face is not match with your registered face.Please try again or contact to your admin!!");
+
+          }
+
+        });
+      });
+    }
+
+    // else{
+    //   showPop(image1);
+    // }
+
+  }
+  Future<Uint8List?> networkImageToBase64(imageUrl) async {
+    http.Response response = await http.get(imageUrl);
+    final bytes = response?.bodyBytes;
+    return bytes;
+    // return (bytes != null ? base64Encode(bytes) : null);
+  }
+  liveness() async{
+    await  Provider.of<GlobalModal>(context, listen: false).loadingShow();
+    Regula.FaceSDK.startLiveness().then((value) async{
+      print("value from liveness---------------$value");
+      var result = Regula.LivenessResponse.fromJson(json.decode(value));
+      print("result from LivenessResponse---------------$result");
+      setImage(true, base64Decode(result!.bitmap!.replaceAll("\n", "")),
+          Regula.ImageType.LIVE);
+      try{
+        if(result.liveness == 0 ){
+          matchFaces(base64Decode(result!.bitmap!.replaceAll("\n", "")));
+        }
+        else{
+          showSnackbar(context,"Something went wrong Please try again later!");
+        }
+
+      }catch(err){
+        print("error from match img-----------$err");
       }
+      print("_liveness from ---------------${result.liveness}");
+      print("image from ---------------${img1.image.runtimeType}");
+
+      setState(() {
+        print("_liveness from ---------------${result.liveness}");
+
+        _liveness = result.liveness == 0 ? "passed" : "unknown";
+      });
+
     });
-
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _flashModeControlRowAnimationController.dispose();
-    _exposureModeControlRowAnimationController.dispose();
-    super.dispose();
-  }
+
+
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   _flashModeControlRowAnimationController.dispose();
+  //   _exposureModeControlRowAnimationController.dispose();
+  //   super.dispose();
+  // }
 
   // #docregion AppLifecycle
   @override
@@ -231,365 +573,261 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
       appBar: AppBar(
         title: const Text('Face Attendance'),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            // margin: EdgeInsets.symmetric(horizontal: 0),
-            height: MediaQuery.of(context).size.height - 161,
-            decoration: BoxDecoration(
-                color: MyColors.white,
-                borderRadius: BorderRadius.circular(4)),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+      body:Provider.of<GlobalModal>(context, listen: false).load==true?CustomLoader(): SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              // margin: EdgeInsets.symmetric(horizontal: 0),
+              height: MediaQuery.of(context).size.height - 161,
+              decoration: BoxDecoration(
+                  color: MyColors.white,
+                  borderRadius: BorderRadius.circular(4)),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
 
-                  vSizedBox4,
-                  // if (attendance)
-                  Column(
-                    children: [
-                      // vSizedBox2,
-                      Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          DigitalClock(
-                            areaDecoration: BoxDecoration(
-                              color: Colors.transparent,
-                            ),
-                            hourMinuteDigitTextStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 50,
-                            ),
-                            amPmDigitTextStyle: TextStyle(
+                    vSizedBox4,
+                    // if (attendance)
+                    Column(
+                      children: [
+                        // vSizedBox2,
+                        Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            DigitalClock(
+                              areaDecoration: BoxDecoration(
+                                color: Colors.transparent,
+                              ),
+                              hourMinuteDigitTextStyle: TextStyle(
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                            areaWidth: 250,
-                            secondDigitTextStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 50,
+                                fontSize: 50,
+                              ),
+                              amPmDigitTextStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              areaWidth: 250,
+                              secondDigitTextStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 50,
+                              ),
                             ),
-                          ),
 
-                        ],
-                      ),
-                      // MainHeadingText(text: '08:54:45 AM', fontSize: 32,),
-                      vSizedBox05,
-                      ParagraphText(
-                        text:
-                        '${DateFormat.EEEE().format(DateTime.parse(DateTime.now().toString()))}, ${DateFormat.yMMMd().format(DateTime.parse(DateTime.now().toString()))}',
-                      ),
-                      // vSizedBox2,
-                      //
-                      // Container(
-                      //   width: 180,
-                      //   // height: 50,
-                      //   child: Chip_Custom(
-                      //     text: att_detail['data']
-                      //                         ['today_attendance']
-                      //                     ['inTime'] ==
-                      //                 null &&
-                      //             att_detail['data']
-                      //                         ['today_attendance']
-                      //                     ['outTime'] ==
-                      //                 null
-                      //         ? 'Not Punched'
-                      //         : att_detail['data'][
-                      //                             'today_attendance']
-                      //                         ['inTime'] !=
-                      //                     null &&
-                      //                 att_detail['data'][
-                      //                             'today_attendance']
-                      //                         ['outTime'] ==
-                      //                     null
-                      //             ? 'punching'
-                      //             : 'Punched',
-                      //     fontsize: 14,
-                      //
-                      //     // fontfamily: 'medium',
-                      //     background: Color(0xFFEFEFEF),
-                      //     textcolor: MyColors.labelcolor,
-                      //   ),
-                      // ),
-                      vSizedBox4,
-                      GestureDetector(
-                        onTap: () async {
-
-                          // globalModal.loadingShow();
-                          // is_scan = true;
-                          // globalModal.loadingHide();
-                          // Future.delayed(
-                          // Duration(milliseconds: 100))
-                          //     .then((value) {
-                          // controller?.resumeCamera();
-                          // // setState(() {
-                          // // });
-                          // });
-                          // try {
-                          // Future.delayed(Duration(seconds: 2))
-                          //     .then((value) {
-                          // controller?.resumeCamera();
-                          // // setState(() {
-                          // // });
-                          // });
-                          // } catch (e) {
-                          // print('Error in catch block $e');
-                          // } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
-
-                        },
-                        child: Container(
-                          height: 260,
-                          width: 298,
-                          // child: _buildQrView(context),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(16),
-                              // color: Color(0xFFD9D9D9)
-                            ),
-                          child: _cameraPreviewWidget(),
-                        ),
-                      ),
-                      vSizedBox,
-                      // GestureDetector(
-                      //   onTap: () async {
-                      //
-                      //     globalModal.loadingShow();
-                      //     is_scan = true;
-                      //     globalModal.loadingHide();
-                      //     Future.delayed(
-                      //         Duration(milliseconds: 100))
-                      //         .then((value) {
-                      //       controller?.resumeCamera();
-                      //       // setState(() {
-                      //       // });
-                      //     });
-                      //     try {
-                      //       Future.delayed(Duration(seconds: 2))
-                      //           .then((value) {
-                      //         controller?.resumeCamera();
-                      //         // setState(() {
-                      //         // });
-                      //       });
-                      //     } catch (e) {
-                      //       print('Error in catch block $e');
-                      //     } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
-                      //   },
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(4.0),
-                      //     child: Text('Click here to scan QR'),
-                      //   ),
-                      // ),
-                      GestureDetector(
-                        // onTap: () {
-                        // globalModal.loadingShow();
-                        // is_scan = true;
-                        // globalModal.loadingHide();
-                        // Future.delayed(
-                        // Duration(milliseconds: 100))
-                        //     .then((value) {
-                        // controller?.resumeCamera();
-                        // // setState(() {
-                        // // });
-                        // });
-                        // try {
-                        // Future.delayed(Duration(seconds: 2))
-                        //     .then((value) {
-                        // controller?.resumeCamera();
-                        // // setState(() {
-                        // // });
-                        // });
-                        // } catch (e) {
-                        // print('Error in catch block $e');
-                        // }
-                        // },
-                        child: Image.asset(
-                          MyImages.camera_turn,
-                          height: 24,
-                        ),
-                      ),
-                      // vSizedBox4,
-
-                      Row(
-                        children: [
-                          // if (att_detail['data']['today_attendance']
-                          // ['inTime'] ==
-                          // null &&
-                          // att_detail['data']['today_attendance']
-                          // ['outTime'] ==
-                          // null)
-                          // Expanded(
-                          // child: GestureDetector(
-                          //
-                          // child: RoundEdgedButton(
-                          // text: 'PUNCH IN',
-                          // // onTap: () {
-                          // // if(result==''){
-                          // // showSnackbar(context, 'Scan Qr');
-                          // // }
-                          // //
-                          // // if(globalModal.location?.addressString==''){
-                          // // showSnackbar(context, 'Please wait while we fatching your  location.');
-                          // // return;
-                          // // }
-                          // // else{
-                          // // globalModal.loadingShow();
-                          // // is_scan = true;
-                          // // globalModal.loadingHide();
-                          // // Future.delayed(
-                          // // Duration(milliseconds: 100))
-                          // //     .then((value) {
-                          // // controller?.resumeCamera();
-                          // // // setState(() {
-                          // // // });
-                          // // });
-                          // // try {
-                          // // Future.delayed(Duration(seconds: 2))
-                          // //     .then((value) {
-                          // // controller?.resumeCamera();
-                          // // // setState(() {
-                          // // // });
-                          // // });
-                          // // } catch (e) {
-                          // // print('Error in catch block $e');
-                          // // }
-                          // // }
-                          //
-                          // // },
-                          // ),
-                          // ),
-                          // ),
-                          hSizedBox,
-
-                        ],
-                      ),
-                      vSizedBox4,
-                      vSizedBox4,
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                MainHeadingText(
-                                  text: '--:--',
-                                  fontSize: 24,
-                                  color: MyColors.primaryColor,
-                                ),
-                                GestureDetector(
-
-                                  child: ParagraphText(
-                                    text: 'Punch In',
-                                    fontFamily: 'bold',
-                                  ),
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                MainHeadingText(
-                                  text: '--:--',
-
-                                  fontSize: 24,
-                                  color: MyColors.primaryColor,
-                                ),
-                                GestureDetector(
-                                  // onTap: () async {
-                                  //
-                                  // // globalModal.loadingShow();
-                                  // is_scan = true;
-                                  // // globalModal.loadingHide();
-                                  // Future.delayed(
-                                  // Duration(milliseconds: 100))
-                                  //     .then((value) {
-                                  // controller?.resumeCamera();
-                                  // // setState(() {
-                                  // // });
-                                  // });
-                                  // try {
-                                  // Future.delayed(Duration(seconds: 2))
-                                  //     .then((value) {
-                                  // controller?.resumeCamera();
-                                  // // setState(() {
-                                  // // });
-                                  // });
-                                  // } catch (e) {
-                                  // print('Error in catch block $e');
-                                  // }
-                                  // },
-                                  child: ParagraphText(
-                                    text: 'Punch Out',
-                                    fontFamily: 'bold',
-                                  ),
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                MainHeadingText(
-                                  text: '--:--',
-
-                                  fontSize: 24,
-                                  color: MyColors.primaryColor,
-                                ),
-                                ParagraphText(
-                                  text: 'Working Hrs',
-                                  fontFamily: 'bold',
-                                )
-                              ],
-                            ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ]
+                        // MainHeadingText(text: '08:54:45 AM', fontSize: 32,),
+                        vSizedBox05,
+                        ParagraphText(
+                          text:
+                          '${DateFormat.EEEE().format(DateTime.parse(DateTime.now().toString()))}, ${DateFormat.yMMMd().format(DateTime.parse(DateTime.now().toString()))}',
+                        ),
+
+                        vSizedBox4,
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     // liveness();
+                        //   },
+                        //   child: Container(
+                        //     height: 260,
+                        //     width: 298,
+                        //     // child: _buildQrView(context),
+                        //     decoration: BoxDecoration(
+                        //         borderRadius:
+                        //         BorderRadius.circular(16),
+                        //         color: Color(0xFFD9D9D9)
+                        //       ),
+                        //     child:
+                        //
+                        //     createImage(img1.image, () {
+                        //       if(att_detail['data']['today_attendance']['outTime']==null ||att_detail['data']['today_attendance']['outTime']=='' || att_detail['data']['today_attendance']['inTime']==null ||att_detail['data']['today_attendance']['inTime']=='' ){
+                        //         liveness();
+                        //       }
+                        //       else{
+                        //         showSnackbar(context, "Already you punched");
+                        //       }
+                        //     })
+                        //   ),
+                        // ),
+                        GestureDetector(
+                          onTap: (){
+                            if(att_detail['data']['today_attendance']['outTime']==null ||att_detail['data']['today_attendance']['outTime']=='' || att_detail['data']['today_attendance']['inTime']==null ||att_detail['data']['today_attendance']['inTime']=='' ){
+                              liveness();
+                            }
+                            else{
+                              showSnackbar(context, "Already you punched");
+                            }
+                          },
+                          child: Container(
+                                height: 260,
+                                width: 298,
+                            // child: _buildQrView(context),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    16),
+                                color: Colors.grey),
+                          ),
+                        ),
+                        vSizedBox,
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //
+                        //     globalModal.loadingShow();
+                        //     is_scan = true;
+                        //     globalModal.loadingHide();
+                        //     Future.delayed(
+                        //         Duration(milliseconds: 100))
+                        //         .then((value) {
+                        //       controller?.resumeCamera();
+                        //       // setState(() {
+                        //       // });
+                        //     });
+                        //     try {
+                        //       Future.delayed(Duration(seconds: 2))
+                        //           .then((value) {
+                        //         controller?.resumeCamera();
+                        //         // setState(() {
+                        //         // });
+                        //       });
+                        //     } catch (e) {
+                        //       print('Error in catch block $e');
+                        //     } // Barcode? result = await push(context: MyGlobalKeys.navigatorKey.currentContext!, screen: ScanQrToJoinGroupPage());
+                        //   },
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(4.0),
+                        //     child: Text('Click here to scan QR'),
+                        //   ),
+                        // ),
+                        GestureDetector(
+                          onTap: ()async{
+                            liveness();
+
+
+
+
+                            // File file = File(att_detail['data']['userData']['face_image']);
+                            // Uint8List uint8list = await file.readAsBytesSync();
+                          },
+                          child: Image.asset(
+                            MyImages.camera_turn,
+                            height: 24,
+                          ),
+                        ),
+                        // vSizedBox4,
+
+                        Row(
+                          children: [
+                            hSizedBox,
+
+                          ],
+                        ),
+                        vSizedBox4,
+                        vSizedBox4,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  MainHeadingText(
+                                    text: att_detail['data']['today_attendance']['inTime']??'--:--',
+                                    fontSize: 24,
+                                    color: MyColors.primaryColor,
+                                  ),
+                                  GestureDetector(
+
+                                    child: ParagraphText(
+                                      text: 'Punch In',
+                                      fontFamily: 'bold',
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  MainHeadingText(
+                                    text: att_detail['data']['today_attendance']['outTime']??'--:--',
+
+                                    fontSize: 24,
+                                    color: MyColors.primaryColor,
+                                  ),
+                                  GestureDetector(
+                                    child: ParagraphText(
+                                      text: 'Punch Out',
+                                      fontFamily: 'bold',
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  MainHeadingText(
+                                    text: workingHours=="" || workingHours=="0"?'--:--':workingHours,
+
+                                    fontSize: 24,
+                                    color: MyColors.primaryColor,
+                                  ),
+                                  ParagraphText(
+                                    text: 'Working Hrs',
+                                    fontFamily: 'bold',
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
+              ),
             ),
-          ),
-          // Expanded(
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       border: Border.all(
-          //         color:
-          //         controller != null && controller!.value.isRecordingVideo
-          //             ? Colors.redAccent
-          //             : Colors.grey,
-          //         width: 3.0,
-          //       ),
-          //     ),
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(1.0),
-          //       child: Column(
-          //         children: [
-          //           Padding(
-          //             padding: const EdgeInsets.all(8.0),
-          //             child: Text('wait for a minute...'),
-          //           ),
-          //           Center(
-          //             child: _cameraPreviewWidget(),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // // _captureControlRowWidget(),
-          // // _modeControlRowWidget(),
-          // Padding(
-          //   padding: const EdgeInsets.all(5.0),
-          //   child: Row(
-          //     children: <Widget>[
-          //       // _cameraTogglesRowWidget(),
-          //       // _thumbnailWidget(),
-          //     ],
-          //   ),
-          // ),
-        ],
+            // Expanded(
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       border: Border.all(
+            //         color:
+            //         controller != null && controller!.value.isRecordingVideo
+            //             ? Colors.redAccent
+            //             : Colors.grey,
+            //         width: 3.0,
+            //       ),
+            //     ),
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(1.0),
+            //       child: Column(
+            //         children: [
+            //           Padding(
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: Text('wait for a minute...'),
+            //           ),
+            //           Center(
+            //             child: _cameraPreviewWidget(),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // // _captureControlRowWidget(),
+            // // _modeControlRowWidget(),
+            // Padding(
+            //   padding: const EdgeInsets.all(5.0),
+            //   child: Row(
+            //     children: <Widget>[
+            //       // _cameraTogglesRowWidget(),
+            //       // _thumbnailWidget(),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -944,7 +1182,7 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
       children: <Widget>[
         IconButton(
           icon: const Icon(Icons.camera_alt),
-          color: Colors.red,
+          // color: Colors.red,
           onPressed: cameraController != null &&
               cameraController.value.isInitialized &&
               !cameraController.value.isRecordingVideo
@@ -1303,8 +1541,8 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
                           context: context);
                       if (res1['success'].toString() == 'true') {
                         faceAtt = res1;
-                        workingHours =
-                        '${faceAtt['data']['today_attendance']['workinHours']}';
+                        // workingHours =
+                        // '${faceAtt['data']['today_attendance']['workinHours']}';
                         // Navigator.pop(context);
                         Navigator.of(context, rootNavigator: true).pop();
 
@@ -1669,6 +1907,9 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
   showPop(file) async {
+
+      Provider.of<GlobalModal>(context, listen: false).loadingHide();
+
     // var btn=false;
     await showCustomDialogBox(
         context:context,
@@ -1730,7 +1971,8 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
                     textColor: MyColors.black,
                     height: 40,
                     onTap: () {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      Navigator.of(context, rootNavigator: true).pop();
                       // is_popup=false;
 
                     },
@@ -1753,38 +1995,43 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
                         : '',
                     height: 40,
                     onTap: () async {
+
+                     await Provider.of<GlobalModal>(context, listen: false).loadingShow();
+
                       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
                       var androidDeviceInfo = await deviceInfo.androidInfo;
                       var id = androidDeviceInfo.androidId;
                       // String? deviceId = await _getId();
                       Map<String, dynamic> data = {
-                        'lat':
-                        Provider.of<GlobalModal>(context, listen: false)
+                        'lat': Provider.of<GlobalModal>(context, listen: false)
                             .location!
                             .Lat
                             .toString(),
-                        'lang':
-                        Provider.of<GlobalModal>(context, listen: false)
+                        'lang': Provider.of<GlobalModal>(context, listen: false)
                             .location!
                             .Lng
                             .toString(),
-                        'location':
-                        Provider.of<GlobalModal>(context, listen: false)
+                        'location': Provider.of<GlobalModal>(context, listen: false)
                             .location!
                             .addressString,
-                        'device_id': id.toString()
+                        'device_id': id.toString(),
+                        'mobile_number':att_detail['data']['userData']['mobile'].toString()
                       };
                       print(data);
-                      Map<String, dynamic> files = {'image': file};
+                      Map<String, dynamic> files = {};
+                      // if(file!=''){
+                      //   files['image']=file;
+                      // }
+
                       print('files-----------55------$files');
                       var res = await Webservices.postDataWithImageFunction(
                           apiUrl: ApiUrls.faceattendanceStore,
                           body: data,
                           context: context,
                           files: files);
-                      // setState(() {
-                      //   load=false;
-                      // });
+                     await Provider.of<GlobalModal>(context, listen: false).loadingHide();
+
+
                       log("res --------------$res");
                       if (res['success'].toString() == 'true') {
                         // permissionModal.showLoading();
@@ -1794,13 +2041,18 @@ class _FaceCameraAttendanceState extends State<FaceCameraAttendance>
                             context: context);
                         if (res1['success'].toString() == 'true') {
                           faceAtt = res1;
-                          workingHours =
-                          '${faceAtt['data']['today_attendance']['workinHours']}';
-                          Navigator.pop(context);
+                          // workingHours =
+                          // '${faceAtt['data']['today_attendance']['workinHours']}';
+                          // Navigator.pop(context);
+                          Navigator.of(context, rootNavigator: true).pop();
                           getDetails();
+
                           // setState(() {
                           //
                           // });
+                        }
+                        else{
+                          Navigator.of(context, rootNavigator: true).pop();
                         }
                       }
 
@@ -1826,8 +2078,8 @@ class CameraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: FaceCameraAttendance(),
+    return  MaterialApp(
+      home: FaceCameraAttendance(phone: '${ Provider.of<GlobalModal>(context, listen: false).userData!.phone}',),
     );
   }
 

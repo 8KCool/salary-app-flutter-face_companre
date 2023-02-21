@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +14,7 @@ import 'package:salaryredesign/widgets/customtextfield.dart';
 import '../../constants/image_urls.dart';
 import '../../providers/clock.dart';
 import '../../services/api_urls.dart';
+import '../../services/auth.dart';
 import '../../services/local_services.dart';
 import '../../services/webservices.dart';
 import '../../widgets/CustomTexts.dart';
@@ -19,6 +22,7 @@ import '../../widgets/customLoader.dart';
 import '../../widgets/showSnackbar.dart';
 import 'otp_screen.dart';
 
+import 'package:path_provider/path_provider.dart';
 class Enter_Phone_Number extends StatefulWidget {
   const Enter_Phone_Number({Key? key}) : super(key: key);
 
@@ -28,8 +32,14 @@ class Enter_Phone_Number extends StatefulWidget {
 
 class _Enter_Phone_NumberState extends State<Enter_Phone_Number> {
   TextEditingController mobilenumber = TextEditingController();
+  check()async{
+    final newpath = await getExternalStorageDirectory();
+    var filePathAndName = newpath!.path + '/'+'liveness.png';
+    deleteFile(File(filePathAndName));
+  }
   @override
   void initState() {
+    check();
     // TODO: implement initState
     sharedPreference.setString('is_visit', 'true');
     super.initState();

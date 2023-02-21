@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +10,14 @@ import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/image_urls.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
+import 'package:salaryredesign/functions/navigation_functions.dart';
 import 'package:salaryredesign/widgets/CustomTexts.dart';
 import 'package:salaryredesign/widgets/appbar.dart';
 import 'package:intl/intl.dart';
 import 'package:salaryredesign/widgets/showSnackbar.dart';
 
 import '../../constants/globalFunction.dart';
+import '../../constants/globalkeys.dart';
 import '../../providers/clock.dart';
 import '../../providers/newProvider.dart';
 import '../../services/api_urls.dart';
@@ -28,6 +32,10 @@ import '../Login_process/enter_phone_number.dart';
 
 
 import 'package:badges/badges.dart' as badge;
+
+import '../face_recognition/face_recognition_start_page.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard_Page extends StatefulWidget {
 
@@ -178,6 +186,17 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
 
 
   Timer? updateDashboardTimer;
+  getAttendanceData() async {
+    print("getAttendanceData");
+    var res = await Webservices.getData(
+        '${ApiUrls.baseApiUrl}checkAttendancetype');
+    var jsonResponse = convert.jsonDecode(res.body);
+    checkType = jsonResponse;
+    // setState(() {});
+    log('checkAttendancetype------------------$jsonResponse');
+
+  }
+
   updateDashboard()async{
     await Future.delayed(Duration(seconds: 3));
     updateDashboardTimer = Timer.periodic(Duration(seconds: 5), (timer) async{
@@ -189,11 +208,12 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
         log('res from new api -------2----${jsonResponse['data']}');
         try{
           Provider.of<PermissionModal>(context, listen: false).getPermission(jsonResponse['data']);
+          getAttendanceData();
         }catch(e){
           print('Error in catch block $e');
         }
 
-        // Provider.of<PermissionModal>(context, listen: false).load=false;
+        Provider.of<PermissionModal>(context, listen: false).load=false;
       }
     });
   }
@@ -813,7 +833,22 @@ class _Dashboard_PageState extends State<Dashboard_Page> {
                                 ],
                               ),
                             ),
-
+                          // Text("${permission.dashboardMenuPermission['faceattendance']}"),
+                          if(permission.dashboardMenuPermission['faceattendance'].toString()=='1')
+                            GestureDetector(
+                              onTap: ()async{
+                                // await showwebView('${permission.dashboardMenuPermission['faceattendancemenu']}');
+                                push(context: context, screen: Face_Recognition_Start_Page());
+                              },
+                              child: Column(
+                                children: [
+                                  Image.asset('assets/images/face.png',height: globalIconSize,
+                                    width: globalIconSize,),
+                                  vSizedBox,
+                                  Text('Face Registration',style: TextStyle(color: Color(0xff2563EB),fontSize: 14),textAlign: TextAlign.center,)
+                                ],
+                              ),
+                            ),
                           if(permission.dashboardMenuPermission['holiday_list_permission'].toString()=='1')
                             GestureDetector(
                               onTap: ()async{

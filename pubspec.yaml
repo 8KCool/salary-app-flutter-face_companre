@@ -67,6 +67,7 @@ dev_dependencies:
   flutter_spinkit: ^5.1.0
   pin_code_fields: ^7.3.0
   location: ^4.4.0
+  flutter_face_api_beta: ^0.0.76
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

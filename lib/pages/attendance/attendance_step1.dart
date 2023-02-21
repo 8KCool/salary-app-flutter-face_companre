@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:convert' as convert;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:salaryredesign/constants/colors.dart';
 import 'package:salaryredesign/constants/sized_box.dart';
 import 'package:salaryredesign/functions/navigation_functions.dart';
@@ -11,6 +12,7 @@ import 'package:salaryredesign/services/api_urls.dart';
 import 'package:salaryredesign/services/webservices.dart';
 
 import '../../constants/globalkeys.dart';
+import '../../providers/clock.dart';
 import '../../widgets/buttons.dart';
 import '../face_recognition/face_recognition_start_page.dart';
 import '../mark_attendance/mark_attendance.dart';
@@ -38,25 +40,25 @@ class _CheckAttStatusPageState extends State<CheckAttStatusPage> {
         return AlertDialog(
           // title: const Text('Alert'),
           content: SingleChildScrollView(
-            child: ListBody(
-              // crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               // mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // Image.asset(MyImages.cancel,width: 70,height: 70,),
-                Icon(
-                  Icons.warning_amber_outlined,
-                  color: Colors.yellow,
-                  size: 80,
-                ),
-                vSizedBox2,
+                // Icon(
+                //   Icons.warning_amber_outlined,
+                //   color: Colors.yellow,
+                //   size: 80,
+                // ),
+                vSizedBox,
                 Text(
                   '${message.toString()}',
-                  textAlign: TextAlign.center,
+                  // textAlign: TextAlign.center,
                 ),
-                vSizedBox,
+                // vSizedBox,
 
                 TextButton(
-                  child: const Text('OK'),
+                  child: const Text('OKAY'),
                   onPressed: () {
                     Navigator.of(context).pop();
                     // push(context: context, screen: TabsPage());
@@ -70,29 +72,22 @@ class _CheckAttStatusPageState extends State<CheckAttStatusPage> {
     );
   }
 
-  Map checkType = {};
-  getAttendanceData() async {
-    var res = await Webservices.getData(
-        '${ApiUrls.baseApiUrl}checkAttendancetype');
-    var jsonResponse = convert.jsonDecode(res.body);
-    checkType = jsonResponse;
-    // setState(() {});
-    log('checkAttendancetype------------------$jsonResponse');
-  }
-getData()async{
-  var res = await Webservices.postData(
-      apiUrl: ApiUrls.faceattendance,
-      body: {},
-      context: context);
-  if (res['success'].toString() == 'true') {
-    faceAtt = res;
-  }
-}
+
+
+// getData()async{
+//   var res = await Webservices.postData(
+//       apiUrl: ApiUrls.faceattendance,
+//       body: {},
+//       context: context);
+//   if (res['success'].toString() == 'true') {
+//     faceAtt = res;
+//   }
+// }
   @override
   void initState() {
     // TODO: implement initState
-    getAttendanceData();
-    getData();
+    // getAttendanceData();
+    // getData();
     super.initState();
   }
 
@@ -145,7 +140,8 @@ getData()async{
                           // pushReplacement(context: context, screen: Mark_Attendance_Page());
                           // Navigator.pushReplacement(context, );
                         } else {
-                          message = 'Your QR Attendance is inactive. ';
+                          message = '${checkType['data']['qrattendance_error']} ';
+
                           _showMyDialog();
                         }
                       },
@@ -175,16 +171,18 @@ getData()async{
                     ),
                     vSizedBox4,
                     GestureDetector(
-                      onTap: () {
-                        // if (checkType['data']['faceattendance'].toString() == '1') {
-                        //   push(context: context, screen: FaceCameraAttendance());
-                        //   // pushReplacement(context: context, screen: Face_Recognition_Start_Page());
-                        // } else {
-                        //   message = 'Your Face Attendance is inactive. ';
-                        //   _showMyDialog();
-                        // }
-                        message = 'Coming soon ... ';
-                        _showMyDialog();
+                      onTap: () async {
+                        if(checkType['data']!=null)
+                        if (checkType['data']['faceattendance'].toString() == '1') {
+                          push(context: context, screen: FaceCameraAttendance(phone: '${ await Provider.of<GlobalModal>(context, listen: false).userData!.phone}',));
+                          // pushReplacement(context: context, screen: Face_Recognition_Start_Page());
+                        } else {
+                          message = '${checkType['data']['faceattendance_error']} ';
+                          _showMyDialog();
+                        }
+                        // message = 'Coming soon ... ';
+                        // _showMyDialog();
+                        // push(context: context, screen: FaceCameraAttendance());
                       },
                       child: Container(
                         height: 50,
@@ -197,7 +195,7 @@ getData()async{
                             Image.asset('assets/images/happy.png',height: 20,),
                             hSizedBox05,
                             Text(
-                              'FACE RECOGINATION',
+                              'FACE RECOGINATION ',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -231,10 +229,17 @@ getData()async{
                     vSizedBox4,
                     GestureDetector(
                       onTap: () {
-                        print('object');
-                        message = 'Coming soon ... ';
-                        _showMyDialog();
-                        // push(context: context, screen: OtherAttendancePage());
+                        if(checkType['data']['otherphone'].toString()=='1'){
+                          push(context: context, screen: OtherAttendancePage());
+                        }
+                        else{
+                          print('object');
+                          message = '${checkType['data']['otherphone_error']} ';
+
+                          _showMyDialog();
+                          //
+                        }
+
                       },
                       child: Container(
                         height: 50,

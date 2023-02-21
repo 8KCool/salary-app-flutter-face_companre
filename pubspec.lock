@@ -223,6 +223,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  flutter_face_api_beta:
+    dependency: "direct dev"
+    description:
+      name: flutter_face_api_beta
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.76"
   flutter_html:
     dependency: "direct dev"
     description:
